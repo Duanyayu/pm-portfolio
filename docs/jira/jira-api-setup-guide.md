@@ -132,11 +132,58 @@ JIRA_EMAIL=your-email JIRA_TOKEN=your-token node proxy.js
 Jira Cloud API **不支持**浏览器直接跨域调用（CORS headers 未设置）。
 
 **解决方案**：
-- **方案 A（推荐）**：使用本地代理服务器，绕过 CORS
-- **方案 B**：使用浏览器插件禁用 CORS（仅限开发/演示）
-- **方案 C**：使用 Jira 的 `atlascode` 或官方浏览器扩展
+- **方案 A**：部署到 Confluence，与 Jira 同域（推荐，见 3.4）
+- **方案 B**：使用本地代理服务器，绕过 CORS
+- **方案 C**：使用浏览器插件禁用 CORS（仅限开发/演示）
+- **方案 D**：仅使用模拟数据（默认，离线可用）
 
-> 仪表盘默认使用模拟数据（`data.js` 中的 `APP_DATA`），即使 Jira 连接失败也不会影响演示。
+> 仪表盘默认使用模拟数据，即使 Jira 连接失败也不影响演示。
+
+### 3.4 Confluence 部署（方案 A：同域解决 CORS）
+
+**原理**：Confluence Cloud 与 Jira Cloud 共享 `*.atlassian.net` 域。将仪表盘部署到 Confluence 页面后，JavaScript 对 Jira API 的请求属于同源请求，不受 CORS 限制。
+
+> ⚠️ **已知限制**：Confluence Cloud 的内置 HTML Macro 将内容渲染在沙箱 iframe 中，可能仍会阻断 fetch 请求。如果你遇到此问题，可尝试以下替代方案：
+> - 使用 Confluence 的 "HTML for Confluence" 第三方 App（支持无沙箱模式）
+> - 使用 Confluence Server/Data Center 版（无 iframe 限制）
+> - 方案 B（本地代理）兜底
+
+#### 部署步骤
+
+**步骤 1：配置 Jira 地址**
+打开 `dashboard/confluence.html`，搜索 `baseUrl`，将值改为你的 Jira Cloud 地址：
+```javascript
+// 在文件中搜索 baseUrl 并修改
+baseUrl: 'https://your-company.atlassian.net',
+```
+
+**步骤 2：在 Confluence 中创建页面**
+1. 登录 Confluence → 进入目标 Space
+2. 点击 "创建"（Create）→ 空白页面
+3. 输入页面标题（如 "Mars 5 Ultra 散热优化仪表盘"）
+
+**步骤 3：插入 HTML Macro**
+1. 在编辑器中输入 `/html` 或点击 "+" → "其他宏" → 搜索 "HTML"
+2. 选择 "HTML" 宏
+
+**步骤 4：粘贴仪表盘代码**
+1. 用文本编辑器打开 `dashboard/confluence.html`
+2. 全选复制全部内容（约 67KB）
+3. 粘贴到 HTML 宏的输入框中
+4. 点击 "插入" → "发布"（或 "更新"）
+
+**步骤 5：验证**
+1. 发布后，在 Confluence 页面中应能看到仪表盘完整渲染
+2. 打开"Jira 实时"开关
+3. 输入你的 Jira 邮箱和 API Token
+4. 由于 Confluence 与 Jira 同域，请求应该成功
+
+#### 如果 Confluence HTML Macro 仍报 CORS 错误
+
+尝试以下替代方案：
+- **Confluence 附件 + HTML Include App**：将 `confluence.html` 上传为页面附件，使用支持完整 JS 执行的第三方 HTML App 加载
+- **回退到本地代理（方案 B）**：在本地运行一个 Node.js 代理，浏览器访问 `http://localhost:3000` 打开仪表盘
+- **回退到模拟数据**：关闭 Jira 实时开关，仪表盘仍可完整演示所有功能
 
 ---
 

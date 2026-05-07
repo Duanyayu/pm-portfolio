@@ -233,6 +233,8 @@
     ],
 
     // ---- Jira 集成配置 ----
+    // >>> 如需 Jira 实时数据，请修改 baseUrl 为你的 Jira Cloud 地址 <<<
+    // 示例: baseUrl: 'https://your-company.atlassian.net'
     jira: {
       enabled: false,
       baseUrl: '',

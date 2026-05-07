@@ -57,15 +57,46 @@
             statusEl.textContent = '实时数据 (' + result.user + ')';
             statusEl.style.color = '#238636';
             D.JiraConnector.fetchIssues();
-          } else {
-            statusEl.textContent = '模拟数据 (连接失败)';
-            statusEl.style.color = '#f85149';
-            toggle.checked = false;
+            return;
           }
+
+          // Specific error messages
+          var errMsg;
+          switch (result.error) {
+            case 'URL_NOT_CONFIGURED':
+              errMsg = '请先在 data.js 中配置 jira.baseUrl';
+              break;
+            case 'CORS_OR_NETWORK':
+              errMsg = '浏览器 CORS 限制 (需本地代理)';
+              break;
+            case 'AUTH_FAILED':
+              errMsg = '认证失败，请检查邮箱和 Token';
+              break;
+            case 'AUTH_CANCELLED':
+              errMsg = '已取消认证';
+              break;
+            default:
+              errMsg = '连接失败: ' + (result.error || '未知错误');
+          }
+          statusEl.textContent = errMsg;
+          statusEl.style.color = '#f85149';
+          statusEl.style.cursor = 'pointer';
+          statusEl.title = '点击查看详情';
+          statusEl.onclick = function() {
+            var tips = {
+              'URL_NOT_CONFIGURED': '需要配置 Jira Cloud 地址。\n\n打开 dashboard/js/data.js，\n找到 jira 配置块，\n将 baseUrl 改为你的 Jira 地址\n(如 https://your-company.atlassian.net)',
+              'CORS_OR_NETWORK': '这是浏览器安全策略限制，不是你的配置问题。\n\nJira Cloud 不允许从本地 HTML 文件\n直接调用其 API。\n\n解决方案：需要启动一个本地 HTTP 代理\n将请求转发到 Jira。\n详见 docs/jira/jira-api-setup-guide.md\n\n当前将使用模拟数据运行。',
+              'AUTH_FAILED': 'API Token 可能已过期或邮箱不匹配。\n请重新生成 Token:\nhttps://id.atlassian.com/manage-profile/security/api-tokens'
+            }[result.error];
+            if (tips) alert(tips);
+          };
+          toggle.checked = false;
         });
       } else {
         statusEl.textContent = '模拟数据';
         statusEl.style.color = '#8b949e';
+        statusEl.style.cursor = 'default';
+        statusEl.onclick = null;
       }
     });
   }
