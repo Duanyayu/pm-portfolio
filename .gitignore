@@ -1,0 +1,21 @@
+# Claude Code session artifacts
+.claude/sessions/
+.claude/cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+
+# Node (if any later)
+node_modules/
+
+# Temporary files
+*.tmp
+*.log

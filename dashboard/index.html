@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mars 5 Ultra 散热优化专项 - 项目仪表盘</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- ====== 顶部状态条 ====== -->
+  <div class="top-bar card">
+    <div class="top-bar-left">
+      <h1>Mars 5 Ultra 散热优化专项</h1>
+      <div class="subtitle">Sprint 3/5 · 项目整体进度 55%</div>
+    </div>
+    <div class="top-bar-right">
+      <div id="project-status"></div>
+      <div class="live-toggle">
+        <span id="jira-status" style="font-size:12px;color:#8b949e;">模拟数据</span>
+        <input type="checkbox" id="jira-live-toggle">
+        <label for="jira-live-toggle" style="font-size:11px;color:#8b949e;cursor:pointer;">Jira 实时</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 待决策提醒 ====== -->
+  <div id="decisions-container"></div>
+
+  <!-- ====== 标签页导航 ====== -->
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="tab-overview">概览</button>
+    <button class="tab-btn" data-tab="tab-kanban">看板</button>
+    <button class="tab-btn" data-tab="tab-risks">风险管理</button>
+    <button class="tab-btn" data-tab="tab-team">团队负载</button>
+    <button class="tab-btn" data-tab="tab-calendar">发布日历</button>
+    <button class="tab-btn" data-tab="tab-sync">同步记录</button>
+  </nav>
+
+  <!-- ====== 概览标签页 ====== -->
+  <div id="tab-overview" class="tab-content active">
+    <div class="grid-2col">
+      <!-- 里程碑 -->
+      <div class="card">
+        <div class="card-header"><h2>里程碑</h2></div>
+        <div id="milestone-container"></div>
+      </div>
+
+      <!-- 燃尽图 -->
+      <div class="card">
+        <div class="card-header"><h2>燃尽图</h2></div>
+        <div id="burndown-container"></div>
+      </div>
+    </div>
+
+    <!-- 风险摘要 -->
+    <div class="card" style="margin-top:20px;">
+      <div class="card-header"><h2>风险热力图</h2></div>
+      <div id="risk-matrix-container"></div>
+    </div>
+  </div>
+
+  <!-- ====== 看板标签页 ====== -->
+  <div id="tab-kanban" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <h2>任务看板</h2>
+        <span style="font-size:12px;color:#8b949e;">拖拽卡片切换状态</span>
+      </div>
+      <div id="kanban-container"></div>
+    </div>
+  </div>
+
+  <!-- ====== 风险管理标签页 ====== -->
+  <div id="tab-risks" class="tab-content">
+    <div class="card">
+      <div class="card-header"><h2>5×5 风险矩阵</h2></div>
+      <div id="risk-matrix-container"></div>
+    </div>
+  </div>
+
+  <!-- ====== 团队负载标签页 ====== -->
+  <div id="tab-team" class="tab-content">
+    <div class="card">
+      <div class="card-header"><h2>团队负载</h2></div>
+      <div id="workload-container"></div>
+    </div>
+  </div>
+
+  <!-- ====== 发布日历标签页 ====== -->
+  <div id="tab-calendar" class="tab-content">
+    <div class="card">
+      <div class="card-header"><h2>Sprint 发布日历</h2></div>
+      <div id="calendar-container"></div>
+    </div>
+  </div>
+
+  <!-- ====== 同步记录标签页 ====== -->
+  <div id="tab-sync" class="tab-content">
+    <div class="card">
+      <div class="card-header"><h2>跨团队同步记录</h2></div>
+      <div id="sync-log-container"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== JavaScript 模块（按依赖顺序加载） ====== -->
+<script src="js/data.js"></script>
+<script src="js/decisions.js"></script>
+<script src="js/burndown.js"></script>
+<script src="js/kanban.js"></script>
+<script src="js/risk-matrix.js"></script>
+<script src="js/workload.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/sync-log.js"></script>
+<script src="js/jira-connector.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

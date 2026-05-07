@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "command": "bash scripts/dev-log-init.sh"
+      }
+    ]
+  }
+}

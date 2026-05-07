@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mars 5 Ultra 散热优化专项 - 项目仪表盘</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', 'Inter', system-ui, sans-serif; padding: 24px; }
+    .dashboard { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 20px; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; }
+    .full-width { grid-column: 1 / -1; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .header h2 { font-size: 18px; font-weight: 600; color: #58a6ff; }
+    .badge { background: #1f6feb; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+    .progress-bar { background: #21262d; height: 8px; border-radius: 4px; margin: 12px 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #238636; border-radius: 4px; transition: width 0.3s; }
+    .milestone-timeline { display: flex; flex-direction: column; gap: 10px; }
+    .milestone { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+    .milestone-dot { width: 12px; height: 12px; border-radius: 50%; background: #30363d; }
+    .milestone-dot.active { background: #d2991b; box-shadow: 0 0 8px #d2991b; }
+    .milestone-dot.done { background: #238636; }
+    .milestone-label { font-size: 14px; }
+    .kanban { display: flex; gap: 12px; }
+    .kanban-col { flex: 1; background: #0d1117; border-radius: 8px; padding: 12px; }
+    .kanban-col h3 { font-size: 14px; margin-bottom: 10px; color: #8b949e; }
+    .task-card { background: #21262d; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; font-size: 13px; border-left: 3px solid #30363d; }
+    .task-card .func-tag { font-size: 11px; padding: 1px 6px; border-radius: 4px; margin-right: 6px; background: #1f6feb; color: white; }
+    .risk-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+    .risk-table th, .risk-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #21262d; }
+    .risk-table th { color: #8b949e; font-weight: 500; }
+    .risk-high { color: #f85149; font-weight: 600; }
+    .risk-mid { color: #d2991b; }
+    .sync-log { background: #0d1117; border-left: 3px solid #58a6ff; padding: 12px; border-radius: 6px; font-size: 13px; line-height: 1.6; color: #8b949e; }
+    .sync-log strong { color: #c9d1d9; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- 顶部状态条 -->
+    <div class="card full-width header" style="display: flex; justify-content: space-between;">
+      <div>
+        <h2 style="margin-bottom: 4px;">Mars 5 Ultra 散热优化专项</h2>
+        <div style="font-size: 13px; color: #8b949e;">Sprint 3/5 · 项目整体进度 55%</div>
+      </div>
+      <div style="text-align: right;">
+        <span class="badge">进行中</span>
+        <div style="font-size: 12px; color: #8b949e; margin-top: 8px;">最后更新：2026-05-07 14:30</div>
+      </div>
+    </div>
+
+    <!-- 里程碑 -->
+    <div class="card">
+      <h2>里程碑</h2>
+      <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
+      <div class="milestone-timeline">
+        <div class="milestone"><span class="milestone-dot done"></span><span class="milestone-label">M1: EVT启动 (04-20)</span></div>
+        <div class="milestone"><span class="milestone-dot done"></span><span class="milestone-label">M2: 样机到位 (04-28)</span></div>
+        <div class="milestone"><span class="milestone-dot active"></span><span class="milestone-label">M3: DVT热测试进行中 (05-05)</span></div>
+        <div class="milestone"><span class="milestone-dot"></span><span class="milestone-label">M4: 固件联调 (05-12)</span></div>
+        <div class="milestone"><span class="milestone-dot"></span><span class="milestone-label">M5: 量产评审 (05-20)</span></div>
+      </div>
+    </div>
+
+    <!-- 任务看板 -->
+    <div class="card full-width">
+      <h2>任务看板</h2>
+      <div class="kanban">
+        <div class="kanban-col">
+          <h3>待办 (2)</h3>
+          <div class="task-card"><span class="func-tag">固件</span>实现打印结束自动延速散热逻辑</div>
+          <div class="task-card"><span class="func-tag">测试</span>编写极端环境(32℃)热测试用例</div>
+        </div>
+        <div class="kanban-col">
+          <h3>进行中 (3)</h3>
+          <div class="task-card"><span class="func-tag">结构</span>底部新风道3D打印手板验证</div>
+          <div class="task-card"><span class="func-tag">硬件</span>新风扇样品噪音-风量曲线测绘</div>
+          <div class="task-card"><span class="func-tag">固件</span>PWM温控PID参数初步调试</div>
+        </div>
+        <div class="kanban-col">
+          <h3>已完成 (3)</h3>
+          <div class="task-card"><span class="func-tag">结构</span>新风道CFD仿真通过</div>
+          <div class="task-card"><span class="func-tag">供应链</span>新风扇供应商定标</div>
+          <div class="task-card"><span class="func-tag">硬件</span>隔热垫材料选型确认</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 风险登记板 -->
+    <div class="card">
+      <h2>风险登记板</h2>
+      <table class="risk-table">
+        <tr><th>风险描述</th><th>等级</th><th>缓解措施</th><th>负责人</th></tr>
+        <tr>
+          <td>新风扇样品交期可能延迟至5/12</td>
+          <td class="risk-high">高</td>
+          <td>已联系备选供应商，最晚5/10到样</td>
+          <td>张工(供应链)</td>
+        </tr>
+        <tr>
+          <td>满速噪音测试37dB，超过目标35dB</td>
+          <td class="risk-mid">中</td>
+          <td>固件限最高转速85%，评估温升影响</td>
+          <td>李工(硬件)</td>
+        </tr>
+        <tr>
+          <td>风道修改可能影响UV遮光</td>
+          <td class="risk-mid">中</td>
+          <td>DVT中增加遮光专项测试</td>
+          <td>王工(测试)</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 跨团队同步记录 -->
+    <div class="card">
+      <h2>最新跨团队同步</h2>
+      <div class="sync-log">
+        <strong>[2026-05-06 16:00] 散热专项同步会议纪要</strong><br>
+        <strong>与会：</strong>硬件(陈)、固件(赵)、结构(周)、测试(王)、产品(本人)<br>
+        <strong>关键结论：</strong><br>
+        1. 新风道手板明日完成打印，结构周工负责装配验证。<br>
+        2. 固件PWM驱动已就绪，但依赖硬件提供准确的风扇转速-电压曲线——<strong>待办：硬件陈工 5/8前输出曲线数据。</strong><br>
+        3. 噪音问题需在用户场景下主观评价，测试王工安排5位内部员工盲测。<br>
+        4. 供应链确认新风扇交期风险可控，备选方案已就绪。<br>
+        <strong>下次同步：</strong>5月9日 15:00，聚焦DVT初步结果。
+      </div>
+    </div>
+  </div>
+</body>
+</html>
