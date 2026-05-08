@@ -101,10 +101,33 @@
     });
   }
 
+  // ---- Edit Mode Detection ----
+  function detectEditMode() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('edit') === '1') {
+      var adminConfig = D.Data.getAdminConfig();
+      var input = prompt('请输入编辑密码:');
+      if (input === adminConfig.password) {
+        D.editMode = true;
+        return;
+      }
+      alert('密码错误，将以只读模式浏览。');
+    }
+    D.editMode = false;
+  }
+
   // ---- Init All ----
   document.addEventListener('DOMContentLoaded', function() {
+    detectEditMode();
     initTabs();
-    initJiraToggle();
+
+    // Jira toggle: only visible in edit mode
+    if (D.editMode) {
+      initJiraToggle();
+    } else {
+      var toggleContainer = document.querySelector('.live-toggle');
+      if (toggleContainer) toggleContainer.style.display = 'none';
+    }
 
     // Initialize all modules
     if (D.Burndown && D.Burndown.init)     D.Burndown.init('burndown-container');

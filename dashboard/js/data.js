@@ -239,6 +239,12 @@
       enabled: false,
       baseUrl: '/api/jira',
       projectKey: 'MAR5'
+    },
+
+    // ---- 编辑模式配置 ----
+    // adminPassword: 访问 ?edit=1 时需要输入的密码
+    admin: {
+      password: 'mars5admin2026'
     }
   };
 
@@ -254,6 +260,7 @@
     getSyncLog: function() { return APP_DATA.syncLog; },
     getDecisions: function() { return APP_DATA.decisions; },
     getJiraConfig: function() { return APP_DATA.jira; },
+    getAdminConfig: function() { return APP_DATA.admin; },
 
     // 更新看板数据（拖拽后调用）
     updateKanban: function(columns) {

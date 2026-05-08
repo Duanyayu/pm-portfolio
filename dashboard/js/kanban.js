@@ -32,44 +32,50 @@
         col.items.forEach(function(item) {
           var card = document.createElement('div');
           card.className = 'task-card';
-          card.draggable = true;
+          if (global.Dashboard.editMode) {
+            card.draggable = true;
+          }
           card.dataset.itemId = item.id;
           card.innerHTML = '<span class="func-tag ' + (item.funcClass || '') + '">' + item.func + '</span>' + item.title;
 
-          // Drag events
-          card.addEventListener('dragstart', function(e) {
-            card.classList.add('dragging');
-            e.dataTransfer.setData('text/plain', JSON.stringify({ itemId: item.id, fromCol: col.id }));
-            e.dataTransfer.effectAllowed = 'move';
-          });
+          // Drag events (only in edit mode)
+          if (global.Dashboard.editMode) {
+            card.addEventListener('dragstart', function(e) {
+              card.classList.add('dragging');
+              e.dataTransfer.setData('text/plain', JSON.stringify({ itemId: item.id, fromCol: col.id }));
+              e.dataTransfer.effectAllowed = 'move';
+            });
 
-          card.addEventListener('dragend', function(e) {
-            card.classList.remove('dragging');
-            board.querySelectorAll('.kanban-col').forEach(function(c) { c.classList.remove('drag-over'); });
-          });
+            card.addEventListener('dragend', function(e) {
+              card.classList.remove('dragging');
+              board.querySelectorAll('.kanban-col').forEach(function(c) { c.classList.remove('drag-over'); });
+            });
+          }
 
           colEl.appendChild(card);
         });
 
-        // Drop events on column
-        colEl.addEventListener('dragover', function(e) {
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'move';
-          colEl.classList.add('drag-over');
-        });
+        // Drop events on column (only in edit mode)
+        if (global.Dashboard.editMode) {
+          colEl.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            colEl.classList.add('drag-over');
+          });
 
-        colEl.addEventListener('dragleave', function(e) {
-          colEl.classList.remove('drag-over');
-        });
+          colEl.addEventListener('dragleave', function(e) {
+            colEl.classList.remove('drag-over');
+          });
 
-        colEl.addEventListener('drop', function(e) {
-          e.preventDefault();
-          colEl.classList.remove('drag-over');
-          var data = JSON.parse(e.dataTransfer.getData('text/plain'));
-          if (data.fromCol !== col.id) {
-            self._moveItem(data.itemId, data.fromCol, col.id);
-          }
-        });
+          colEl.addEventListener('drop', function(e) {
+            e.preventDefault();
+            colEl.classList.remove('drag-over');
+            var data = JSON.parse(e.dataTransfer.getData('text/plain'));
+            if (data.fromCol !== col.id) {
+              self._moveItem(data.itemId, data.fromCol, col.id);
+            }
+          });
+        }
 
         board.appendChild(colEl);
       });

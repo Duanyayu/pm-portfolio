@@ -161,6 +161,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Health check endpoint (for Render monitoring)
+  if (reqPath === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', uptime: process.uptime() }));
+    return;
+  }
+
   // Serve static dashboard files
   serveStatic(reqPath, res);
 });
@@ -171,8 +178,10 @@ server.listen(PORT, () => {
   console.log('  Mars 5 Ultra 散热优化 — 项目仪表盘');
   console.log('  ============================================');
   console.log('');
-  console.log(`  Local:  http://localhost:${PORT}`);
-  console.log(`  Proxy:  /api/jira/* → ${JIRA_HOST}`);
+  console.log(`  Local:         http://localhost:${PORT}`);
+  console.log('  HR (read-only): http://localhost:' + PORT + '/');
+  console.log(`  Admin (edit):   http://localhost:${PORT}/?edit=1`);
+  console.log(`  Jira Proxy:     /api/jira/* → ${JIRA_HOST}`);
   console.log('');
   console.log('  按 Ctrl+C 停止服务器');
   console.log('');

@@ -47,17 +47,24 @@
           '<strong>推荐:</strong> ' + decision.recommendation +
           ' | <strong>负责人:</strong> ' + decision.owner +
           ' | <span style="color:' + countdownColor + ';">截止: ' + decision.deadline + ' (' + countdownText + ')</span>' +
-          '</div></div>' +
-          '<button class="dismiss" title="暂时关闭">✕</button>';
+          '</div></div>';
 
-        banner.querySelector('.dismiss').addEventListener('click', function() {
-          self._dismissed.push(decision.id);
-          localStorage.setItem('dashboard-dismissed-decisions', JSON.stringify(self._dismissed));
-          banner.remove();
-          if (self.container.querySelectorAll('.decisions-banner').length === 0) {
-            self.container.innerHTML = '<div style="font-size:13px;color:#8b949e;">所有决策已处理。</div>';
-          }
-        });
+        // Dismiss button: only in edit mode
+        if (global.Dashboard && global.Dashboard.editMode) {
+          var dismissBtn = document.createElement('button');
+          dismissBtn.className = 'dismiss';
+          dismissBtn.title = '暂时关闭';
+          dismissBtn.textContent = '✕';
+          dismissBtn.addEventListener('click', function() {
+            self._dismissed.push(decision.id);
+            localStorage.setItem('dashboard-dismissed-decisions', JSON.stringify(self._dismissed));
+            banner.remove();
+            if (self.container.querySelectorAll('.decisions-banner').length === 0) {
+              self.container.innerHTML = '<div style="font-size:13px;color:#8b949e;">所有决策已处理。</div>';
+            }
+          });
+          banner.appendChild(dismissBtn);
+        }
 
         self.container.appendChild(banner);
       });
