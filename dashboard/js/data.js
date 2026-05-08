@@ -233,11 +233,11 @@
     ],
 
     // ---- Jira 集成配置 ----
-    // >>> 如需 Jira 实时数据，请修改 baseUrl 为你的 Jira Cloud 地址 <<<
-    // 示例: baseUrl: 'https://your-company.atlassian.net'
+    // 本地演示: baseUrl: '/api/jira' (通过 Node.js 代理)
+    // Confluence: baseUrl: 'https://你的域名.atlassian.net' (同域免代理)
     jira: {
       enabled: false,
-      baseUrl: '',
+      baseUrl: '/api/jira',
       projectKey: 'MAR5'
     }
   };
