@@ -18,6 +18,7 @@ const path = require('path');
 const url = require('url');
 
 const PORT = process.env.PORT || 3000;
+const ROOT_DIR = path.join(__dirname, '..');
 const DASHBOARD_DIR = path.join(__dirname, '..', 'dashboard');
 const JIRA_HOST = '424592383.atlassian.net';
 
@@ -33,17 +34,17 @@ const MIME = {
   '.ico': 'image/x-icon'
 };
 
-function serveStatic(reqPath, res) {
-  // Map / -> /index.html, /css/* -> /css/*, /js/* -> /js/*
+function serveStatic(reqPath, baseDir, res) {
+  // Map / -> /index.html
   let filePath = reqPath;
   if (filePath === '/' || filePath === '') filePath = '/index.html';
 
   // Security: prevent directory traversal
   const normalized = path.normalize(filePath).replace(/^(\.\.(\/|\\|$))+/, '');
-  const fullPath = path.join(DASHBOARD_DIR, normalized);
+  const fullPath = path.join(baseDir, normalized);
 
-  // Ensure the resolved path is within dashboard/
-  if (!fullPath.startsWith(DASHBOARD_DIR)) {
+  // Ensure the resolved path is within baseDir
+  if (!fullPath.startsWith(baseDir)) {
     res.writeHead(403);
     res.end('Forbidden');
     return;
@@ -55,16 +56,8 @@ function serveStatic(reqPath, res) {
   fs.readFile(fullPath, (err, data) => {
     if (err) {
       if (err.code === 'ENOENT') {
-        // SPA fallback: serve index.html for unknown paths
-        fs.readFile(path.join(DASHBOARD_DIR, 'index.html'), (err2, indexData) => {
-          if (err2) {
-            res.writeHead(404);
-            res.end('Not Found');
-          } else {
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            res.end(indexData);
-          }
-        });
+        res.writeHead(404);
+        res.end('Not Found');
       } else {
         res.writeHead(500);
         res.end('Internal Server Error');
@@ -168,8 +161,21 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Serve static dashboard files
-  serveStatic(reqPath, res);
+  // Route: /dashboard/* → dashboard/ directory
+  if (reqPath.startsWith('/dashboard/') || reqPath === '/dashboard') {
+    var subPath = reqPath.replace(/^\/dashboard/, '') || '/';
+    serveStatic(subPath, DASHBOARD_DIR, res);
+    return;
+  }
+
+  // Route: /deliverables/* → deliverables/ directory
+  if (reqPath.startsWith('/deliverables/')) {
+    serveStatic(reqPath, ROOT_DIR, res);
+    return;
+  }
+
+  // Route: / → root index.html (portfolio landing page)
+  serveStatic(reqPath, ROOT_DIR, res);
 });
 
 server.listen(PORT, () => {
@@ -178,10 +184,10 @@ server.listen(PORT, () => {
   console.log('  Mars 5 Ultra 散热优化 — 项目仪表盘');
   console.log('  ============================================');
   console.log('');
-  console.log(`  Local:         http://localhost:${PORT}`);
-  console.log('  HR (read-only): http://localhost:' + PORT + '/');
-  console.log(`  Admin (edit):   http://localhost:${PORT}/?edit=1`);
-  console.log(`  Jira Proxy:     /api/jira/* → ${JIRA_HOST}`);
+  console.log(`  Portfolio:       http://localhost:${PORT}/`);
+  console.log(`  Dashboard (RO):  http://localhost:${PORT}/dashboard/`);
+  console.log(`  Dashboard (Edit): http://localhost:${PORT}/dashboard/?edit=1`);
+  console.log(`  Jira Proxy:      /api/jira/* → ${JIRA_HOST}`);
   console.log('');
   console.log('  按 Ctrl+C 停止服务器');
   console.log('');

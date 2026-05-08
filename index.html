@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>硬件产品经理 · 作品集</title>
+<style>
+:root {
+  --bg: #080c12; --bg2: #0f151e; --bg3: #161e2a;
+  --border: #1e2a3a; --text: #c8d6e5; --text2: #7a8ba0;
+  --accent: #4dabf7; --accent2: #748ffc; --accent3: #20c997;
+  --warn: #fcc419; --danger: #ff6b6b;
+  --radius: 14px; --radius-sm: 8px;
+}
+* { margin:0;padding:0;box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif; line-height:1.6; overflow-x:hidden; }
+
+/* ---- Navigation ---- */
+.nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; justify-content:space-between; align-items:center; transition:background .3s; }
+.nav.scrolled { background:rgba(8,12,18,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+.nav-logo { font-size:18px; font-weight:700; color:#fff; letter-spacing:-0.5px; }
+.nav-logo span { color:var(--accent); }
+.nav-links { display:flex; gap:28px; list-style:none; }
+.nav-links a { color:var(--text2); text-decoration:none; font-size:14px; transition:color .2s; }
+.nav-links a:hover { color:#fff; }
+
+/* ---- Hero ---- */
+.hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:120px 32px 80px; position:relative; }
+.hero::before { content:''; position:absolute; top:20%; left:50%; transform:translate(-50%,-50%); width:600px; height:600px; background:radial-gradient(circle,rgba(77,171,247,0.08),transparent 70%); pointer-events:none; }
+.hero-badge { display:inline-block; padding:6px 16px; border:1px solid var(--border); border-radius:20px; font-size:12px; color:var(--accent); letter-spacing:1px; text-transform:uppercase; margin-bottom:28px; }
+.hero h1 { font-size:clamp(36px,6vw,64px); font-weight:800; letter-spacing:-1.5px; line-height:1.15; margin-bottom:20px; }
+.hero h1 .gradient { background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero p { font-size:18px; color:var(--text2); max-width:600px; margin:0 auto 40px; }
+.hero-cta { display:inline-flex; gap:12px; }
+.btn { padding:12px 28px; border-radius:var(--radius-sm); font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; transition:all .25s; display:inline-flex; align-items:center; gap:8px; border:none; }
+.btn-primary { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; box-shadow:0 4px 20px rgba(77,171,247,0.3); }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(77,171,247,0.45); }
+.btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+.btn-outline:hover { border-color:var(--accent); color:var(--accent); }
+
+/* ---- Section Common ---- */
+.section { padding:100px 32px; max-width:1100px; margin:0 auto; }
+.section-label { font-size:12px; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:12px; }
+.section h2 { font-size:clamp(28px,4vw,40px); font-weight:700; letter-spacing:-0.5px; margin-bottom:16px; }
+.section-intro { font-size:17px; color:var(--text2); max-width:600px; margin-bottom:48px; }
+
+/* ---- Competency Grid ---- */
+.comp-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+.comp-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:32px; transition:all .3s; position:relative; overflow:hidden; cursor:default; }
+.comp-card:hover { transform:translateY(-4px); border-color:var(--accent); box-shadow:0 12px 40px rgba(0,0,0,0.3); }
+.comp-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transform:scaleX(0); transition:transform .3s; }
+.comp-card:hover::after { transform:scaleX(1); }
+.comp-icon { font-size:28px; margin-bottom:16px; display:block; }
+.comp-card h3 { font-size:17px; margin-bottom:8px; color:#fff; }
+.comp-card p { font-size:13px; color:var(--text2); line-height:1.7; }
+.comp-card .tag { display:inline-block; padding:3px 10px; background:rgba(77,171,247,0.1); color:var(--accent); border-radius:12px; font-size:11px; margin-top:12px; }
+
+/* ---- Thinking Process ---- */
+.thinking-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(450px,1fr)); gap:24px; }
+.think-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:28px 32px; display:flex; gap:20px; align-items:flex-start; transition:all .3s; }
+.think-card:hover { border-color:var(--accent2); }
+.think-num { width:44px; height:44px; border-radius:50%; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:var(--accent); flex-shrink:0; border:1px solid var(--border); }
+.think-content h4 { font-size:16px; color:#fff; margin-bottom:6px; }
+.think-content .skill-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+.think-content .skill-tag { padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; text-transform:uppercase; }
+.skill-tag.insight { background:rgba(32,201,151,0.15); color:var(--accent3); }
+.skill-tag.prd { background:rgba(116,143,252,0.15); color:var(--accent2); }
+.skill-tag.pm { background:rgba(252,196,25,0.15); color:var(--warn); }
+.skill-tag.collab { background:rgba(77,171,247,0.15); color:var(--accent); }
+.think-content p { font-size:13px; color:var(--text2); }
+
+/* ---- Stats ---- */
+.stats-row { display:flex; gap:40px; justify-content:center; flex-wrap:wrap; margin:48px 0; }
+.stat-item { text-align:center; }
+.stat-num { font-size:clamp(32px,5vw,48px); font-weight:800; color:#fff; letter-spacing:-1px; }
+.stat-label { font-size:13px; color:var(--text2); margin-top:4px; }
+
+/* ---- Deliverables ---- */
+.deliver-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+.deliver-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:28px; transition:all .3s; text-decoration:none; color:inherit; display:block; }
+.deliver-card:hover { border-color:var(--accent3); transform:translateY(-3px); }
+.deliver-card .icon { font-size:32px; margin-bottom:12px; }
+.deliver-card h4 { font-size:16px; color:#fff; margin-bottom:8px; }
+.deliver-card p { font-size:13px; color:var(--text2); }
+.deliver-card .arrow { display:inline-flex; align-items:center; gap:6px; color:var(--accent); font-size:13px; font-weight:600; margin-top:14px; transition:gap .2s; }
+.deliver-card:hover .arrow { gap:10px; }
+
+/* ---- Dashboard CTA Section ---- */
+.cta-section { text-align:center; padding:120px 32px; background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.cta-section h2 { font-size:clamp(28px,4vw,36px); margin-bottom:12px; }
+.cta-section p { color:var(--text2); margin-bottom:32px; font-size:16px; }
+.cta-buttons { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+
+/* ---- Footer ---- */
+.footer { text-align:center; padding:40px 32px; color:var(--text2); font-size:12px; }
+
+/* ---- Animations ---- */
+.fade-in { opacity:0; transform:translateY(24px); transition:all .6s ease-out; }
+.fade-in.visible { opacity:1; transform:translateY(0); }
+
+/* ---- Particles ---- */
+#particles { position:fixed; top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0; }
+
+@media (max-width:768px) {
+  .nav-links { display:none; }
+  .thinking-grid { grid-template-columns:1fr; }
+  .hero { padding:80px 20px; }
+  .section { padding:60px 20px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav class="nav" id="nav">
+  <div class="nav-logo">Mars 5 Ultra <span>· PM</span></div>
+  <ul class="nav-links">
+    <li><a href="#competencies">核心素养</a></li>
+    <li><a href="#thinking">设计思考</a></li>
+    <li><a href="#deliverables">交付物</a></li>
+    <li><a href="#dashboard">仪表盘</a></li>
+  </ul>
+</nav>
+
+<!-- ====== Hero ====== -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">Hardware Product Manager Portfolio</div>
+    <h1>从用户反馈到产品交付<br><span class="gradient">完整闭环的PM思维</span></h1>
+    <p>基于 Mars 5 Ultra 真实用户反馈推演，展示从洞察→PRD→拆解→管理→验证的硬件产品经理核心能力链条</p>
+    <div class="hero-cta">
+      <a href="#dashboard" class="btn btn-primary">→ 进入项目管理仪表盘</a>
+      <a href="#thinking" class="btn btn-outline">查看设计思考</a>
+    </div>
+  </div>
+</section>
+
+<!-- ====== Competencies ====== -->
+<section class="section" id="competencies">
+  <div class="section-label fade-in">Core Competencies</div>
+  <h2 class="fade-in">硬件产品经理 · 核心素养</h2>
+  <p class="section-intro fade-in">以下六项能力在本作品集的每一份交付物中均有体现，点击任意卡片查看对应的产出物证据。</p>
+
+  <div class="comp-grid">
+    <div class="comp-card fade-in" onclick="document.getElementById('thinking').scrollIntoView({behavior:'smooth'})">
+      <span class="comp-icon">🔍</span>
+      <h3>市场与用户洞察</h3>
+      <p>持续追踪市场与竞品动态，系统化整理行业技术信息与核心用户反馈，为产品策略提供关键数据与事实支持。</p>
+      <span class="tag">→ 用户洞察报告</span>
+    </div>
+    <div class="comp-card fade-in" onclick="document.getElementById('thinking').scrollIntoView({behavior:'smooth'})">
+      <span class="comp-icon">📋</span>
+      <h3>开发计划分解与落地</h3>
+      <p>主导撰写逻辑严密、细节清晰的产品需求文档 PRD，并将其分解为结构化的开发任务与可执行计划。</p>
+      <span class="tag">→ 散热优化 PRD · WBS</span>
+    </div>
+    <div class="comp-card fade-in" onclick="document.getElementById('thinking').scrollIntoView({behavior:'smooth'})">
+      <span class="comp-icon">📊</span>
+      <h3>项目进度管理与驱动</h3>
+      <p>建立清晰的项目状态同步机制，精准识别并持续跟进风险、资源瓶颈和跨团队依赖，推动问题形成解决方案并最终闭环。</p>
+      <span class="tag">→ 仪表盘 · 风险矩阵 · 燃尽图</span>
+    </div>
+    <div class="comp-card fade-in" onclick="document.getElementById('thinking').scrollIntoView({behavior:'smooth'})">
+      <span class="comp-icon">🤝</span>
+      <h3>跨部门沟通与协同</h3>
+      <p>作为项目执行阶段的核心接口，在硬件、固件、软件、测试及供应链团队之间高效同步项目信息，确保目标与变更共识。</p>
+      <span class="tag">→ 同步记录 · RACI 矩阵</span>
+    </div>
+    <div class="comp-card fade-in" onclick="document.getElementById('thinking').scrollIntoView({behavior:'smooth'})">
+      <span class="comp-icon">🧪</span>
+      <h3>产品验证与迭代跟进</h3>
+      <p>深度参与产品测试验证，系统跟进内外部反馈，转化为具体待办事项纳入开发流程追踪管理。</p>
+      <span class="tag">→ 测试用例 · 验收标准</span>
+    </div>
+    <div class="comp-card fade-in" onclick="document.getElementById('thinking').scrollIntoView({behavior:'smooth'})">
+      <span class="comp-icon">⚡</span>
+      <h3>逻辑思维与结构化拆解</h3>
+      <p>擅长将复杂目标分解为可执行的细节任务，从用户反馈逐层下钻到开发任务，形成可追溯的需求链路。</p>
+      <span class="tag">→ WBS · Jira 映射 · 需求追溯</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== Thinking Process ====== -->
+<section class="section" id="thinking">
+  <div class="section-label fade-in">Design Thinking Journey</div>
+  <h2 class="fade-in">从问题到方案 · 思考历程</h2>
+  <p class="section-intro fade-in">以下展示了每个交付物背后的PM思考过程，以及所体现的核心素养。</p>
+
+  <div class="thinking-grid">
+    <div class="think-card fade-in">
+      <div class="think-num">1</div>
+      <div class="think-content">
+        <h4>用户洞察报告</h4>
+        <div class="skill-tags">
+          <span class="skill-tag insight">用户洞察</span>
+          <span class="skill-tag insight">竞品分析</span>
+          <span class="skill-tag collab">数据驱动</span>
+        </div>
+        <p>采集三位真实用户的公开测评反馈，对非结构化抱怨进行"产品化转译"——将用户的"底部发烫"转化为"散热设计未覆盖长时工况"的工程命题。痛点分级 P0/P1/P2 依据跨用户共识度和对核心价值主张的侵蚀程度，而非直觉排序。</p>
+      </div>
+    </div>
+    <div class="think-card fade-in">
+      <div class="think-num">2</div>
+      <div class="think-content">
+        <h4>散热优化 PRD</h4>
+        <div class="skill-tags">
+          <span class="skill-tag prd">PRD 撰写</span>
+          <span class="skill-tag prd">工程化思维</span>
+          <span class="skill-tag pm">范围管理</span>
+        </div>
+        <p>将洞察转化为可执行的 PRD：量化目标（38℃/35dB/¥15），明确 In/Out Scope 边界，定义固件接口 JSON Schema，编写可复现的测试用例。WBS 拆解至人天级，标注跨职能依赖——这一切体现的是"能落地的需求文档"的标准。</p>
+      </div>
+    </div>
+    <div class="think-card fade-in">
+      <div class="think-num">3</div>
+      <div class="think-content">
+        <h4>项目管理仪表盘</h4>
+        <div class="skill-tags">
+          <span class="skill-tag pm">项目管理</span>
+          <span class="skill-tag pm">风险管理</span>
+          <span class="skill-tag collab">数据可视化</span>
+        </div>
+        <p>从 PRD 的 WBS 推导出 Sprint 规划、燃尽图预测、5×5 风险矩阵、团队负载视图。每个模块都有清晰的"为什么需要它"的产品理由——燃尽图跟踪交付信心，风险矩阵量化优先级，负载视图防止资源过载。</p>
+      </div>
+    </div>
+    <div class="think-card fade-in">
+      <div class="think-num">4</div>
+      <div class="think-content">
+        <h4>Jira 集成设计</h4>
+        <div class="skill-tags">
+          <span class="skill-tag prd">系统设计</span>
+          <span class="skill-tag collab">工具链</span>
+          <span class="skill-tag pm">敏捷流程</span>
+        </div>
+        <p>将 PRD 的 WBS 映射到 Jira Epic/Story/子任务三级结构，设计 Sprint 规划总览。同时处理了 CORS 跨域、API 认证、优雅降级等实际工程问题——展示 PM 对技术实现边界的理解深度。</p>
+      </div>
+    </div>
+    <div class="think-card fade-in">
+      <div class="think-num">5</div>
+      <div class="think-content">
+        <h4>标准文档体系</h4>
+        <div class="skill-tags">
+          <span class="skill-tag prd">流程建设</span>
+          <span class="skill-tag collab">组织能力</span>
+          <span class="skill-tag insight">经验沉淀</span>
+        </div>
+        <p>建立了可复用的模板体系：PRD 模板、设计评审 Checklist、项目执行 SOP（含 RACI 矩阵）、需求管理规范（含 ID 命名与优先级定义）。体现的不只是"做过一个项目"，而是"能将经验转化为团队可用的流程资产"。</p>
+      </div>
+    </div>
+    <div class="think-card fade-in">
+      <div class="think-num">6</div>
+      <div class="think-content">
+        <h4>编辑模式与权限设计</h4>
+        <div class="skill-tags">
+          <span class="skill-tag pm">体验设计</span>
+          <span class="skill-tag prd">产品思维</span>
+          <span class="skill-tag collab">技术理解</span>
+        </div>
+        <p>考虑到面试场景中HR只需浏览、自己需要修改演示，设计了"只读链接 + ?edit=1密码解锁"的双模式访问。这个设计本身就是一个微型的"用户需求→产品方案"闭环——识别了两类用户的核心场景差异。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== Stats ====== -->
+<div class="stats-row section fade-in">
+  <div class="stat-item"><div class="stat-num" data-count="3">0</div><div class="stat-label">核心交付物</div></div>
+  <div class="stat-item"><div class="stat-num" data-count="30">0</div><div class="stat-label">项目文件</div></div>
+  <div class="stat-item"><div class="stat-num" data-count="7">0</div><div class="stat-label">仪表盘模块</div></div>
+  <div class="stat-item"><div class="stat-num" data-count="6">0</div><div class="stat-label">标准模板</div></div>
+</div>
+
+<!-- ====== Deliverables ====== -->
+<section class="section" id="deliverables">
+  <div class="section-label fade-in">Deliverables</div>
+  <h2 class="fade-in">核心交付物</h2>
+  <p class="section-intro fade-in">三份交付物共同构成完整的"用户反馈 → 洞察 → PRD → 任务拆解 → 项目管理 → 验证闭环"证据链。</p>
+
+  <div class="deliver-grid">
+    <a href="deliverables/user-insight-report-v1.md" class="deliver-card fade-in" target="_blank">
+      <div class="icon">📖</div>
+      <h4>用户深度洞察报告 V1.0</h4>
+      <p>基于三位Mars 5 Ultra真实用户公开测评，系统化识别P0/P1/P2痛点，含竞品推演与产品策略建议。</p>
+      <span class="arrow">查看报告 →</span>
+    </a>
+    <a href="deliverables/thermal-optimization-prd-v1.md" class="deliver-card fade-in" target="_blank">
+      <div class="icon">📐</div>
+      <h4>散热系统优化专项 PRD V1.0</h4>
+      <p>完整PRD：量化目标、In/Out Scope、功能需求、固件接口JSON Schema、测试用例、WBS分解。</p>
+      <span class="arrow">查看PRD →</span>
+    </a>
+    <a href="deliverables/project-dashboard.html" class="deliver-card fade-in" target="_blank">
+      <div class="icon">📊</div>
+      <h4>项目管理仪表盘（原始版）</h4>
+      <p>修改前的对照版本——里程碑、看板、风险登记板、跨团队同步记录，纯HTML可直接浏览器打开。</p>
+      <span class="arrow">查看原始版 →</span>
+    </a>
+  </div>
+</section>
+
+<!-- ====== Dashboard CTA ====== -->
+<section class="cta-section fade-in" id="dashboard">
+  <h2>进入交互式项目管理仪表盘</h2>
+  <p>7 个模块：燃尽图 · 拖拽看板 · 风险矩阵 · 团队负载 · Sprint 日历 · 同步记录 · Jira 实时数据</p>
+  <div class="cta-buttons">
+    <a href="/dashboard/" class="btn btn-primary" style="font-size:17px;padding:16px 36px;">→ 进入仪表盘（只读模式）</a>
+    <a href="/dashboard/?edit=1" class="btn btn-outline" style="font-size:17px;padding:16px 36px;">🔑 编辑模式（需密码）</a>
+  </div>
+  <p style="margin-top:20px;font-size:12px;color:var(--text2);">编辑密码: mars5admin2026 | 编辑模式下可拖拽看板、关闭决策、连接Jira实时数据</p>
+</section>
+
+<footer class="footer">
+  <p>Mars 5 Ultra PM Portfolio · 基于公开用户反馈推演 · 不依赖任何内部信息</p>
+</footer>
+
+<script>
+// ---- Particles ----
+(function(){
+  var c=document.getElementById('particles'),ctx=c.getContext('2d'),w,h,particles=[];
+  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(var i=0;i<50;i++) particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+0.5,vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3});
+  function animate(){
+    ctx.clearRect(0,0,w,h);
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(77,171,247,0.15)';ctx.fill();
+    }
+    // draw connections
+    for(var i=0;i<particles.length;i++){
+      for(var j=i+1;j<particles.length;j++){
+        var dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<120){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle='rgba(77,171,247,'+(0.06*(1-dist/120))+')';ctx.stroke();}
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ---- Nav scroll ----
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);});
+
+// ---- Scroll reveal ----
+(function(){
+  var els=document.querySelectorAll('.fade-in');
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.15});
+  els.forEach(function(el){obs.observe(el);});
+})();
+
+// ---- Counter animation ----
+(function(){
+  var nums=document.querySelectorAll('.stat-num[data-count]');
+  var started={};
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting && !started[e.target.textContent]){
+        started[e.target.textContent]=true;
+        var target=parseInt(e.target.dataset.count),current=0,step=Math.ceil(target/40);
+        var timer=setInterval(function(){current+=step;if(current>=target){current=target;clearInterval(timer);}e.target.textContent=current;},30);
+      }
+    });
+  },{threshold:0.5});
+  nums.forEach(function(n){obs.observe(n);});
+})();
+</script>
+</body>
+</html>
