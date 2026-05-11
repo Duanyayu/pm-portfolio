@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mars 5 Ultra 散热优化专项 — 产品经理作品集</title>
+
+<!-- ==================== Google Fonts: 编辑级字体搭配 ==================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ========================================================================
+   设计系统 — CSS 自定义属性（三层 Token 架构）
+   ======================================================================== */
+
+:root {
+  /* ---- 原语层 Primitive Tokens ---- */
+  --color-warm-black:     #171412;
+  --color-deep-brown:     #1f1c18;
+  --color-dark-surface:   #282420;
+  --color-elevated:       #2f2a25;
+  --color-card:           #332e28;
+  --color-border-subtle:  #3a332b;
+  --color-border:         #4a4238;
+
+  --color-copper-400:     #b8855c;
+  --color-copper-300:     #c8966c;
+  --color-copper-200:     #d4a574;
+  --color-copper-100:     #e0bc8f;
+  --color-copper-50:      #edd4b0;
+
+  --color-cream:          #f5f0eb;
+  --color-warm-white:     #ede6dc;
+  --color-warm-gray-200:  #c4b8a8;
+  --color-warm-gray-300:  #b8a99a;
+  --color-warm-gray-400:  #9a8b7b;
+  --color-warm-gray-500:  #8a7b6e;
+  --color-warm-gray-600:  #6b5f55;
+  --color-warm-gray-700:  #4d433b;
+
+  --color-green-muted:    #7b9b6a;
+  --color-red-muted:      #c4665a;
+  --color-blue-muted:     #7b9bb5;
+  --color-yellow-muted:   #c9a85a;
+  --color-orange-muted:   #c47f5a;
+
+  /* ---- 语义层 Semantic Tokens ---- */
+  --bg-primary:         var(--color-warm-black);
+  --bg-secondary:       var(--color-deep-brown);
+  --bg-surface:         var(--color-dark-surface);
+  --bg-elevated:        var(--color-elevated);
+  --bg-card:            var(--color-card);
+  --border-subtle:      var(--color-border-subtle);
+  --border-default:     var(--color-border);
+
+  --text-primary:       var(--color-warm-white);
+  --text-secondary:     var(--color-warm-gray-200);
+  --text-tertiary:      var(--color-warm-gray-300);
+  --text-muted:         var(--color-warm-gray-500);
+  --text-inverse:       var(--color-warm-black);
+
+  --accent:             var(--color-copper-300);
+  --accent-light:       var(--color-copper-200);
+  --accent-lighter:     var(--color-copper-100);
+  --accent-dark:        var(--color-copper-400);
+  --accent-subtle:      rgba(200, 150, 108, 0.10);
+
+  --semantic-success:   var(--color-green-muted);
+  --semantic-danger:    var(--color-red-muted);
+  --semantic-info:      var(--color-blue-muted);
+  --semantic-warning:   var(--color-yellow-muted);
+  --semantic-orange:    var(--color-orange-muted);
+
+  /* ---- 排版层 Typography Tokens ---- */
+  --font-display:       'Playfair Display', 'Noto Serif SC', serif;
+  --font-body:          'Inter', 'Noto Sans SC', sans-serif;
+  --font-mono:          'JetBrains Mono', monospace;
+
+  --text-hero:          clamp(2.5rem, 5vw, 4.5rem);
+  --text-h1:            clamp(2rem, 3.5vw, 3rem);
+  --text-h2:            clamp(1.5rem, 2.5vw, 2rem);
+  --text-h3:            1.25rem;
+  --text-body:          0.9375rem;
+  --text-body-sm:       0.8125rem;
+  --text-caption:       0.75rem;
+  --text-mono:          0.8125rem;
+
+  --leading-tight:      1.15;
+  --leading-snug:       1.35;
+  --leading-normal:     1.6;
+  --leading-relaxed:    1.75;
+
+  --weight-light:       300;
+  --weight-regular:     400;
+  --weight-medium:      500;
+  --weight-semibold:    600;
+  --weight-bold:        700;
+  --weight-extrabold:   800;
+
+  /* ---- 间距层 Spacing Scale (基于 4px 基准) ---- */
+  --space-xs:           0.25rem;
+  --space-sm:           0.5rem;
+  --space-md:           1rem;
+  --space-lg:           1.5rem;
+  --space-xl:           2rem;
+  --space-2xl:          3rem;
+  --space-3xl:          4rem;
+  --space-4xl:          6rem;
+  --space-section:      5rem;
+
+  /* ---- 其他 ---- */
+  --radius-sm:          4px;
+  --radius-md:          8px;
+  --radius-lg:          12px;
+  --radius-xl:          16px;
+  --radius-full:        9999px;
+
+  --shadow-sm:          0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md:          0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg:          0 8px 32px rgba(0,0,0,0.5);
+  --shadow-glow:        0 0 40px rgba(200,150,108,0.10);
+
+  --transition-fast:    150ms ease;
+  --transition-base:    250ms ease;
+  --transition-slow:    400ms ease;
+
+  --max-width:          1200px;
+  --max-width-narrow:   860px;
+}
+
+/* ========================================================================
+   全局重置与基础样式
+   ======================================================================== */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+}
+
+/* 编辑级装饰性网格背景 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(200,150,108,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,150,108,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- 排版基础 ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+h1 { font-size: var(--text-h1); }
+h2 { font-size: var(--text-h2); }
+h3 { font-size: var(--text-h3); }
+
+p { color: var(--text-secondary); line-height: var(--leading-relaxed); }
+
+a {
+  color: var(--accent-light);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover { color: var(--accent-lighter); }
+
+/* ---- 容器 ---- */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.container-narrow {
+  max-width: var(--max-width-narrow);
+}
+
+/* ---- 分区标题 ---- */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-medium);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: var(--space-sm);
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.section-heading {
+  font-size: var(--text-h2);
+  margin-bottom: var(--space-lg);
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  font-size: var(--text-body);
+  color: var(--text-tertiary);
+  max-width: 560px;
+  margin-bottom: var(--space-2xl);
+}
+
+/* ========================================================================
+   导航栏 — 类杂志目录风格
+   ======================================================================== */
+
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(23,20,18,0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-block: var(--space-md);
+}
+
+.top-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.nav-brand span {
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-xl);
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-tertiary);
+  transition: color var(--transition-fast);
+  letter-spacing: 0.02em;
+}
+
+.nav-links a:hover { color: var(--accent-light); }
+
+/* ========================================================================
+   Hero 区块 — 编辑级大标题布局
+   ======================================================================== */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* 装饰性光晕 */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: -20%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(200,150,108,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-medium);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-lg);
+  display: inline-block;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid rgba(200,150,108,0.2);
+  border-radius: var(--radius-full);
+}
+
+.hero-title {
+  font-size: var(--text-hero);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: var(--space-lg);
+  color: var(--text-primary);
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent-light);
+  position: relative;
+}
+
+.hero-title em::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  opacity: 0.3;
+  border-radius: var(--radius-full);
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-tertiary);
+  line-height: var(--leading-relaxed);
+  max-width: 480px;
+  margin-bottom: var(--space-2xl);
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.75rem 1.75rem;
+  background: var(--accent);
+  color: var(--text-inverse);
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: all var(--transition-base);
+}
+
+.btn-primary:hover {
+  background: var(--accent-light);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(200,150,108,0.25);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.75rem 1.75rem;
+  background: transparent;
+  color: var(--accent-light);
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+  border: 1px solid rgba(200,150,108,0.3);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: all var(--transition-base);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  background: rgba(200,150,108,0.06);
+}
+
+/* Hero 右侧：装饰性排版元素 */
+.hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-accent-shape {
+  width: 320px;
+  height: 380px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  position: relative;
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.hero-accent-shape::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(200,150,108,0.05) 60deg,
+    transparent 120deg,
+    rgba(200,150,108,0.03) 180deg,
+    transparent 240deg,
+    rgba(200,150,108,0.04) 300deg,
+    transparent 360deg
+  );
+  animation: rotateSlow 20s linear infinite;
+}
+
+@keyframes rotateSlow { to { transform: rotate(360deg); } }
+
+.hero-accent-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 7rem;
+  font-weight: var(--weight-extrabold);
+  color: var(--accent);
+  opacity: 0.12;
+  line-height: 1;
+}
+
+.hero-accent-label {
+  position: absolute;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* ========================================================================
+   统计数字条 — 编辑级数据陈列
+   ======================================================================== */
+
+.stats-bar {
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  position: relative;
+  z-index: 1;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.stat-item {
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  position: relative;
+}
+
+.stat-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: var(--border-subtle);
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: var(--weight-extrabold);
+  color: var(--accent-light);
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.04em;
+}
+
+/* ========================================================================
+   区块通用样式
+   ======================================================================== */
+
+.section {
+  padding-block: var(--space-section);
+  position: relative;
+  z-index: 1;
+}
+
+.section-alt {
+  background: var(--bg-secondary);
+}
+
+/* ========================================================================
+   用户原声 — 编辑级 Pull Quote 样式
+   ======================================================================== */
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.quote-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  position: relative;
+  transition: border-color var(--transition-base);
+}
+
+.quote-card:hover {
+  border-color: var(--border-default);
+}
+
+.quote-mark {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: var(--weight-extrabold);
+  color: var(--accent);
+  opacity: 0.15;
+  line-height: 0.5;
+  margin-bottom: var(--space-lg);
+  user-select: none;
+}
+
+.quote-text {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: var(--leading-snug);
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
+.quote-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.quote-source-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--accent-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-caption);
+  color: var(--accent);
+  font-weight: var(--weight-bold);
+}
+
+.quote-source {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+}
+
+.quote-source strong {
+  display: block;
+  color: var(--text-secondary);
+  font-weight: var(--weight-medium);
+}
+
+/* ========================================================================
+   痛点卡片 — 优先级标识
+   ======================================================================== */
+
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.pain-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--transition-base), border-color var(--transition-base);
+}
+
+.pain-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-default);
+}
+
+.pain-card-header {
+  padding: var(--space-lg) var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pain-priority {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  letter-spacing: 0.06em;
+}
+
+.pain-priority.p0 {
+  background: rgba(196,102,90,0.15);
+  color: var(--semantic-danger);
+}
+
+.pain-priority.p1 {
+  background: rgba(196,127,90,0.15);
+  color: var(--semantic-orange);
+}
+
+.pain-priority.p2 {
+  background: rgba(201,168,90,0.15);
+  color: var(--semantic-warning);
+}
+
+.pain-card-body {
+  padding: var(--space-xl);
+}
+
+.pain-card-title {
+  font-size: var(--text-h3);
+  margin-bottom: var(--space-sm);
+}
+
+.pain-card-desc {
+  font-size: var(--text-body-sm);
+  color: var(--text-tertiary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-lg);
+}
+
+.pain-tags {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.pain-tag {
+  font-size: var(--text-caption);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+}
+
+/* ========================================================================
+   竞品对比表 — 编辑级数据表
+   ======================================================================== */
+
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+}
+
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+}
+
+.comp-table th {
+  text-align: left;
+  padding: var(--space-md) var(--space-xl);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.comp-table td {
+  padding: var(--space-md) var(--space-xl);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.comp-table tr:last-child td { border-bottom: none; }
+
+.comp-table .highlight-col {
+  background: var(--accent-subtle);
+  color: var(--accent-light);
+  font-weight: var(--weight-semibold);
+}
+
+.comp-table .check {
+  color: var(--semantic-success);
+  font-weight: var(--weight-bold);
+}
+
+.comp-table .warn {
+  color: var(--semantic-warning);
+}
+
+.comp-table .fail {
+  color: var(--semantic-danger);
+}
+
+/* ========================================================================
+   PRD 目标指标 — 度量卡片
+   ======================================================================== */
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  transition: border-color var(--transition-base);
+}
+
+.metric-card:hover { border-color: var(--accent-dark); }
+
+.metric-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--accent-subtle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: var(--space-md);
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: var(--weight-extrabold);
+  color: var(--accent-light);
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+}
+
+.metric-unit {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.metric-label {
+  font-size: var(--text-caption);
+  color: var(--text-tertiary);
+  font-weight: var(--weight-medium);
+}
+
+/* ========================================================================
+   In Scope / Out of Scope — 双列对比
+   ======================================================================== */
+
+.scope-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.scope-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.scope-header {
+  padding: var(--space-lg) var(--space-xl);
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-bold);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.scope-header.in {
+  background: rgba(123,155,106,0.06);
+  color: var(--semantic-success);
+  border-bottom: 1px solid rgba(123,155,106,0.15);
+}
+
+.scope-header.out {
+  background: rgba(196,102,90,0.06);
+  color: var(--semantic-danger);
+  border-bottom: 1px solid rgba(196,102,90,0.15);
+}
+
+.scope-list {
+  list-style: none;
+  padding: var(--space-xl);
+}
+
+.scope-list li {
+  padding: var(--space-sm) 0;
+  padding-left: var(--space-xl);
+  position: relative;
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.scope-list li:last-child { border-bottom: none; }
+
+.scope-list li::before {
+  position: absolute;
+  left: 0;
+  top: var(--space-sm);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-body-sm);
+}
+
+.in-list li::before {
+  content: '+';
+  color: var(--semantic-success);
+}
+
+.out-list li::before {
+  content: '—';
+  color: var(--semantic-danger);
+}
+
+/* ========================================================================
+   看板 — 拖拽交互任务管理
+   ======================================================================== */
+
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.kanban-column {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.kanban-col-header {
+  padding: var(--space-md) var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kanban-col-count {
+  font-size: var(--text-caption);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+}
+
+.kanban-col-header.todo { color: var(--semantic-info); }
+.kanban-col-header.progress { color: var(--semantic-warning); }
+.kanban-col-header.review { color: var(--semantic-orange); }
+.kanban-col-header.done { color: var(--semantic-success); }
+
+.kanban-col-body {
+  padding: var(--space-sm);
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.kanban-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  cursor: grab;
+  user-select: none;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.kanban-card:active { cursor: grabbing; }
+
+.kanban-card:hover {
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-sm);
+}
+
+.kanban-card.dragging {
+  opacity: 0.4;
+  border-style: dashed;
+}
+
+.kanban-card.drag-over {
+  border-color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+.kanban-card-id {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--accent);
+  font-weight: var(--weight-medium);
+  margin-bottom: var(--space-xs);
+}
+
+.kanban-card-title {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  line-height: var(--leading-snug);
+}
+
+.kanban-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.kanban-card-priority {
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.prio-p0 { background: rgba(196,102,90,0.2); color: var(--semantic-danger); }
+.prio-p1 { background: rgba(196,127,90,0.2); color: var(--semantic-orange); }
+.prio-p2 { background: rgba(201,168,90,0.2); color: var(--semantic-warning); }
+
+/* 拖拽占位提示 */
+.kanban-drop-zone {
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius-md);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: var(--text-caption);
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+/* ========================================================================
+   燃尽图 — Canvas + Sprint 时间线
+   ======================================================================== */
+
+.burndown-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--space-lg);
+}
+
+.burndown-chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  position: relative;
+}
+
+.burndown-chart-container canvas {
+  width: 100%;
+  height: 320px;
+  display: block;
+}
+
+.sprint-timeline {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.timeline-item {
+  display: flex;
+  gap: var(--space-md);
+  position: relative;
+}
+
+.timeline-dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  margin-top: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 18px;
+  bottom: -12px;
+  width: 2px;
+  background: var(--border-subtle);
+}
+
+.timeline-item:last-child::before { display: none; }
+
+.timeline-content {
+  flex: 1;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.timeline-item:last-child .timeline-content { border-bottom: none; }
+
+.timeline-date {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.timeline-title {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.timeline-desc {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+/* ========================================================================
+   底部面板：风险矩阵 + 团队负载 + 同步记录 + 测试用例
+   ======================================================================== */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.dashboard-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: var(--space-md) var(--space-xl);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+
+.panel-body {
+  padding: var(--space-xl);
+}
+
+/* -- 风险矩阵 5x5 -- */
+.risk-matrix {
+  display: grid;
+  grid-template-columns: auto repeat(5, 1fr);
+  gap: 0;
+}
+
+.risk-matrix-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-muted);
+  font-weight: var(--weight-medium);
+}
+
+.risk-header {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--space-xs);
+  font-weight: var(--weight-medium);
+}
+
+.risk-cell {
+  aspect-ratio: 1;
+  min-width: 48px;
+  border-radius: var(--radius-sm);
+  margin: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  position: relative;
+  cursor: default;
+}
+
+.risk-r1 { background: rgba(123,155,106,0.15); color: var(--semantic-success); }
+.risk-r2 { background: rgba(123,155,106,0.25); color: var(--semantic-success); }
+.risk-r3 { background: rgba(201,168,90,0.2); color: var(--semantic-warning); }
+.risk-r4 { background: rgba(196,127,90,0.25); color: var(--semantic-orange); }
+.risk-r5 { background: rgba(196,102,90,0.3); color: var(--semantic-danger); }
+
+.risk-bubble {
+  position: absolute;
+  font-size: 0.7rem;
+}
+
+.risk-legend {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.risk-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.risk-legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* -- 团队负载 -- */
+.team-load-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding-block: var(--space-sm);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.team-load-item:last-child { border-bottom: none; }
+
+.team-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--accent-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-body-sm);
+  color: var(--accent);
+  font-weight: var(--weight-bold);
+  flex-shrink: 0;
+}
+
+.team-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.team-name {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.team-role {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.team-load-bar-wrap {
+  width: 80px;
+  height: 6px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.team-load-bar {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+
+.team-load-pct {
+  width: 36px;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* -- 同步记录 -- */
+.sync-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sync-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sync-item:last-child { border-bottom: none; }
+
+.sync-date {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sync-text {
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-snug);
+}
+
+/* -- 测试用例 -- */
+.test-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.test-case {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.test-id {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--accent);
+  margin-bottom: var(--space-xs);
+}
+
+.test-name {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.test-result {
+  font-size: var(--text-caption);
+  font-weight: var(--weight-medium);
+}
+
+.test-pass { color: var(--semantic-success); }
+.test-fail { color: var(--semantic-danger); }
+.test-pending { color: var(--semantic-warning); }
+
+/* ========================================================================
+   页脚
+   ======================================================================== */
+
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding-block: var(--space-2xl);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-text {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.footer-text strong {
+  color: var(--text-tertiary);
+}
+
+/* ========================================================================
+   响应式
+   ======================================================================== */
+
+@media (max-width: 1024px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+
+  .quotes-grid,
+  .pain-grid { grid-template-columns: 1fr; }
+
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .kanban-board { grid-template-columns: repeat(2, 1fr); }
+
+  .dashboard-grid { grid-template-columns: 1fr; }
+
+  .burndown-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-item:not(:last-child)::after { display: none; }
+
+  .metrics-grid { grid-template-columns: 1fr; }
+
+  .scope-grid { grid-template-columns: 1fr; }
+
+  .kanban-board { grid-template-columns: 1fr; }
+
+  .nav-links { display: none; }
+
+  .hero-title { font-size: 2rem; }
+}
+
+/* ========================================================================
+   打印样式
+   ======================================================================== */
+
+@media print {
+  .top-nav { position: static; }
+  body::before { display: none; }
+  .kanban-board { display: block; }
+  .kanban-column { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== 顶部导航 ==================== -->
+<nav class="top-nav" role="navigation" aria-label="主导航">
+  <div class="container">
+    <div class="nav-brand">Mars 5 <span>Ultra</span> 产品日志</div>
+    <ul class="nav-links">
+      <li><a href="#">洞察</a></li>
+      <li><a href="#">PRD</a></li>
+      <li><a href="#">任务</a></li>
+      <li><a href="#">验证</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ==================== Hero ==================== -->
+<header class="hero" id="hero">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <div class="hero-eyebrow">硬件产品经理 · 作品集</div>
+      <h1 class="hero-title">从用户反馈到<em>产品交付闭环</em></h1>
+      <p class="hero-subtitle">
+        基于 Mars 5 Ultra 真实用户反馈推演，展示从市场洞察→PRD撰写→任务拆解→项目管理→验证闭环的完整PM思维链
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" aria-label="查看完整PRD文档">查看 PRD 文档 &rarr;</button>
+        <button class="btn-secondary" aria-label="查看用户洞察报告">用户洞察报告</button>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-accent-shape">
+        <div class="hero-accent-number">M5</div>
+        <div class="hero-accent-label">Thermal Optimization</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== 统计数字条 ==================== -->
+<section class="stats-bar" aria-label="关键指标">
+  <div class="container stats-grid">
+    <div class="stat-item">
+      <div class="stat-number">3</div>
+      <div class="stat-label">核心交付物</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">39</div>
+      <div class="stat-label">开发任务</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">5</div>
+      <div class="stat-label">标准模板</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 用户原声 ==================== -->
+<section class="section" id="quotes" aria-labelledby="quotes-heading">
+  <div class="container">
+    <div class="section-label">用户原声</div>
+    <h2 class="section-heading" id="quotes-heading">真实反馈驱动的需求来源</h2>
+    <p class="section-subtitle">以下引用来自社交媒体/论坛公开帖子，经脱敏处理后作为需求推演的起点。</p>
+
+    <div class="quotes-grid">
+      <article class="quote-card">
+        <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+        <blockquote class="quote-text">打印一小时后底部面板超过42.5&deg;C，手碰上去烫得不行，旁边就是电源，有点害怕。</blockquote>
+        <div class="quote-meta">
+          <div class="quote-source-icon" aria-hidden="true">U</div>
+          <div class="quote-source"><strong>Reddit 用户</strong>r/resinprinting</div>
+        </div>
+      </article>
+
+      <article class="quote-card">
+        <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+        <blockquote class="quote-text">每次取盖子都要先拔掉空气净化器那根线，盖子和机身卡得很紧，单手很难操作。</blockquote>
+        <div class="quote-meta">
+          <div class="quote-source-icon" aria-hidden="true">D</div>
+          <div class="quote-source"><strong>Discord 社区</strong>Mars 5 Ultra 频道</div>
+        </div>
+      </article>
+
+      <article class="quote-card">
+        <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+        <blockquote class="quote-text">机器工作时能闻到明显的树脂味，外壳塑料感有点强，跟之前用的GKtwo比缩水感明显。</blockquote>
+        <div class="quote-meta">
+          <div class="quote-source-icon" aria-hidden="true">B</div>
+          <div class="quote-source"><strong>B站评论区</strong>Mars 5 Ultra 评测视频</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 痛点卡片 ==================== -->
+<section class="section section-alt" id="pain-points" aria-labelledby="pain-heading">
+  <div class="container">
+    <div class="section-label">痛点分析</div>
+    <h2 class="section-heading" id="pain-heading">优先级驱动的需求分层</h2>
+    <p class="section-subtitle">基于用户反馈频次、严重程度和商业影响的综合评估。</p>
+
+    <div class="pain-grid">
+      <article class="pain-card">
+        <div class="pain-card-header">
+          <span class="pain-priority p0">P0 · 紧急</span>
+        </div>
+        <div class="pain-card-body">
+          <h3 class="pain-card-title">散热信任危机</h3>
+          <p class="pain-card-desc">底部面板长时间工作超过42&deg;C，用户对安全性产生质疑，直接影响购买决策和品牌信任度。</p>
+          <div class="pain-tags">
+            <span class="pain-tag">#散热</span>
+            <span class="pain-tag">#安全</span>
+            <span class="pain-tag">#品牌信任</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pain-card">
+        <div class="pain-card-header">
+          <span class="pain-priority p1">P1 · 高优</span>
+        </div>
+        <div class="pain-card-body">
+          <h3 class="pain-card-title">结构交互连锁</h3>
+          <p class="pain-card-desc">盖子与机身卡紧、空气净化器走线干扰取盖操作，形成一系列关联的结构交互问题。</p>
+          <div class="pain-tags">
+            <span class="pain-tag">#结构</span>
+            <span class="pain-tag">#交互</span>
+            <span class="pain-tag">#走线</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pain-card">
+        <div class="pain-card-header">
+          <span class="pain-priority p2">P2 · 中等</span>
+        </div>
+        <div class="pain-card-body">
+          <h3 class="pain-card-title">跨型号价值落差</h3>
+          <p class="pain-card-desc">与竞品GKtwo对比后，用户感知外壳质感、气味控制等方面存在差距，影响高端定位认知。</p>
+          <div class="pain-tags">
+            <span class="pain-tag">#竞品</span>
+            <span class="pain-tag">#质感</span>
+            <span class="pain-tag">#价值感知</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 竞品对比表 ==================== -->
+<section class="section" id="competitive" aria-labelledby="comp-heading">
+  <div class="container">
+    <div class="section-label">竞品分析</div>
+    <h2 class="section-heading" id="comp-heading">竞品散热与结构横向对比</h2>
+    <p class="section-subtitle">选取同价位区间主要竞品，聚焦散热、结构、气味三个维度进行对标。</p>
+
+    <div class="table-wrapper">
+      <table class="comp-table" aria-label="竞品对比表">
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>Mars 5 Ultra</th>
+            <th>Phrozen Sonic Mini 8K</th>
+            <th>Anycubic Photon M5s</th>
+            <th>GKtwo Uniformation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>底部温度</strong></td>
+            <td class="highlight-col warn">~42.5&deg;C</td>
+            <td>~37&deg;C</td>
+            <td>~39&deg;C</td>
+            <td class="check">~35&deg;C</td>
+          </tr>
+          <tr>
+            <td><strong>散热方案</strong></td>
+            <td class="highlight-col fail">被动散热</td>
+            <td>被动+散热片</td>
+            <td>小型风扇</td>
+            <td class="check">双风扇+风道</td>
+          </tr>
+          <tr>
+            <td><strong>盖子易用性</strong></td>
+            <td class="highlight-col warn">卡紧/需双手</td>
+            <td>普通</td>
+            <td>普通</td>
+            <td class="check">铰链式翻盖</td>
+          </tr>
+          <tr>
+            <td><strong>气味控制</strong></td>
+            <td class="highlight-col fail">树脂味明显</td>
+            <td class="warn">中等</td>
+            <td class="warn">中等</td>
+            <td class="check">活性炭过滤</td>
+          </tr>
+          <tr>
+            <td><strong>外壳材质</strong></td>
+            <td class="highlight-col warn">工程塑料</td>
+            <td>工程塑料</td>
+            <td>工程塑料</td>
+            <td class="check">金属+塑料复合</td>
+          </tr>
+          <tr>
+            <td><strong>价格区间</strong></td>
+            <td class="highlight-col">¥2,299</td>
+            <td>¥2,199</td>
+            <td>¥2,399</td>
+            <td>¥2,699</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PRD 目标指标 ==================== -->
+<section class="section section-alt" id="metrics" aria-labelledby="metrics-heading">
+  <div class="container">
+    <div class="section-label">PRD 目标指标</div>
+    <h2 class="section-heading" id="metrics-heading">量化驱动的设计目标</h2>
+    <p class="section-subtitle">所有指标均为可测量、可验证的硬性标准，纳入设计评审 Checklist。</p>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon" aria-hidden="true">&#x1F321;</div>
+        <div class="metric-value">&le;38</div>
+        <div class="metric-unit">&deg;C</div>
+        <div class="metric-label">底部面板最高温度</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon" aria-hidden="true">&#x1F50A;</div>
+        <div class="metric-value">&le;35</div>
+        <div class="metric-unit">dB</div>
+        <div class="metric-label">散热风扇运行噪音</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon" aria-hidden="true">&#xFFE5;</div>
+        <div class="metric-value">&le;15</div>
+        <div class="metric-unit">元 / 台</div>
+        <div class="metric-label">散热方案 BOM 增量成本</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon" aria-hidden="true">&#x1F4CB;</div>
+        <div class="metric-value">&ge;80%</div>
+        <div class="metric-unit">&nbsp;</div>
+        <div class="metric-label">用户盲测通过率</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== In Scope / Out of Scope ==================== -->
+<section class="section" id="scope" aria-labelledby="scope-heading">
+  <div class="container">
+    <div class="section-label">范围定义</div>
+    <h2 class="section-heading" id="scope-heading">项目边界清晰可控</h2>
+    <p class="section-subtitle">明确当前迭代的交付边界，防止范围蔓延，确保 4 周 Sprint 可交付。</p>
+
+    <div class="scope-grid">
+      <div class="scope-card">
+        <div class="scope-header in" aria-label="In Scope">&#x2713; In Scope</div>
+        <ul class="scope-list in-list">
+          <li>底部散热系统重新设计（主动散热方案）</li>
+          <li>风扇选型与风道 CFD 仿真验证</li>
+          <li>盖子与机身配合间隙优化</li>
+          <li>空气净化器走线方案改良</li>
+          <li>底部面板温度传感器新增</li>
+          <li>Firmware 温控逻辑开发</li>
+          <li>外壳表面处理工艺升级</li>
+          <li>用户盲测（N&ge;30）</li>
+        </ul>
+      </div>
+
+      <div class="scope-card">
+        <div class="scope-header out" aria-label="Out of Scope">&#x2717; Out of Scope</div>
+        <ul class="scope-list out-list">
+          <li>LCD 屏幕升级（下代产品规划）</li>
+          <li>全新外观 ID 设计</li>
+          <li>Z 轴精度提升（步进电机替换）</li>
+          <li>Wi-Fi 模块新增</li>
+          <li>树脂槽加热功能</li>
+          <li>App 远程控制</li>
+          <li>多语言固件界面</li>
+          <li>包装盒重新设计</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 看板 ==================== -->
+<section class="section section-alt" id="kanban" aria-labelledby="kanban-heading">
+  <div class="container">
+    <div class="section-label">任务看板</div>
+    <h2 class="section-heading" id="kanban-heading">Sprint 2 任务追踪</h2>
+    <p class="section-subtitle">拖拽卡片可切换任务状态。当前展示 8 个活跃任务，覆盖散热、结构、固件三条线。</p>
+
+    <div class="kanban-board" id="kanbanBoard">
+      <!-- 待开始 -->
+      <div class="kanban-column" data-status="todo">
+        <div class="kanban-col-header todo">
+          To Do
+          <span class="kanban-col-count" id="count-todo">0</span>
+        </div>
+        <div class="kanban-col-body" id="col-todo" data-status="todo"></div>
+      </div>
+
+      <!-- 进行中 -->
+      <div class="kanban-column" data-status="progress">
+        <div class="kanban-col-header progress">
+          In Progress
+          <span class="kanban-col-count" id="count-progress">0</span>
+        </div>
+        <div class="kanban-col-body" id="col-progress" data-status="progress"></div>
+      </div>
+
+      <!-- 评审中 -->
+      <div class="kanban-column" data-status="review">
+        <div class="kanban-col-header review">
+          Review
+          <span class="kanban-col-count" id="count-review">0</span>
+        </div>
+        <div class="kanban-col-body" id="col-review" data-status="review"></div>
+      </div>
+
+      <!-- 已完成 -->
+      <div class="kanban-column" data-status="done">
+        <div class="kanban-col-header done">
+          Done
+          <span class="kanban-col-count" id="count-done">0</span>
+        </div>
+        <div class="kanban-col-body" id="col-done" data-status="done"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 燃尽图 + Sprint 时间线 ==================== -->
+<section class="section" id="burndown" aria-labelledby="burndown-heading">
+  <div class="container">
+    <div class="section-label">进度追踪</div>
+    <h2 class="section-heading" id="burndown-heading">Sprint 2 燃尽图与时程</h2>
+    <p class="section-subtitle">理想燃尽线 vs 实际剩余工作量。每日更新，数据来源于看板卡片的完成状态。</p>
+
+    <div class="burndown-layout">
+      <div class="burndown-chart-container">
+        <canvas id="burndownCanvas" aria-label="Sprint 2 燃尽图：横轴为日期，纵轴为剩余故事点"></canvas>
+      </div>
+
+      <div class="sprint-timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">05/12</div>
+            <div class="timeline-title">Sprint 2 启动</div>
+            <div class="timeline-desc">39 故事点 · 全量任务入列</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">05/14</div>
+            <div class="timeline-title">散热方案评审</div>
+            <div class="timeline-desc">风扇选型 + CFD 报告</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">05/18</div>
+            <div class="timeline-title">结构样机交付</div>
+            <div class="timeline-desc">3D 打印验证件</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">05/20</div>
+            <div class="timeline-title">固件联调</div>
+            <div class="timeline-desc">温控逻辑 + 传感器集成</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">05/24</div>
+            <div class="timeline-title">Sprint 2 验收</div>
+            <div class="timeline-desc">盲测 + 指标核验</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 底部综合面板 ==================== -->
+<section class="section section-alt" id="dashboard" aria-labelledby="dashboard-heading">
+  <div class="container">
+    <div class="section-label">综合视图</div>
+    <h2 class="section-heading" id="dashboard-heading">风险 · 团队 · 同步 · 验证</h2>
+    <p class="section-subtitle">项目管理四维一体视图，覆盖风险矩阵、团队负载、同步记录和测试用例状态。</p>
+
+    <div class="dashboard-grid">
+
+      <!-- 风险矩阵 5x5 -->
+      <div class="dashboard-panel">
+        <div class="panel-header">风险矩阵 (5 &times; 5)</div>
+        <div class="panel-body">
+          <div class="risk-matrix" id="riskMatrix" role="grid" aria-label="5x5 risk matrix: rows = likelihood, columns = impact">
+            <!-- 由 JS 动态渲染 -->
+          </div>
+          <div class="risk-legend">
+            <div class="risk-legend-item"><span class="risk-legend-swatch" style="background:rgba(123,155,106,0.35)"></span> 低风险</div>
+            <div class="risk-legend-item"><span class="risk-legend-swatch" style="background:rgba(201,168,90,0.35)"></span> 中风险</div>
+            <div class="risk-legend-item"><span class="risk-legend-swatch" style="background:rgba(196,127,90,0.4)"></span> 高风险</div>
+            <div class="risk-legend-item"><span class="risk-legend-swatch" style="background:rgba(196,102,90,0.45)"></span> 极高风险</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 团队负载 -->
+      <div class="dashboard-panel">
+        <div class="panel-header">团队负载 (5 人)</div>
+        <div class="panel-body" id="teamLoad">
+          <!-- 由 JS 动态渲染 -->
+        </div>
+      </div>
+
+      <!-- 同步记录 -->
+      <div class="dashboard-panel">
+        <div class="panel-header">同步记录</div>
+        <div class="panel-body">
+          <ul class="sync-list">
+            <li class="sync-item">
+              <span class="sync-date">05/09</span>
+              <span class="sync-text">Sprint 1 回顾会：散热方案方向对齐，确认主动散热路径</span>
+            </li>
+            <li class="sync-item">
+              <span class="sync-date">05/07</span>
+              <span class="sync-text">结构评审：盖子间隙从 0.8mm 优化至 0.4mm，样件验证通过</span>
+            </li>
+            <li class="sync-item">
+              <span class="sync-date">05/05</span>
+              <span class="sync-text">与供应商确认风扇样品交期，预计 05/12 到货</span>
+            </li>
+            <li class="sync-item">
+              <span class="sync-date">05/03</span>
+              <span class="sync-text">CFD 仿真初版结果出炉，底部温度预估降至 37&deg;C</span>
+            </li>
+            <li class="sync-item">
+              <span class="sync-date">05/01</span>
+              <span class="sync-text">Sprint 2 规划会：39 故事点拆分完成，团队承诺交付</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 测试用例 -->
+      <div class="dashboard-panel">
+        <div class="panel-header">测试用例 (6 项)</div>
+        <div class="panel-body" id="testCases">
+          <!-- 由 JS 动态渲染 -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 页脚 ==================== -->
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-text">
+      <strong>Mars 5 Ultra</strong> 散热优化专项 &middot;
+      产品经理作品集 &middot;
+      基于公开用户反馈推演 &middot;
+      不含内部信息
+    </p>
+  </div>
+</footer>
+
+<!-- ========================================================================
+     JavaScript
+     ======================================================================== -->
+<script>
+/* ==========================================================================
+   一、看板任务数据
+   ========================================================================== */
+
+const INITIAL_TASKS = [
+  { id: 'M5-201', title: '底部散热风扇选型',            status: 'done',    priority: 'p0', assignee: 'HW', storyPoints: 5 },
+  { id: 'M5-202', title: '风道结构 CFD 仿真验证',       status: 'review',  priority: 'p0', assignee: 'ME', storyPoints: 8 },
+  { id: 'M5-203', title: '温度传感器硬件集成',          status: 'progress', priority: 'p0', assignee: 'HW', storyPoints: 5 },
+  { id: 'M5-204', title: '盖子-机身配合间隙优化',       status: 'done',    priority: 'p1', assignee: 'ME', storyPoints: 3 },
+  { id: 'M5-205', title: '空气净化器走线方案改良',      status: 'review',  priority: 'p1', assignee: 'ID', storyPoints: 3 },
+  { id: 'M5-206', title: 'Firmware 温控逻辑开发',       status: 'progress', priority: 'p0', assignee: 'FW', storyPoints: 8 },
+  { id: 'M5-207', title: '外壳表面处理工艺升级',        status: 'todo',    priority: 'p2', assignee: 'ID', storyPoints: 5 },
+  { id: 'M5-208', title: '用户盲测方案设计与执行',      status: 'todo',    priority: 'p1', assignee: 'PM', storyPoints: 2 },
+];
+
+/* ==========================================================================
+   二、看板渲染
+   ========================================================================== */
+
+function renderKanban() {
+  ['todo', 'progress', 'review', 'done'].forEach(function(status) {
+    var col = document.getElementById('col-' + status);
+    col.innerHTML = '';
+
+    var tasks = INITIAL_TASKS.filter(function(t) { return t.status === status; });
+
+    // 更新列计数
+    var countEl = document.getElementById('count-' + status);
+    countEl.textContent = tasks.length;
+
+    tasks.forEach(function(task) {
+      var card = document.createElement('div');
+      card.className = 'kanban-card';
+      card.draggable = true;
+      card.dataset.taskId = task.id;
+      card.dataset.status = task.status;
+
+      card.innerHTML =
+        '<div class="kanban-card-id">' + task.id + '</div>' +
+        '<div class="kanban-card-title">' + task.title + '</div>' +
+        '<div class="kanban-card-meta">' +
+          '<span class="kanban-card-priority prio-' + task.priority + '">' + task.priority.toUpperCase() + '</span>' +
+          '<span>' + task.assignee + '</span>' +
+          '<span>' + task.storyPoints + ' SP</span>' +
+        '</div>';
+
+      // ---- 拖拽事件 ----
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+
+      col.appendChild(card);
+    });
+  });
+}
+
+/* ==========================================================================
+   三、拖拽交互逻辑
+   ========================================================================== */
+
+var draggedCard = null;
+
+function handleDragStart(e) {
+  draggedCard = this;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', this.dataset.taskId);
+}
+
+function handleDragEnd(e) {
+  this.classList.remove('dragging');
+  draggedCard = null;
+  // 清除所有 drag-over 样式
+  document.querySelectorAll('.kanban-card.drag-over').forEach(function(el) {
+    el.classList.remove('drag-over');
+  });
+}
+
+// 为所有列容器绑定 drop 事件
+document.querySelectorAll('.kanban-col-body').forEach(function(col) {
+  col.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    // 高亮目标列的第一个卡片位置
+    var targetCard = e.target.closest('.kanban-card');
+    if (targetCard && targetCard !== draggedCard) {
+      targetCard.classList.add('drag-over');
+    }
+  });
+
+  col.addEventListener('dragleave', function(e) {
+    var targetCard = e.target.closest('.kanban-card');
+    if (targetCard) {
+      targetCard.classList.remove('drag-over');
+    }
+  });
+
+  col.addEventListener('drop', function(e) {
+    e.preventDefault();
+    // 清除高亮
+    document.querySelectorAll('.kanban-card.drag-over').forEach(function(el) {
+      el.classList.remove('drag-over');
+    });
+
+    if (!draggedCard) return;
+
+    var taskId = draggedCard.dataset.taskId;
+    var newStatus = this.dataset.status;
+
+    // 更新数据
+    var task = INITIAL_TASKS.find(function(t) { return t.id === taskId; });
+    if (task && task.status !== newStatus) {
+      task.status = newStatus;
+
+      // 动画反馈：从旧列移到新列
+      var cardEl = document.querySelector('[data-task-id="' + taskId + '"]');
+      if (cardEl) {
+        cardEl.style.transform = 'scale(0.95)';
+        cardEl.style.opacity = '0.6';
+        setTimeout(function() {
+          renderKanban();
+        }, 120);
+      } else {
+        renderKanban();
+      }
+    }
+  });
+});
+
+/* ==========================================================================
+   四、燃尽图 (Canvas)
+   ========================================================================== */
+
+function drawBurndownChart() {
+  var canvas = document.getElementById('burndownCanvas');
+  if (!canvas) return;
+
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.parentElement.getBoundingClientRect();
+  var width = rect.width - 64;   // 减去 padding
+  var height = 320;
+
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // 数据：Sprint 2 共 10 个工作日 (索引 0~9)，总故事点 39
+  var days = ['05/12','05/13','05/14','05/15','05/16','05/19','05/20','05/21','05/22','05/24'];
+  var idealLine = [39, 35, 31, 27, 23, 19, 15, 11, 7, 0];
+  var actualLine = [39, 37, 34, 30, 28, 24, 19, 16, null, null]; // 最后两天待更新
+
+  // 绘图区域
+  var margin = { top: 30, right: 30, bottom: 40, left: 45 };
+  var w = width - margin.left - margin.right;
+  var h = height - margin.top - margin.bottom;
+
+  // Y 轴范围
+  var yMax = 45;
+
+  // ---- 辅助函数 ----
+  function xPos(i) { return margin.left + (i / (days.length - 1)) * w; }
+  function yPos(v) { return margin.top + (1 - v / yMax) * h; }
+
+  // ---- 绘制网格线 ----
+  ctx.strokeStyle = 'rgba(200,150,108,0.08)';
+  ctx.lineWidth = 1;
+  for (var gy = 0; gy <= yMax; gy += 10) {
+    var yy = yPos(gy);
+    ctx.beginPath();
+    ctx.moveTo(margin.left, yy);
+    ctx.lineTo(margin.left + w, yy);
+    ctx.stroke();
+  }
+
+  // ---- 绘制 Y 轴标签 ----
+  ctx.fillStyle = '#8a7b6e';
+  ctx.font = '11px "JetBrains Mono", monospace';
+  ctx.textAlign = 'right';
+  for (var gy2 = 0; gy2 <= yMax; gy2 += 10) {
+    ctx.fillText(gy2 + ' SP', margin.left - 8, yPos(gy2) + 4);
+  }
+
+  // ---- 绘制 X 轴标签 ----
+  ctx.textAlign = 'center';
+  days.forEach(function(d, i) {
+    ctx.fillText(d, xPos(i), margin.top + h + 20);
+  });
+
+  // ---- 绘制理想燃尽线 (虚线) ----
+  ctx.strokeStyle = '#8a7b6e';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  idealLine.forEach(function(v, i) {
+    var action = i === 0 ? 'moveTo' : 'lineTo';
+    ctx[action](xPos(i), yPos(v));
+  });
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 理想线标签
+  ctx.fillStyle = '#8a7b6e';
+  ctx.font = '11px "Inter", "Noto Sans SC", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('理想线', xPos(days.length - 1) - 30, yPos(idealLine[idealLine.length - 1]) - 8);
+
+  // ---- 绘制实际燃尽线 (实线) ----
+  ctx.strokeStyle = '#c8966c';
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  var lastActualIdx = -1;
+  actualLine.forEach(function(v, i) {
+    if (v === null) return;
+    var action = lastActualIdx === -1 ? 'moveTo' : 'lineTo';
+    ctx[action](xPos(i), yPos(v));
+    lastActualIdx = i;
+  });
+  ctx.stroke();
+
+  // 实际线标签
+  ctx.fillStyle = '#c8966c';
+  ctx.textAlign = 'left';
+  if (lastActualIdx >= 0) {
+    ctx.fillText('实际线', xPos(lastActualIdx) - 30, yPos(actualLine[lastActualIdx]) - 8);
+  }
+
+  // ---- 绘制数据点 ----
+  actualLine.forEach(function(v, i) {
+    if (v === null) return;
+    ctx.beginPath();
+    ctx.arc(xPos(i), yPos(v), 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#c8966c';
+    ctx.fill();
+    ctx.strokeStyle = '#1f1c18';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+
+  // ---- 标题 ----
+  ctx.fillStyle = '#ede6dc';
+  ctx.font = '600 14px "Inter", "Noto Sans SC", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('Sprint 2 燃尽追踪', margin.left, 20);
+}
+
+/* ==========================================================================
+   五、风险矩阵 (5x5)
+   ========================================================================== */
+
+function renderRiskMatrix() {
+  var container = document.getElementById('riskMatrix');
+  if (!container) return;
+
+  var risks = [
+    { id: 'R1', label: '风扇',        likelihood: 2, impact: 4, desc: '风扇样品交期延迟' },
+    { id: 'R2', label: 'CFD',         likelihood: 1, impact: 3, desc: '仿真与实测偏差' },
+    { id: 'R3', label: '温控',        likelihood: 3, impact: 3, desc: 'Firmware 温控逻辑缺陷' },
+    { id: 'R4', label: '成本',        likelihood: 2, impact: 2, desc: 'BOM 成本超目标' },
+    { id: 'R5', label: '盲测',        likelihood: 3, impact: 4, desc: '盲测通过率不达标' },
+  ];
+
+  var html = '';
+
+  // 表头行
+  html += '<div class="risk-matrix-label"></div>';
+  for (var ci = 1; ci <= 5; ci++) {
+    html += '<div class="risk-header">影响 ' + ci + '</div>';
+  }
+
+  // 5 行 (可能性 1~5)
+  for (var ri = 1; ri <= 5; ri++) {
+    html += '<div class="risk-matrix-label">可能 ' + ri + '</div>';
+    for (var cj = 1; cj <= 5; cj++) {
+      // 查找落在该单元格的风险
+      var cellRisks = risks.filter(function(r) {
+        return r.likelihood === ri && r.impact === cj;
+      });
+
+      var riskLevel = ri * cj;
+      var levelClass = '';
+      if (riskLevel <= 4)       levelClass = 'risk-r1';
+      else if (riskLevel <= 8)  levelClass = 'risk-r2';
+      else if (riskLevel <= 12) levelClass = 'risk-r3';
+      else if (riskLevel <= 18) levelClass = 'risk-r4';
+      else                       levelClass = 'risk-r5';
+
+      html += '<div class="risk-cell ' + levelClass + '" style="position:relative;">';
+      html += ri*cj;
+      if (cellRisks.length > 0) {
+        html += '<span class="risk-bubble" title="' + cellRisks[0].desc + '">&#x25CF;</span>';
+      }
+      html += '</div>';
+    }
+  }
+
+  container.innerHTML = html;
+}
+
+/* ==========================================================================
+   六、团队负载
+   ========================================================================== */
+
+function renderTeamLoad() {
+  var container = document.getElementById('teamLoad');
+  if (!container) return;
+
+  var members = [
+    { name: '张工', role: '硬件工程师',   load: 90, avatar: 'Z' },
+    { name: '李工', role: '结构工程师',   load: 75, avatar: 'L' },
+    { name: '王工', role: '固件工程师',   load: 85, avatar: 'W' },
+    { name: '赵工', role: 'ID 设计师',    load: 60, avatar: 'Z2' },
+    { name: 'PM',   role: '产品经理',     load: 70, avatar: 'P' },
+  ];
+
+  var html = '';
+  members.forEach(function(m) {
+    var barColor = m.load >= 90 ? '#c4665a' : m.load >= 80 ? '#c47f5a' : '#c8966c';
+    html +=
+      '<div class="team-load-item">' +
+        '<div class="team-avatar">' + m.avatar + '</div>' +
+        '<div class="team-info">' +
+          '<div class="team-name">' + m.name + '</div>' +
+          '<div class="team-role">' + m.role + '</div>' +
+        '</div>' +
+        '<div class="team-load-bar-wrap">' +
+          '<div class="team-load-bar" style="width:' + m.load + '%;background:' + barColor + '"></div>' +
+        '</div>' +
+        '<div class="team-load-pct">' + m.load + '%</div>' +
+      '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+/* ==========================================================================
+   七、测试用例
+   ========================================================================== */
+
+function renderTestCases() {
+  var container = document.getElementById('testCases');
+  if (!container) return;
+
+  var testCases = [
+    { id: 'TC-01', name: '底部面板持续工作 2h 温度',               result: 'pass',  text: '38.2°C（通过）' },
+    { id: 'TC-02', name: '风扇噪音 1m 距离 A 加权',                result: 'pass',  text: '33.4 dB(A)（通过）' },
+    { id: 'TC-03', name: 'BOM 增量成本核算',                       result: 'pass',  text: '¥12.80/台（通过）' },
+    { id: 'TC-04', name: '盖子单手开合成功率',                     result: 'pending', text: '待 2nd 样件' },
+    { id: 'TC-05', name: '空气净化器走线不干扰取盖',               result: 'pass',  text: '100% 通过' },
+    { id: 'TC-06', name: '用户盲测通过率 (n=30)',                  result: 'pending', text: '待 Sprint 末执行' },
+  ];
+
+  var html = '<div class="test-grid">';
+  testCases.forEach(function(tc) {
+    html +=
+      '<div class="test-case">' +
+        '<div class="test-id">' + tc.id + '</div>' +
+        '<div class="test-name">' + tc.name + '</div>' +
+        '<div class="test-result test-' + tc.result + '">' +
+          (tc.result === 'pass' ? '✓ ' : tc.result === 'fail' ? '✗ ' : '○ ') + tc.text +
+        '</div>' +
+      '</div>';
+  });
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+/* ==========================================================================
+   八、初始化
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderKanban();
+  drawBurndownChart();
+  renderRiskMatrix();
+  renderTeamLoad();
+  renderTestCases();
+});
+
+// 窗口大小改变时重绘燃尽图
+window.addEventListener('resize', function() {
+  drawBurndownChart();
+});
+</script>
+
+</body>
+</html>

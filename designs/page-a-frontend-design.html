@@ -1,0 +1,2463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mars 5 Ultra 散热优化专项 — 产品经理作品集</title>
+
+<!-- Google Fonts: Bodoni Moda (标题) + Jost (正文) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;0,6..96,800;1,6..96,400;1,6..96,500&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   全局重置与 CSS 变量
+   ============================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* 极暗暖色主题 — 灵感源自热辐射光谱 */
+  --bg-deep: #060606;
+  --bg-primary: #0b0b0b;
+  --bg-surface: #121212;
+  --bg-card: #1a1a1a;
+  --bg-card-hover: #22201e;
+  --bg-elevated: #242220;
+  --border-subtle: #2a2520;
+  --border-active: #3d352a;
+  --border-glow: #5a4528;
+
+  /* 暖金/铜色系 — 散热主题的视觉锚点 */
+  --accent-thermal: #e8a850;
+  --accent-thermal-bright: #f5c47a;
+  --accent-copper: #c4783c;
+  --accent-copper-deep: #9a5a2a;
+  --accent-ember: #f0b060;
+  --accent-glow: rgba(232, 168, 80, 0.18);
+  --accent-glow-strong: rgba(232, 168, 80, 0.35);
+
+  /* 文字 */
+  --text-primary: #efe9dd;
+  --text-secondary: #a0998c;
+  --text-muted: #6b6358;
+  --text-inverse: #0b0b0b;
+
+  /* 语义色 */
+  --danger: #d4604a;
+  --danger-bg: rgba(212, 96, 74, 0.12);
+  --warning: #e0a040;
+  --warning-bg: rgba(224, 160, 64, 0.12);
+  --info: #6a9cc4;
+  --info-bg: rgba(106, 156, 196, 0.12);
+  --success: #5a9e6f;
+  --success-bg: rgba(90, 158, 111, 0.12);
+
+  /* 排版 */
+  --font-display: 'Bodoni Moda', 'Georgia', 'Times New Roman', serif;
+  --font-body: 'Jost', 'Segoe UI', system-ui, sans-serif;
+
+  /* 间距 */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 5rem;
+  --space-3xl: 8rem;
+
+  /* 圆角 */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* 过渡 */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-normal: 0.4s;
+  --duration-slow: 0.7s;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  background: var(--bg-deep);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   全局交错渐入动画系统 (Staggered Reveal)
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              transform var(--duration-slow) var(--ease-out-expo);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 子元素交错延迟 */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s var(--ease-out-expo),
+              transform 0.6s var(--ease-out-expo);
+}
+.reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.12s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.19s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.26s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.33s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.40s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(7) { transition-delay: 0.47s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(8) { transition-delay: 0.54s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(9) { transition-delay: 0.61s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.visible > *:nth-child(10) { transition-delay: 0.68s; opacity: 1; transform: translateY(0); }
+
+/* ============================================================
+   背景纹理 — 微妙的噪点叠加
+   ============================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ============================================================
+   容器与布局
+   ============================================================ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+.container-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.section {
+  padding: var(--space-3xl) 0;
+  position: relative;
+}
+
+.section-label {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-thermal);
+  margin-bottom: var(--space-md);
+  position: relative;
+  padding-left: 2.5rem;
+}
+.section-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 1.75rem;
+  height: 1px;
+  background: var(--accent-thermal);
+  opacity: 0.6;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+/* ============================================================
+   Hero 区域 — 核心视觉记忆点
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-3xl) var(--space-lg);
+}
+
+/* 热辐射光晕 — 页面的视觉惊喜 */
+.hero-thermal-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(70vw, 700px);
+  height: min(70vw, 700px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(232, 168, 80, 0.12) 0%,
+    rgba(200, 120, 50, 0.06) 25%,
+    rgba(180, 100, 40, 0.02) 50%,
+    transparent 70%
+  );
+  animation: thermal-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes thermal-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* 第二层光晕 — 偏移制造不对称感 */
+.hero-thermal-orb-secondary {
+  position: absolute;
+  top: 55%;
+  left: 48%;
+  transform: translate(-50%, -50%);
+  width: min(50vw, 500px);
+  height: min(50vw, 500px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 40% 45%,
+    rgba(240, 176, 96, 0.08) 0%,
+    rgba(200, 120, 50, 0.03) 40%,
+    transparent 65%
+  );
+  animation: thermal-pulse-secondary 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes thermal-pulse-secondary {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 1;
+  }
+}
+
+/* 热力粒子 Canvas */
+#hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-thermal);
+  border: 1px solid var(--border-active);
+  border-radius: 999px;
+  padding: 0.4rem 1.4rem;
+  margin-bottom: var(--space-xl);
+  backdrop-filter: blur(10px);
+  background: rgba(232, 168, 80, 0.05);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+/* 标题文字的暖色光晕 */
+.hero-title-glow {
+  background: linear-gradient(
+    180deg,
+    #f5e6d0 0%,
+    #e8c898 30%,
+    #d4a878 60%,
+    #c89858 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(232, 168, 80, 0.3));
+}
+
+.hero-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 650px;
+  margin: 0 auto var(--space-xl);
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  animation: scroll-float 2s ease-in-out infinite;
+}
+
+@keyframes scroll-float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+.hero-scroll-line {
+  width: 1px;
+  height: 3rem;
+  background: linear-gradient(to bottom, var(--accent-thermal), transparent);
+  opacity: 0.5;
+}
+
+.hero-scroll-text {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   统计数字条
+   ============================================================ */
+.stats-bar {
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  padding: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stat-item {
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+  position: relative;
+}
+.stat-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 25%;
+  height: 50%;
+  width: 1px;
+  background: var(--border-subtle);
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent-thermal);
+  margin-bottom: var(--space-xs);
+  letter-spacing: -0.03em;
+}
+
+.stat-label {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   用户原声引用卡片
+   ============================================================ */
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.quote-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  position: relative;
+  transition: border-color var(--duration-normal) var(--ease-out-expo),
+              background var(--duration-normal) var(--ease-out-expo);
+}
+.quote-card:hover {
+  border-color: var(--border-active);
+  background: var(--bg-card-hover);
+}
+
+/* 引用装饰 */
+.quote-card::before {
+  content: '"';
+  font-family: var(--font-display);
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 0.5;
+  color: var(--accent-thermal);
+  opacity: 0.2;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.quote-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  font-style: italic;
+}
+
+.quote-author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.quote-author-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--accent-thermal);
+}
+
+/* ============================================================
+   痛点卡片 — P0/P1/P2
+   ============================================================ */
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.pain-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              border-color var(--duration-normal) var(--ease-out-expo),
+              box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+.pain-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-active);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+
+/* 顶部优先级色条 */
+.pain-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+.pain-card.p0::before { background: var(--danger); }
+.pain-card.p1::before { background: var(--warning); }
+.pain-card.p2::before { background: var(--info); }
+
+.pain-badge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-md);
+}
+.pain-badge.p0 { background: var(--danger-bg); color: var(--danger); }
+.pain-badge.p1 { background: var(--warning-bg); color: var(--warning); }
+.pain-badge.p2 { background: var(--info-bg); color: var(--info); }
+
+.pain-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.pain-desc {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   竞品对比表
+   ============================================================ */
+.competitive-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+}
+
+.competitive-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.competitive-table thead th {
+  background: var(--bg-surface);
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.competitive-table thead th:first-child {
+  color: var(--accent-thermal);
+}
+
+.competitive-table tbody td {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  vertical-align: top;
+}
+
+.competitive-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.competitive-table tbody tr:hover td {
+  background: rgba(232, 168, 80, 0.03);
+}
+
+/* 高亮当前产品列 */
+.competitive-table tbody td:nth-child(2) {
+  background: rgba(232, 168, 80, 0.04);
+  font-weight: 500;
+}
+.competitive-table tbody tr:hover td:nth-child(2) {
+  background: rgba(232, 168, 80, 0.07);
+}
+
+/* 突出较差数据 */
+.cell-bad {
+  color: var(--danger) !important;
+  position: relative;
+}
+.cell-good {
+  color: var(--success) !important;
+}
+.cell-neutral {
+  color: var(--warning) !important;
+}
+
+/* ============================================================
+   PRD 目标指标
+   ============================================================ */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  transition: border-color var(--duration-normal) var(--ease-out-expo);
+}
+.metric-card:hover {
+  border-color: var(--border-active);
+}
+
+.metric-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-sm);
+  opacity: 0.8;
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent-thermal);
+  margin-bottom: var(--space-xs);
+}
+
+.metric-unit {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.metric-desc {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   In / Out of Scope
+   ============================================================ */
+.scope-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.scope-card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  border: 1px solid var(--border-subtle);
+}
+
+.scope-card.in {
+  background: var(--bg-card);
+  border-left: 3px solid var(--success);
+}
+
+.scope-card.out {
+  background: var(--bg-card);
+  border-left: 3px solid var(--text-muted);
+  opacity: 0.7;
+}
+
+.scope-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  color: var(--text-primary);
+}
+
+.scope-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.scope-card li {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.scope-card li:last-child {
+  border-bottom: none;
+}
+
+.scope-card.in li::before {
+  content: '+';
+  color: var(--success);
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.scope-card.out li::before {
+  content: '—';
+  color: var(--text-muted);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   看板 — 拖拽交互
+   ============================================================ */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.kanban-column {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  padding: var(--space-md);
+  min-height: 320px;
+  transition: border-color var(--duration-normal) var(--ease-out-expo),
+              background var(--duration-normal) var(--ease-out-expo);
+}
+
+/* 拖拽悬停时列高亮 */
+.kanban-column.drag-over {
+  border-color: var(--accent-thermal) !important;
+  background: var(--bg-card-hover) !important;
+  box-shadow: inset 0 0 0 2px rgba(232, 168, 80, 0.15);
+}
+
+.kanban-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.kanban-col-title {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+}
+
+.kanban-col-count {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent-thermal);
+  background: rgba(232, 168, 80, 0.08);
+  border-radius: 999px;
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+
+.kanban-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-height: 60px;
+}
+
+/* 任务卡片 */
+.kanban-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  cursor: grab;
+  user-select: none;
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              border-color var(--duration-normal) var(--ease-out-expo),
+              box-shadow var(--duration-normal) var(--ease-out-expo),
+              opacity var(--duration-normal) var(--ease-out-expo);
+  position: relative;
+}
+.kanban-card:hover {
+  border-color: var(--border-active);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
+/* 拖拽状态 */
+.kanban-card.dragging {
+  opacity: 0.4;
+  transform: scale(0.95);
+  border-style: dashed;
+  cursor: grabbing;
+}
+
+.kanban-card-id {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent-thermal);
+  margin-bottom: var(--space-xs);
+}
+
+.kanban-card-title {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: var(--space-sm);
+}
+
+.kanban-card-tags {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.kanban-card-tag {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+.tag-thermal { background: rgba(232,168,80,0.12); color: var(--accent-thermal); }
+.tag-structure { background: rgba(106,156,196,0.12); color: var(--info); }
+.tag-firmware { background: rgba(90,158,111,0.12); color: var(--success); }
+.tag-research { background: rgba(200,130,150,0.12); color: #c88296; }
+
+/* ============================================================
+   燃尽图 + Sprint 时间线
+   ============================================================ */
+.burndown-wrapper {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.burndown-chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+}
+
+.burndown-chart-container h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.burndown-legend {
+  display: flex;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.burndown-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.legend-line {
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+}
+.legend-line.ideal { background: var(--text-muted); }
+.legend-line.actual { background: var(--accent-thermal); }
+
+.burndown-svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Sprint 时间线 */
+.sprint-timeline {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+}
+
+.sprint-timeline h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.timeline-list {
+  list-style: none;
+  padding: 0;
+  position: relative;
+}
+
+.timeline-list::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-subtle);
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 2rem;
+  padding-bottom: var(--space-lg);
+}
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-thermal);
+  background: var(--bg-card);
+  z-index: 1;
+}
+.timeline-item.active .timeline-dot {
+  background: var(--accent-thermal);
+}
+
+.timeline-date {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent-thermal);
+  margin-bottom: var(--space-xs);
+}
+
+.timeline-title {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.timeline-meta {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   风险矩阵 (5x5)
+   ============================================================ */
+.risk-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+}
+
+.risk-section h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.risk-matrix {
+  display: grid;
+  grid-template-columns: auto repeat(5, 1fr);
+  grid-template-rows: auto repeat(5, 1fr);
+  gap: 2px;
+  background: var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.risk-cell {
+  background: var(--bg-surface);
+  padding: var(--space-sm);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.risk-cell.label {
+  background: var(--bg-elevated);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  padding: var(--space-sm) var(--space-md);
+  min-height: unset;
+}
+
+.risk-cell.header {
+  background: var(--bg-elevated);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  min-height: unset;
+  padding: var(--space-sm);
+}
+
+/* 风险点 */
+.risk-dot {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-out-expo);
+  z-index: 1;
+}
+.risk-dot:hover {
+  transform: scale(1.2);
+  z-index: 2;
+}
+
+.risk-dot.high { background: var(--danger); }
+.risk-dot.medium { background: var(--warning); }
+.risk-dot.low { background: var(--info); }
+
+/* 风险图例 */
+.risk-legend {
+  display: flex;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.risk-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.risk-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.risk-legend-dot.high { background: var(--danger); }
+.risk-legend-dot.medium { background: var(--warning); }
+.risk-legend-dot.low { background: var(--info); }
+
+/* ============================================================
+   团队负载 + 同步记录
+   ============================================================ */
+.team-sync-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.team-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+}
+
+.team-section h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: border-color var(--duration-normal) var(--ease-out-expo);
+}
+.team-member:hover {
+  border-color: var(--border-active);
+}
+
+.team-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-thermal);
+  flex-shrink: 0;
+}
+
+.team-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.team-name {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.team-role {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.team-load-bar-wrap {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-elevated);
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.team-load-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s var(--ease-out-expo);
+}
+.team-load-bar.critical { background: var(--danger); }
+.team-load-bar.warning { background: var(--warning); }
+.team-load-bar.normal { background: var(--success); }
+
+.team-load-pct {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-thermal);
+  flex-shrink: 0;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* 同步记录 */
+.sync-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+}
+
+.sync-section h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.sync-list {
+  list-style: none;
+  padding: 0;
+}
+
+.sync-item {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  align-items: flex-start;
+}
+.sync-item:last-child {
+  border-bottom: none;
+}
+
+.sync-date-badge {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent-thermal);
+  background: rgba(232, 168, 80, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sync-content h4 {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.sync-content p {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   测试用例
+   ============================================================ */
+.testcases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.testcase-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  transition: border-color var(--duration-normal) var(--ease-out-expo);
+}
+.testcase-card:hover {
+  border-color: var(--border-active);
+}
+
+.testcase-id {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent-thermal);
+  margin-bottom: var(--space-sm);
+}
+
+.testcase-desc {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.testcase-status {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+.testcase-status.pending {
+  background: rgba(160,140,100,0.12);
+  color: var(--text-muted);
+}
+.testcase-status.pass {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footer-text {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-thermal);
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .quotes-grid { grid-template-columns: 1fr; }
+  .pain-grid { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .kanban-board { grid-template-columns: repeat(2, 1fr); }
+  .burndown-wrapper { grid-template-columns: 1fr; }
+  .team-sync-grid { grid-template-columns: 1fr; }
+  .testcases-grid { grid-template-columns: repeat(2, 1fr); }
+  .scope-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .hero-title { font-size: clamp(2rem, 8vw, 3.5rem); }
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-item:not(:last-child)::after { display: none; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .kanban-board { grid-template-columns: 1fr; }
+  .testcases-grid { grid-template-columns: 1fr; }
+  .risk-matrix { font-size: 0.6rem; }
+  .risk-cell { min-height: 44px; }
+  .risk-dot { width: 24px; height: 24px; font-size: 0.45rem; }
+}
+
+/* ============================================================
+   滚动条定制
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-active);
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     Hero — 视觉记忆点：热辐射光晕 + 粒子系统
+     ============================================================ -->
+<section class="hero">
+  <!-- 双层热辐射光晕 -->
+  <div class="hero-thermal-orb" aria-hidden="true"></div>
+  <div class="hero-thermal-orb-secondary" aria-hidden="true"></div>
+
+  <!-- 热力粒子 Canvas -->
+  <canvas id="hero-particles" aria-hidden="true"></canvas>
+
+  <div class="hero-content reveal">
+    <div class="hero-badge">Mars 5 Ultra 散热优化专项</div>
+    <h1 class="hero-title">
+      <span class="hero-title-glow">从用户反馈到产品交付闭环</span>
+    </h1>
+    <p class="hero-subtitle">
+      基于 Mars 5 Ultra 真实用户反馈推演，展示从市场洞察&#8594;PRD撰写&#8594;任务拆解&#8594;项目管理&#8594;验证闭环的完整PM思维链
+    </p>
+  </div>
+
+  <!-- 滚动提示 -->
+  <div class="hero-scroll-indicator" aria-hidden="true">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-text">滚动探索</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     统计数字条
+     ============================================================ -->
+<section class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-number" data-count="3">0</div>
+      <div class="stat-label">核心交付物</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number" data-count="39">0</div>
+      <div class="stat-label">开发任务</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number" data-count="5">0</div>
+      <div class="stat-label">标准模板</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     用户原声引用
+     ============================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label reveal">用户之声</div>
+    <h2 class="section-title reveal">真实反馈驱动产品决策</h2>
+
+    <div class="quotes-grid reveal-stagger">
+      <div class="quote-card">
+        <p class="quote-text">底壳温度实测42.5&#176;C，手不敢碰超过5秒，这哪是Ultra这是烤炉。打印两小时就得停机降温，严重影响连续生产能力。</p>
+        <div class="quote-author">
+          <div class="quote-author-avatar">M</div>
+          <span>京东用户 @M***</span>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        <p class="quote-text">每次取盖子都要拔USB线，洗完了再插回去，三天两头这么搞，接口迟早要废。设计的人自己不用这个机器吗？</p>
+        <div class="quote-author">
+          <div class="quote-author-avatar">树</div>
+          <span>贴吧用户 @树脂战士</span>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        <p class="quote-text">打了几锅之后那股树脂味混着热塑料的甜腻味，而且外壳接缝处有缩水痕，看着真廉价。跟上一代比提升有限，两千块花得有点冤。</p>
+        <div class="quote-author">
+          <div class="quote-author-avatar">R</div>
+          <span>Reddit u/ResinCrafter</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     痛点卡片 (P0/P1/P2)
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">痛点深挖</div>
+    <h2 class="section-title reveal">三级优先级分级定位</h2>
+
+    <div class="pain-grid reveal-stagger">
+      <!-- P0 -->
+      <div class="pain-card p0">
+        <span class="pain-badge p0">P0 紧急</span>
+        <h3 class="pain-title">散热信任危机</h3>
+        <p class="pain-desc">底壳 42.5&#176;C 高温引发用户安全焦虑，社区负面口碑扩散加速，直接导致潜在用户流失与 NPS 走低。高温还可能影响 LCD 屏及电子元件寿命，形成可靠性隐患。</p>
+      </div>
+
+      <!-- P1 -->
+      <div class="pain-card p1">
+        <span class="pain-badge p1">P1 重要</span>
+        <h3 class="pain-title">结构交互连锁反应</h3>
+        <p class="pain-desc">取盖拔线、清洗擦光学件的繁琐流程造成用户操作摩擦，USB 接口机械寿命加速消耗。长期使用体验持续衰减，复购意愿与品牌推荐度受损。</p>
+      </div>
+
+      <!-- P2 -->
+      <div class="pain-card p2">
+        <span class="pain-badge p2">P2 一般</span>
+        <h3 class="pain-title">跨型号价值落差</h3>
+        <p class="pain-desc">Mars 5 老用户升级至 Ultra 后感知提升有限，同价位竞品外观精致度更优。"缩水感"评价侵蚀 Ultra 产品线溢价能力，影响下一代产品定价空间。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     竞品对比表
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">竞争格局</div>
+    <h2 class="section-title reveal">竞品散热与结构横向对比</h2>
+
+    <div class="competitive-table-wrap reveal">
+      <table class="competitive-table">
+        <thead>
+          <tr>
+            <th>对比维度</th>
+            <th>Mars 5 Ultra &#9662;</th>
+            <th>Phrozen Sonic Mini 8K S</th>
+            <th>Anycubic Photon Mono M5s</th>
+            <th>GKtwo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>散热设计</td>
+            <td class="cell-bad">被动散热，底部无风道</td>
+            <td>主动风道 + 双风扇</td>
+            <td>金属机身被动散热</td>
+            <td>底部进气 + 顶部排气</td>
+          </tr>
+          <tr>
+            <td>底壳温度</td>
+            <td class="cell-bad">42.5&#176;C</td>
+            <td class="cell-good">34&#176;C</td>
+            <td>38&#176;C</td>
+            <td class="cell-good">35&#176;C</td>
+          </tr>
+          <tr>
+            <td>噪音 (1m处)</td>
+            <td>42dB</td>
+            <td>38dB</td>
+            <td>40dB</td>
+            <td>36dB</td>
+          </tr>
+          <tr>
+            <td>结构便捷性</td>
+            <td class="cell-bad">取盖需拔线</td>
+            <td class="cell-good">翻盖式</td>
+            <td class="cell-good">翻盖式</td>
+            <td class="cell-good">滑盖式</td>
+          </tr>
+          <tr>
+            <td>售价 (人民币)</td>
+            <td>&#165;1,999</td>
+            <td>&#165;2,399</td>
+            <td>&#165;2,199</td>
+            <td>&#165;2,099</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRD 目标指标
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">成功标准</div>
+    <h2 class="section-title reveal">可量化的 PRD 目标指标</h2>
+
+    <div class="metrics-grid reveal-stagger">
+      <div class="metric-card">
+        <div class="metric-icon">&#127777;</div>
+        <div class="metric-value">&le;38</div>
+        <div class="metric-unit">&#176;C 底壳温度</div>
+        <div class="metric-desc">环境 25&#176;C 下连续打印 4h 后底壳最高温度</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">&#128264;</div>
+        <div class="metric-value">&le;35</div>
+        <div class="metric-unit">dB 噪音上限</div>
+        <div class="metric-desc">距离设备 1m 处 A 计权声压级，日间使用不扰人</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">&#128176;</div>
+        <div class="metric-value">&le;15</div>
+        <div class="metric-unit">&#165; BOM增量</div>
+        <div class="metric-desc">单台散热系统改造的物料成本上限</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">&#128065;</div>
+        <div class="metric-value">&ge;80%</div>
+        <div class="metric-unit">盲测通过率</div>
+        <div class="metric-desc">20 人双盲对照测试中"散热改善明显"选择率</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     In Scope / Out of Scope
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">范围管理</div>
+    <h2 class="section-title reveal">明确边界，聚焦散热核心</h2>
+
+    <div class="scope-grid reveal-stagger">
+      <div class="scope-card in">
+        <h3>In Scope &#8212; 本次专项范围</h3>
+        <ul>
+          <li>底部主动风道重新设计与热仿真验证</li>
+          <li>散热鳍片几何优化与模具修改</li>
+          <li>风扇选型：风量 / 静压 / 噪音三参数平衡</li>
+          <li>顶部翻盖结构可拆卸方案</li>
+          <li>温控固件升级：风扇 PWM 调速与过温保护</li>
+        </ul>
+      </div>
+      <div class="scope-card out">
+        <h3>Out of Scope &#8212; 本次不涉及</h3>
+        <ul>
+          <li>LCD 屏幕分辨率或尺寸升级</li>
+          <li>机身外观大幅重新设计</li>
+          <li>Z 轴机械精度提升</li>
+          <li>树脂槽主动加热功能</li>
+          <li>WiFi 模块新增或通讯协议改造</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     看板 — 8 卡片 4 列 + 拖拽交互
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">任务追踪</div>
+    <h2 class="section-title reveal">看板 &#8212; 拖拽卡片改变状态</h2>
+
+    <div class="kanban-board reveal" id="kanban-board">
+      <!-- 列 1: 待办 -->
+      <div class="kanban-column" data-column="todo">
+        <div class="kanban-col-header">
+          <span class="kanban-col-title">待办</span>
+          <span class="kanban-col-count" data-col-count="todo">2</span>
+        </div>
+        <div class="kanban-cards" data-column="todo">
+          <div class="kanban-card" draggable="true" data-card-id="T-001">
+            <div class="kanban-card-id">T-001</div>
+            <div class="kanban-card-title">散热系统热仿真建模</div>
+            <div class="kanban-card-tags">
+              <span class="kanban-card-tag tag-thermal">散热</span>
+              <span class="kanban-card-tag tag-research">仿真</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" data-card-id="T-002">
+            <div class="kanban-card-id">T-002</div>
+            <div class="kanban-card-title">竞品散热方案拆解分析</div>
+            <div class="kanban-card-tags">
+              <span class="kanban-card-tag tag-research">调研</span>
+              <span class="kanban-card-tag tag-structure">结构</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 列 2: 进行中 -->
+      <div class="kanban-column" data-column="in-progress">
+        <div class="kanban-col-header">
+          <span class="kanban-col-title">进行中</span>
+          <span class="kanban-col-count" data-col-count="in-progress">2</span>
+        </div>
+        <div class="kanban-cards" data-column="in-progress">
+          <div class="kanban-card" draggable="true" data-card-id="T-003">
+            <div class="kanban-card-id">T-003</div>
+            <div class="kanban-card-title">风道方案详细设计</div>
+            <div class="kanban-card-tags">
+              <span class="kanban-card-tag tag-thermal">散热</span>
+              <span class="kanban-card-tag tag-structure">结构</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" data-card-id="T-004">
+            <div class="kanban-card-id">T-004</div>
+            <div class="kanban-card-title">风扇扇叶选型与噪音验证</div>
+            <div class="kanban-card-tags">
+              <span class="kanban-card-tag tag-thermal">散热</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 列 3: 评审中 -->
+      <div class="kanban-column" data-column="review">
+        <div class="kanban-col-header">
+          <span class="kanban-col-title">评审中</span>
+          <span class="kanban-col-count" data-col-count="review">2</span>
+        </div>
+        <div class="kanban-cards" data-column="review">
+          <div class="kanban-card" draggable="true" data-card-id="T-005">
+            <div class="kanban-card-id">T-005</div>
+            <div class="kanban-card-title">DFM 可制造性评审</div>
+            <div class="kanban-card-tags">
+              <span class="kanban-card-tag tag-structure">结构</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" data-card-id="T-006">
+            <div class="kanban-card-id">T-006</div>
+            <div class="kanban-card-title">温控固件模块开发</div>
+            <div class="kanban-card-tags">
+              <span class="kanban-card-tag tag-firmware">固件</span>
+              <span class="kanban-card-tag tag-thermal">散热</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 列 4: 已完成 -->
+      <div class="kanban-column" data-column="done">
+        <div class="kanban-col-header">
+          <span class="kanban-col-title">已完成</span>
+          <span class="kanban-col-count" data-col-count="done">2</span>
+        </div>
+        <div class="kanban-cards" data-column="done">
+          <div class="kanban-card" draggable="true" data-card-id="T-007">
+            <div class="kanban-card-id">T-007</div>
+            <div class="kanban-card-title">用户调研与需求采集报告</div>
+            <div class="kanban-card-tags">
+              <span class="kanban-card-tag tag-research">调研</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" data-card-id="T-008">
+            <div class="kanban-card-id">T-008</div>
+            <div class="kanban-card-title">散热优化 PRD v1.0 定稿</div>
+            <div class="kanban-card-tags">
+              <span class="kanban-card-tag tag-thermal">散热</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     燃尽图 + Sprint 时间线
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">进度追踪</div>
+    <h2 class="section-title reveal">Sprint 2 燃尽图 &amp; 时间线</h2>
+
+    <div class="burndown-wrapper reveal-stagger">
+      <!-- 燃尽图 SVG -->
+      <div class="burndown-chart-container">
+        <h3>Sprint 2 燃尽趋势 (10 工作日)</h3>
+        <div class="burndown-legend">
+          <div class="burndown-legend-item">
+            <span class="legend-line ideal"></span> 理想线
+          </div>
+          <div class="burndown-legend-item">
+            <span class="legend-line actual"></span> 实际线
+          </div>
+        </div>
+
+        <!-- 燃尽图 SVG 内联 -->
+        <svg class="burndown-svg" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+          <!-- 背景网格 -->
+          <defs>
+            <pattern id="grid" width="60" height="30" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 30" fill="none" stroke="#2a2520" stroke-width="0.5" opacity="0.4"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="300" fill="url(#grid)" />
+
+          <!-- Y轴标签 -->
+          <text x="8" y="20" fill="#6b6358" font-family="Jost, sans-serif" font-size="10" font-weight="500">40</text>
+          <text x="8" y="80" fill="#6b6358" font-family="Jost, sans-serif" font-size="10" font-weight="500">30</text>
+          <text x="8" y="140" fill="#6b6358" font-family="Jost, sans-serif" font-size="10" font-weight="500">20</text>
+          <text x="8" y="200" fill="#6b6358" font-family="Jost, sans-serif" font-size="10" font-weight="500">10</text>
+          <text x="8" y="260" fill="#6b6358" font-family="Jost, sans-serif" font-size="10" font-weight="500">0</text>
+
+          <!-- 参考横线 -->
+          <line x1="30" y1="15" x2="590" y2="15" stroke="#2a2520" stroke-width="0.5" />
+          <line x1="30" y1="75" x2="590" y2="75" stroke="#2a2520" stroke-width="0.5" />
+          <line x1="30" y1="135" x2="590" y2="135" stroke="#2a2520" stroke-width="0.5" />
+          <line x1="30" y1="195" x2="590" y2="195" stroke="#2a2520" stroke-width="0.5" />
+          <line x1="30" y1="255" x2="590" y2="255" stroke="#2a2520" stroke-width="0.5" />
+
+          <!-- X轴标签 -->
+          <text x="60" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D1</text>
+          <text x="116" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D2</text>
+          <text x="172" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D3</text>
+          <text x="228" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D4</text>
+          <text x="284" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D5</text>
+          <text x="340" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D6</text>
+          <text x="396" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D7</text>
+          <text x="452" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D8</text>
+          <text x="508" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D9</text>
+          <text x="564" y="295" fill="#6b6358" font-family="Jost, sans-serif" font-size="9" text-anchor="middle">D10</text>
+
+          <!-- 理想燃尽线 (虚线) -->
+          <polyline
+            points="60,15 116,46 172,77 228,108 284,139 340,170 396,201 452,232 508,251 564,255"
+            fill="none"
+            stroke="#6b6358"
+            stroke-width="1.5"
+            stroke-dasharray="6,4"
+            opacity="0.7"
+          />
+
+          <!-- 实际燃尽线 (实线) -->
+          <polyline
+            points="60,15 116,46 172,83 228,114 284,151 340,193 396,220 452,224 508,238 564,245"
+            fill="none"
+            stroke="#e8a850"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+          <!-- 实际线数据点 -->
+          <circle cx="60" cy="15" r="4" fill="#e8a850" />
+          <circle cx="116" cy="46" r="4" fill="#e8a850" />
+          <circle cx="172" cy="83" r="4" fill="#e8a850" />
+          <circle cx="228" cy="114" r="4" fill="#e8a850" />
+          <circle cx="284" cy="151" r="4" fill="#e8a850" />
+          <circle cx="340" cy="193" r="4" fill="#e8a850" />
+          <circle cx="396" cy="220" r="4" fill="#e8a850" />
+          <circle cx="452" cy="224" r="4" fill="#e8a850" />
+          <circle cx="508" cy="238" r="4" fill="#e8a850" />
+          <circle cx="564" cy="245" r="5" fill="#e8a850" stroke="#0b0b0b" stroke-width="2" />
+
+          <!-- 偏差标注 -->
+          <text x="564" y="238" fill="#d4604a" font-family="Jost, sans-serif" font-size="10" font-weight="600">+2pt</text>
+        </svg>
+      </div>
+
+      <!-- Sprint 时间线 -->
+      <div class="sprint-timeline">
+        <h3>Sprint 时间线</h3>
+        <ul class="timeline-list">
+          <li class="timeline-item active">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2025-12-15</div>
+            <div class="timeline-title">Sprint 1 启动 — 需求评审</div>
+            <div class="timeline-meta">确认 P0 散热问题优先级，分配资源</div>
+          </li>
+          <li class="timeline-item active">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2025-12-22</div>
+            <div class="timeline-title">技术方案评审通过</div>
+            <div class="timeline-meta">风扇选型方案确认，热仿真基线建立</div>
+          </li>
+          <li class="timeline-item active">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026-01-05</div>
+            <div class="timeline-title">Sprint 1 Review</div>
+            <div class="timeline-meta">热仿真相较基线改善 6&#176;C，进入 DFM</div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026-01-19</div>
+            <div class="timeline-title">Sprint 2 Review</div>
+            <div class="timeline-meta">DFM 首版手板确认，启动 EVT 验证</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     风险矩阵 5x5
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">风险管理</div>
+    <h2 class="section-title reveal">5x5 风险评估矩阵</h2>
+
+    <div class="risk-section reveal">
+      <div class="risk-matrix">
+        <!-- 表头行 -->
+        <div class="risk-cell label"></div>
+        <div class="risk-cell header">很低</div>
+        <div class="risk-cell header">低</div>
+        <div class="risk-cell header">中</div>
+        <div class="risk-cell header">高</div>
+        <div class="risk-cell header">很高</div>
+
+        <!-- 影响: 很高 -->
+        <div class="risk-cell label">很高</div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+
+        <!-- 影响: 高 -->
+        <div class="risk-cell label">高</div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell">
+          <div class="risk-dot medium" title="供方产能不足 — P:低 I:高">R4</div>
+        </div>
+        <div class="risk-cell">
+          <div class="risk-dot high" title="风扇噪音超标 — P:中 I:高">R1</div>
+        </div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+
+        <!-- 影响: 中 -->
+        <div class="risk-cell label">中</div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell">
+          <div class="risk-dot medium" title="模具修改周期长 — P:中 I:中">R3</div>
+        </div>
+        <div class="risk-cell">
+          <div class="risk-dot medium" title="BOM成本超出 — P:高 I:中">R2</div>
+        </div>
+        <div class="risk-cell"></div>
+
+        <!-- 影响: 低 -->
+        <div class="risk-cell label">低</div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell">
+          <div class="risk-dot low" title="固件兼容性问题 — P:低 I:低">R5</div>
+        </div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+
+        <!-- 影响: 很低 -->
+        <div class="risk-cell label">很低</div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+        <div class="risk-cell"></div>
+      </div>
+
+      <!-- 风险图例 -->
+      <div class="risk-legend">
+        <div class="risk-legend-item">
+          <span class="risk-legend-dot high"></span>
+          <span>R1 风扇噪音超标</span>
+        </div>
+        <div class="risk-legend-item">
+          <span class="risk-legend-dot medium"></span>
+          <span>R2 BOM成本超出</span>
+        </div>
+        <div class="risk-legend-item">
+          <span class="risk-legend-dot medium"></span>
+          <span>R3 模具修改周期长</span>
+        </div>
+        <div class="risk-legend-item">
+          <span class="risk-legend-dot medium"></span>
+          <span>R4 供方产能不足</span>
+        </div>
+        <div class="risk-legend-item">
+          <span class="risk-legend-dot low"></span>
+          <span>R5 固件兼容性</span>
+        </div>
+      </div>
+      <p style="font-family:var(--font-body);font-size:0.7rem;color:var(--text-muted);margin-top:var(--space-sm);">
+        横轴：发生概率 &nbsp;|&nbsp; 纵轴：影响程度 &nbsp;|&nbsp; 色阶：红=高 / 橙=中 / 蓝=低风险
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     团队负载 + 同步记录
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">团队协同</div>
+    <h2 class="section-title reveal">5 人核心团队 &amp; 同步记录</h2>
+
+    <div class="team-sync-grid reveal-stagger">
+      <!-- 团队负载 -->
+      <div class="team-section">
+        <h3>团队成员负载</h3>
+        <div class="team-list" id="team-list">
+          <div class="team-member">
+            <div class="team-avatar">PM</div>
+            <div class="team-info">
+              <div class="team-name">产品经理</div>
+              <div class="team-role">需求定义 &#183; 用户验证 &#183; 跨部门协调</div>
+              <div class="team-load-bar-wrap">
+                <div class="team-load-bar warning" style="width: 0%" data-width="80%"></div>
+              </div>
+            </div>
+            <div class="team-load-pct">80%</div>
+          </div>
+
+          <div class="team-member">
+            <div class="team-avatar">SE</div>
+            <div class="team-info">
+              <div class="team-name">结构工程师</div>
+              <div class="team-role">风道设计 &#183; DFM对接 &#183; 模具跟进</div>
+              <div class="team-load-bar-wrap">
+                <div class="team-load-bar critical" style="width: 0%" data-width="100%"></div>
+              </div>
+            </div>
+            <div class="team-load-pct">100%</div>
+          </div>
+
+          <div class="team-member">
+            <div class="team-avatar">TE</div>
+            <div class="team-info">
+              <div class="team-name">散热工程师</div>
+              <div class="team-role">热仿真 &#183; 风扇选型 &#183; 温控策略</div>
+              <div class="team-load-bar-wrap">
+                <div class="team-load-bar warning" style="width: 0%" data-width="90%"></div>
+              </div>
+            </div>
+            <div class="team-load-pct">90%</div>
+          </div>
+
+          <div class="team-member">
+            <div class="team-avatar">ID</div>
+            <div class="team-info">
+              <div class="team-name">ID 设计师</div>
+              <div class="team-role">外观适配 &#183; CMF方案 &#183; 手板确认</div>
+              <div class="team-load-bar-wrap">
+                <div class="team-load-bar normal" style="width: 0%" data-width="60%"></div>
+              </div>
+            </div>
+            <div class="team-load-pct">60%</div>
+          </div>
+
+          <div class="team-member">
+            <div class="team-avatar">QA</div>
+            <div class="team-info">
+              <div class="team-name">测试工程师</div>
+              <div class="team-role">温升测试 &#183; 噪音测试 &#183; 可靠性验证</div>
+              <div class="team-load-bar-wrap">
+                <div class="team-load-bar warning" style="width: 0%" data-width="75%"></div>
+              </div>
+            </div>
+            <div class="team-load-pct">75%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 同步记录 -->
+      <div class="sync-section">
+        <h3>关键同步记录</h3>
+        <ul class="sync-list">
+          <li class="sync-item">
+            <span class="sync-date-badge">2025-12-15</span>
+            <div class="sync-content">
+              <h4>需求评审会</h4>
+              <p>确认 P0 散热问题为最高优先级，成立跨职能专项小组，明确 Sprint 1 交付物清单与时间节点。</p>
+            </div>
+          </li>
+          <li class="sync-item">
+            <span class="sync-date-badge">2025-12-22</span>
+            <div class="sync-content">
+              <h4>技术方案评审</h4>
+              <p>风扇选型方案（4020 规格 / 双滚珠轴承）通过评审；热仿真基线模型搭建完毕，首轮仿真预计 3 个工作日出结果。</p>
+            </div>
+          </li>
+          <li class="sync-item">
+            <span class="sync-date-badge">2026-01-05</span>
+            <div class="sync-content">
+              <h4>Sprint 1 Review</h4>
+              <p>热仿真相较基线改善 6&#176;C，达到 36.5&#176;C 模拟值。DFM 评审准备启动，模具厂已预约档期。</p>
+            </div>
+          </li>
+          <li class="sync-item">
+            <span class="sync-date-badge">2026-01-19</span>
+            <div class="sync-content">
+              <h4>Sprint 2 Review</h4>
+              <p>DFM 首版手板确认，风道结构通过装配验证。EVT 测试计划已签发，下周启动首轮温升实际测量。</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     测试用例
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">验证闭环</div>
+    <h2 class="section-title reveal">6 项核心测试用例</h2>
+
+    <div class="testcases-grid reveal-stagger">
+      <div class="testcase-card">
+        <div class="testcase-id">TC-001</div>
+        <div class="testcase-desc">25&#176;C 环境温度下连续打印 4 小时，红外测温仪监测底壳温度 &le; 38&#176;C。</div>
+        <span class="testcase-status pending">待验证</span>
+      </div>
+      <div class="testcase-card">
+        <div class="testcase-id">TC-002</div>
+        <div class="testcase-desc">35&#176;C 高温环境连续打印 2 小时，底壳温度 &le; 42&#176;C（极端工况）。</div>
+        <span class="testcase-status pending">待验证</span>
+      </div>
+      <div class="testcase-card">
+        <div class="testcase-id">TC-003</div>
+        <div class="testcase-desc">距离设备 1m 处声级计 A 计权测量，风扇全速运转噪音 &le; 35dB(A)。</div>
+        <span class="testcase-status pending">待验证</span>
+      </div>
+      <div class="testcase-card">
+        <div class="testcase-id">TC-004</div>
+        <div class="testcase-desc">风扇连续运转 2000 小时加速寿命测试，无卡轴、异响或性能衰减。</div>
+        <span class="testcase-status pending">待验证</span>
+      </div>
+      <div class="testcase-card">
+        <div class="testcase-id">TC-005</div>
+        <div class="testcase-desc">取盖操作无需任何工具，单人 &le; 10 秒完成，重复 500 次无结构松动。</div>
+        <span class="testcase-status pending">待验证</span>
+      </div>
+      <div class="testcase-card">
+        <div class="testcase-id">TC-006</div>
+        <div class="testcase-desc">20 人双盲对照测试（改造前/后），&ge; 80% 认为"散热改善明显"。</div>
+        <span class="testcase-status pending">待验证</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Footer
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer-brand reveal">Mars 5 Ultra</div>
+  <p class="footer-text reveal">散热优化专项 — 产品经理作品集 &middot; 基于公开用户反馈推演 &middot; 不依赖内部数据</p>
+</footer>
+
+<!-- ============================================================
+     JavaScript — 所有交互逻辑
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  /* ==========================================================
+     Hero 热力粒子 Canvas
+     ========================================================== */
+  const canvas = document.getElementById('hero-particles');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const maxParticles = 60;
+
+    function resizeCanvas() {
+      const hero = canvas.parentElement;
+      canvas.width = hero.offsetWidth;
+      canvas.height = hero.offsetHeight;
+    }
+
+    function createParticle() {
+      return {
+        x: Math.random() * canvas.width,
+        y: canvas.height + Math.random() * 40,
+        size: Math.random() * 2 + 0.8,
+        speedY: -(Math.random() * 0.6 + 0.2),
+        speedX: (Math.random() - 0.5) * 0.4,
+        opacity: Math.random() * 0.5 + 0.15,
+        life: 0,
+        maxLife: Math.random() * 200 + 150
+      };
+    }
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < maxParticles; i++) {
+        const p = createParticle();
+        p.life = Math.floor(Math.random() * p.maxLife);
+        particles.push(p);
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.life++;
+
+        if (p.life > p.maxLife || p.y < -20) {
+          particles[i] = createParticle();
+          particles[i].life = 0;
+        }
+
+        const alpha = p.opacity * (1 - p.life / p.maxLife);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(232, 168, 80, ' + alpha.toFixed(3) + ')';
+        ctx.fill();
+      }
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    resizeCanvas();
+    initParticles();
+    animateParticles();
+    window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+  }
+
+  /* ==========================================================
+     交错渐入动画系统 (Intersection Observer)
+     ========================================================== */
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -60px 0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  /* ==========================================================
+     统计数字递增动画
+     ========================================================== */
+  const statObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        const duration = 1500;
+        const startTime = performance.now();
+
+        function updateCounter(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          /* easeOutExpo */
+          const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+          el.textContent = Math.round(eased * target);
+          if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+          } else {
+            el.textContent = target;
+          }
+        }
+
+        requestAnimationFrame(updateCounter);
+        statObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat-number[data-count]').forEach(function(el) {
+    statObserver.observe(el);
+  });
+
+  /* ==========================================================
+     团队负载条渐入动画
+     ========================================================== */
+  const teamLoadObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        const width = bar.getAttribute('data-width');
+        bar.style.width = width;
+        teamLoadObserver.unobserve(bar);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.team-load-bar[data-width]').forEach(function(bar) {
+    teamLoadObserver.observe(bar);
+  });
+
+  /* ==========================================================
+     看板拖拽系统
+     ========================================================== */
+  const kanbanBoard = document.getElementById('kanban-board');
+  if (kanbanBoard) {
+    let draggedCard = null;
+
+    /* 为所有卡片绑定拖拽事件 */
+    function bindCardEvents(card) {
+      card.addEventListener('dragstart', function(e) {
+        draggedCard = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.getAttribute('data-card-id'));
+        /* 设置拖拽图像为透明，避免默认半透明预览 */
+        const ghost = document.createElement('div');
+        ghost.style.position = 'absolute';
+        ghost.style.top = '-9999px';
+        document.body.appendChild(ghost);
+        e.dataTransfer.setDragImage(ghost, 0, 0);
+        setTimeout(function() { document.body.removeChild(ghost); }, 0);
+      });
+
+      card.addEventListener('dragend', function() {
+        this.classList.remove('dragging');
+        draggedCard = null;
+        /* 清除所有列的高亮 */
+        document.querySelectorAll('.kanban-column').forEach(function(col) {
+          col.classList.remove('drag-over');
+        });
+      });
+    }
+
+    /* 为所有列绑定放置事件 */
+    function bindColumnEvents(column) {
+      column.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        this.classList.add('drag-over');
+      });
+
+      column.addEventListener('dragleave', function(e) {
+        /* 只在离开列本身时清除高亮 */
+        if (!this.contains(e.relatedTarget)) {
+          this.classList.remove('drag-over');
+        }
+      });
+
+      column.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+
+        if (!draggedCard) return;
+
+        const targetCards = this.querySelector('.kanban-cards');
+        const sourceColumn = draggedCard.closest('.kanban-column');
+        const sourceColName = sourceColumn.getAttribute('data-column');
+        const targetColName = this.getAttribute('data-column');
+
+        /* 同列不放 */
+        if (sourceColName === targetColName) return;
+
+        /* 移动卡片到目标列 */
+        targetCards.appendChild(draggedCard);
+
+        /* 更新列计数 */
+        updateColumnCount(sourceColName);
+        updateColumnCount(targetColName);
+
+        /* 轻量成功反馈 */
+        draggedCard.style.borderColor = 'var(--accent-thermal)';
+        setTimeout(function() {
+          if (draggedCard) {
+            draggedCard.style.borderColor = '';
+          }
+        }, 600);
+      });
+    }
+
+    function updateColumnCount(columnName) {
+      const col = document.querySelector('.kanban-column[data-column="' + columnName + '"]');
+      if (!col) return;
+      const cards = col.querySelectorAll('.kanban-card');
+      const countEl = col.querySelector('.kanban-col-count');
+      if (countEl) {
+        countEl.textContent = cards.length;
+      }
+    }
+
+    /* 初始化绑定 */
+    document.querySelectorAll('.kanban-card').forEach(bindCardEvents);
+    document.querySelectorAll('.kanban-column').forEach(bindColumnEvents);
+  }
+
+  /* ==========================================================
+     风险矩阵 Tooltip
+     ========================================================== */
+  document.querySelectorAll('.risk-dot').forEach(function(dot) {
+    dot.addEventListener('mouseenter', function() {
+      const title = this.getAttribute('title');
+      if (!title) return;
+      const tooltip = document.createElement('div');
+      tooltip.className = 'risk-tooltip';
+      tooltip.textContent = title;
+      tooltip.style.cssText = [
+        'position: absolute',
+        'background: #1a1a1a',
+        'color: #efe9dd',
+        'padding: 0.3rem 0.7rem',
+        'border-radius: 6px',
+        'font-family: var(--font-body)',
+        'font-size: 0.7rem',
+        'pointer-events: none',
+        'z-index: 100',
+        'white-space: nowrap',
+        'border: 1px solid #3d352a',
+        'top: -2rem',
+        'left: 50%',
+        'transform: translateX(-50%)'
+      ].join(';');
+      this.appendChild(tooltip);
+    });
+
+    dot.addEventListener('mouseleave', function() {
+      const tooltip = this.querySelector('.risk-tooltip');
+      if (tooltip) tooltip.remove();
+    });
+  });
+
+  /* ==========================================================
+     滚动时隐藏 Hero 滚动指示器
+     ========================================================== */
+  const scrollIndicator = document.querySelector('.hero-scroll-indicator');
+  if (scrollIndicator) {
+    window.addEventListener('scroll', function() {
+      const opacity = Math.max(0, 1 - window.scrollY / 400);
+      scrollIndicator.style.opacity = opacity;
+    }, { passive: true });
+  }
+
+})();
+</script>
+
+</body>
+</html>
