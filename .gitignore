@@ -16,6 +16,9 @@ desktop.ini
 # Node (if any later)
 node_modules/
 
+# PM Skills tool package (not portfolio content)
+Product-Manager-Skills-main/
+
 # Temporary files
 *.tmp
 *.log

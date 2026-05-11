@@ -1,77 +1,97 @@
-# Mars 5 Ultra 散热优化专项 — 产品经理作品集
+# 我是[你的名字]——从硬件测试到硬件 PM
 
-## 关于本项目
+> 我是一名电网设备硬件测试工程师，正在寻找 3D 打印行业的硬件产品经理机会。
+> 这个仓库不是"一个项目的文档"——**它是我作为产品经理的完整能力证明。**
 
-本项目是硬件产品经理求职面试作品集，完整展示从**用户反馈 → 洞察 → PRD → 任务拆解 → 项目管理 → 验证闭环**的产品思维链条。所有数据基于公开用户反馈推演，不依赖任何内部信息。
+---
 
-## 快速导航
+## 你看完这个页面需要 3 分钟。但如果要深入看证据，你需要 15 分钟。
 
-### 核心交付物
-| 文件 | 说明 |
-|------|------|
-| [用户洞察报告](deliverables/user-insight-report-v1.md) | 基于三位真实用户的公开测评，系统化识别 P0/P1/P2 痛点，含竞品推演与产品策略建议 |
-| [散热优化 PRD](deliverables/thermal-optimization-prd-v1.md) | 完整的硬件 PRD，含量化目标、功能需求、验收标准、WBS、固件接口定义 |
-| [项目管理仪表盘](dashboard/index.html) | 增强版交互仪表盘，含燃尽图、拖拽看板、5×5 风险矩阵、团队负载、Sprint 日历等 7 个模块 |
+### 在线演示（推荐）
 
-### 仪表盘演示
-```bash
-# 直接浏览器打开即可演示，无需任何安装
-open dashboard/index.html
-```
+👉 **[点此打开我的产品经理仪表盘](https://duanyayu.github.io/pm-portfolio/dashboard/)** — 浏览器直接打开，无需安装任何东西。包含燃尽图、拖拽看板、风险矩阵、Jira 连接器等 7 个功能模块。
 
-仪表盘功能模块：
-- **概览标签页** — 里程碑时间线 + SVG 燃尽图（理想 vs 实际）+ 风险热力图
-- **看板标签页** — 拖拽式任务看板，卡片可在列间拖动，数据持久化到 localStorage
-- **风险管理** — 5×5 概率×影响矩阵 + 风险详情表
-- **团队负载** — 成员任务数、承诺点数、容量占用率
-- **发布日历** — Gantt 风格 Sprint 时间线 + 里程碑标记
-- **同步记录** — 结构化会议纪要，按团队过滤
-- **Jira 实时数据** — 可选连接 Jira Cloud REST API（默认关闭）
+### 我做了什么
 
-### 标准文档与模板
-| 文件 | 适用场景 |
-|------|----------|
-| [PRD 模板](docs/templates/prd-template.md) | 新功能/优化项需求定义 |
-| [用户洞察报告模板](docs/templates/user-insight-report-template.md) | 用户研究结论输出 |
-| [设计评审 Checklist](docs/templates/design-review-checklist.md) | 硬件各阶段评审 |
-| [项目执行 SOP](docs/templates/project-execution-sop.md) | Phase-Gate 流程管理（含 RACI） |
-| [需求管理规范](docs/templates/product-requirements-management-standards.md) | 需求 ID、优先级、追溯、变更控制 |
-| [WBS→Jira 映射表](docs/jira/wbs-to-jira-mapping.md) | PRD 任务到 Jira Epic/Story/子任务 |
-| [Jira API 对接指南](docs/jira/jira-api-setup-guide.md) | Jira Cloud REST API 配置 |
+过去一年，我在电网设备测试工作中发现——**这个行业没有产品经理岗位，但 PM 要做的事（需求分析、跨部门协同、缺陷闭环、验证迭代）并不会凭空消失。它被打散在不同角色身上。而测试部，恰好是离"问题全貌"最近的位置。**
 
-### 开发日志
-- [日志目录](dev-log/) — 每日自动生成（Stop Hook）的开发记录
+我主动承担了跨部门协调的角色。最典型的一个案例是 TU36 海外电表的电源柜兼容性问题——我通过 6 组对照实验，在 2 天内定位到供应商设备的带载能力边界，推动了硬件研发、嵌入式软件、测试、供应商四方的协同闭环。
+
+然后我做了这件事：**把这段经历用产品经理的工具和方法论重新翻译了一遍。**
+
+### 我的作品集包含什么
+
+**如果你只有 5 分钟，看这三个：**
+
+| 优先级 | 看什么 | 证明什么 |
+|---|---|---|
+| ⭐⭐⭐ | [**项目管理仪表盘**](https://duanyayu.github.io/pm-portfolio/dashboard/) | Jira/Confluence/敏捷开发流程的工具使用能力 |
+| ⭐⭐⭐ | [**散热优化 PRD**](deliverables/thermal-optimization-prd-v1.md) | PRD 撰写、WBS 拆解、任务分解能力 |
+| ⭐⭐⭐ | [**用户洞察报告**](deliverables/user-insight-report-v1.md) | 市场与用户洞察、数据驱动决策能力 |
+
+**如果你有 15 分钟，再看这三个：**
+
+| 优先级 | 看什么 | 证明什么 |
+|---|---|---|
+| ⭐⭐ | [**Jira Sprint Board**](https://duanyayu.github.io/pm-portfolio/dashboard/jira-board.html) | Jira Epic/Story/Sub-task 层级管理、敏捷 Scrum 流程 |
+| ⭐⭐ | [**Confluence 项目文档空间**](https://duanyayu.github.io/pm-portfolio/dashboard/confluence.html) | Confluence 文档管理、项目信息同步机制 |
+| ⭐⭐ | [**测试报告→PRD 改写对照**](deliverables/career-transition/A2-prd-from-test-report.md) | 从执行思维到产品思维的跃迁证据 |
+
+---
+
+## 为什么我能做硬件 PM
+
+我理解 3D 打印的核心产品挑战——**打印质量的可重复性取决于材料、机械精度、固件参数、切片软件的多层依赖。** 这和我在电网设备中处理的"电压→互感器→电路设计→嵌入式固件→测试设备"多层依赖链是同构的。
+
+我做的事：**在没有 PM 的环境中，自己长出了 PM 的工作模式。** 不是在等别人告诉我该做什么——我看到阻塞就去解决，看到系统性风险就推动，看到问题全貌就协调各方。
+
+---
+
+## 我熟悉 Jira 和 Confluence 吗？
+
+是的。这个仓库里有证据：
+
+- [**Jira Sprint Board 模拟**](https://duanyayu.github.io/pm-portfolio/dashboard/jira-board.html) — 我把 TU36 问题闭环拆成了 4 个 Epic、12 个 Story，每个 Story 有 Issue Key、Story Points、Acceptance Criteria、优先级、Sprint 分配。这就是我在 Jira 中管理项目的方式。
+- [**Confluence 项目文档空间**](https://duanyayu.github.io/pm-portfolio/dashboard/confluence.html) — 我按 Confluence 的文档树结构组织了项目文档：PRD、设计评审记录、会议纪要、风险登记板、决策日志。这就是我在 Confluence 中维护项目信息的方式。
+- [**WBS → Jira 映射表**](docs/jira/wbs-to-jira-mapping.md) — 我理解 PRD 任务如何映射到 Jira 的 Initiative → Epic → Story → Sub-task 层级。
+- [**Jira API 对接方案**](docs/jira/jira-api-setup-guide.md) — 我研究过 Jira Cloud REST API v3 的认证、请求格式和错误处理。
+
+---
 
 ## 项目结构
 
 ```
-├── deliveries/          # 核心交付物
-├── dashboard/           # 增强版交互仪表盘（纯前端，零依赖）
-│   ├── index.html       #   入口
-│   ├── css/             #   样式
-│   └── js/              #   10 个模块（data, kanban, burndown, risk-matrix, ...）
-├── docs/                # 标准文档与模板
-│   ├── templates/       #   PRD/用户报告/设计评审/执行SOP/需求管理 模板
-│   └── jira/            #   WBS映射 + API指南
-├── dev-log/             # 每日开发日志（自动生成）
-├── scripts/             # 工具脚本（日志初始化）
-├── CLAUDE.md            # Claude Code 项目指引
-└── .claude/settings.json # Hook 配置
+├── dashboard/                    # 👈 HR 请直接点开这个文件夹的 index.html
+│   ├── index.html                #   项目管理仪表盘入口
+│   ├── jira-board.html           #   Jira Sprint Board 模拟
+│   ├── confluence.html           #   Confluence 文档空间模拟
+│   ├── css/                      #   样式文件
+│   └── js/                       #   10 个功能模块（1346 行 Vanilla JS）
+├── deliverables/                 # 核心交付物（Markdown）
+│   ├── user-insight-report-v1.md #   用户洞察报告
+│   ├── thermal-optimization-prd-v1.md # 散热优化 PRD
+│   └── career-transition/        #   职业转型备战包（11 个文件）
+├── docs/                         # 标准模板与方法论文档
+│   ├── templates/                #   PRD / 用户报告 / 设计评审 / SOP 模板
+│   └── jira/                     #   WBS-Jira 映射 + API 对接指南
+└── CLAUDE.md                     # 本项目的工作指引
 ```
 
-## 技术栈
+---
 
-- **仪表盘**：纯 Vanilla JavaScript (IIFE 模式)、CSS Grid/Flexbox、SVG 图表、HTML5 Drag & Drop API
-- **无第三方依赖**，无需 `npm install`，浏览器直接打开即可运行
-- **Jira 集成**：REST API v3 + 优雅降级（连接失败时回退模拟数据）
-- **自动化日志**：Claude Code Stop Hook → Shell 脚本 → 模板复制
+## 技术说明
 
-## 演示要点
+- 仪表盘是纯前端应用——零依赖、零构建、零 `npm install`
+- 浏览器直接打开 `dashboard/index.html` 即可完整运行
+- 基于 Vanilla JavaScript (IIFE 模块化)、CSS Grid/Flexbox、SVG 图表、HTML5 Drag & Drop API
+- Jira 实时数据功能通过 REST API v3 连接，默认使用模拟数据以保证离线演示的稳定性
 
-面试时可按以下流程讲解：
+---
 
-1. **用户洞察报告**（3 分钟）— 展示如何从用户原声→产品化转译→策略建议
-2. **散热优化 PRD**（5 分钟）— 展示 PRD 的结构、量化目标、WBS 拆解
-3. **项目管理仪表盘**（5 分钟）— 实时演示看板拖拽、燃尽图、风险矩阵
-4. **标准模板体系**（2 分钟）— 快速展示项目执行 SOP 和需求管理规范
-5. **Jira 集成思维**（2 分钟）— 展示 WBS→Jira 映射表 + API 对接方案
+## 联系我
+
+如果你看到这里——我已经证明了我能用自己的方式解决问题。现在我需要一个机会，把这些能力用在真正的产品上。
+
+📧 [你的邮箱]
+📱 [你的电话]
+🔗 [你的 LinkedIn]

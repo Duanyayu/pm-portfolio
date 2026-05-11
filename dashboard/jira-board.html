@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TU36 电源柜兼容性优化 — Jira Sprint Board</title>
+<style>
+:root {
+  --jira-blue: #0052CC;
+  --jira-bg: #f4f5f7;
+  --jira-card: #fff;
+  --jira-border: #dfe1e6;
+  --jira-text: #172b4d;
+  --jira-muted: #5e6c84;
+  --jira-epic: #904ee2;
+  --jira-story: #00b8d9;
+  --jira-task: #4c9aff;
+  --jira-bug: #ff5630;
+  --jira-p0: #de350b;
+  --jira-p1: #ff8b00;
+  --jira-p2: #0052cc;
+  --jira-p3: #42526e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:var(--jira-bg); color:var(--jira-text); }
+
+/* Top Nav */
+.nav { background:#0747a6; color:#fff; padding:0 24px; height:56px; display:flex; align-items:center; gap:24px; font-size:14px; }
+.nav .logo { font-weight:700; font-size:16px; display:flex; align-items:center; gap:8px; }
+.nav .logo svg { width:24px; height:24px; }
+.nav .sep { color:rgba(255,255,255,0.3); }
+.nav a { color:rgba(255,255,255,0.85); text-decoration:none; }
+.nav a:hover { color:#fff; }
+.nav .right { margin-left:auto; display:flex; align-items:center; gap:16px; }
+.nav .avatar { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; }
+
+/* Project Sidebar + Board Layout */
+.layout { display:flex; min-height:calc(100vh - 56px); }
+.sidebar { width:240px; background:#fff; border-right:1px solid var(--jira-border); padding:16px 0; flex-shrink:0; }
+.sidebar .proj-name { padding:8px 24px; font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+.sidebar .proj-name .icon { width:24px; height:24px; border-radius:3px; background:var(--jira-blue); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; }
+.sidebar nav a { display:flex; align-items:center; gap:8px; padding:8px 24px; font-size:13px; color:var(--jira-text); text-decoration:none; }
+.sidebar nav a:hover { background:#f4f5f7; }
+.sidebar nav a.active { background:#e9f2ff; color:var(--jira-blue); font-weight:500; }
+.sidebar .section { padding:16px 24px 4px; font-size:11px; font-weight:700; color:var(--jira-muted); text-transform:uppercase; letter-spacing:0.5px; }
+
+/* Main Content */
+.main { flex:1; padding:24px; overflow-x:auto; }
+
+/* Sprint Header */
+.sprint-header { background:#fff; border:1px solid var(--jira-border); border-radius:6px; padding:16px 20px; margin-bottom:20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.sprint-header .sprint-name { font-size:20px; font-weight:700; }
+.sprint-header .sprint-dates { font-size:13px; color:var(--jira-muted); }
+.sprint-header .sprint-status { margin-left:auto; padding:4px 12px; border-radius:3px; font-size:12px; font-weight:600; background:#e3fcef; color:#006644; }
+.sprint-header .quick-stats { display:flex; gap:20px; font-size:13px; }
+.sprint-header .quick-stats strong { display:block; font-size:18px; }
+
+/* Board Columns */
+.board { display:flex; gap:12px; min-width:900px; }
+.col { flex:1; background:#f4f5f7; border-radius:6px; min-width:220px; }
+.col-header { padding:12px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--jira-muted); display:flex; justify-content:space-between; }
+.col-header .count { background:#dfe1e6; padding:1px 8px; border-radius:10px; font-size:11px; }
+
+/* Issue Card */
+.issue-card { background:#fff; margin:0 8px 8px; border-radius:4px; padding:12px; box-shadow:0 1px 2px rgba(0,0,0,0.08); cursor:pointer; transition:box-shadow 0.15s; font-size:13px; border-left:3px solid transparent; }
+.issue-card:hover { box-shadow:0 2px 6px rgba(0,0,0,0.15); }
+.issue-card.story { border-left-color:var(--jira-story); }
+.issue-card.task { border-left-color:var(--jira-task); }
+.issue-card.bug { border-left-color:var(--jira-bug); }
+.issue-card .issue-key { font-size:11px; color:var(--jira-muted); margin-bottom:4px; }
+.issue-card .issue-title { font-weight:500; margin-bottom:6px; line-height:1.4; }
+.issue-card .issue-meta { display:flex; gap:8px; align-items:center; font-size:11px; color:var(--jira-muted); flex-wrap:wrap; }
+.issue-card .issue-meta img { width:16px; height:16px; border-radius:50%; }
+.issue-card .priority { display:inline-block; width:16px; height:16px; border-radius:2px; }
+.issue-card .priority.p0 { background:var(--jira-p0); }
+.issue-card .priority.p1 { background:var(--jira-p1); }
+.issue-card .priority.p2 { background:var(--jira-p2); }
+.issue-card .priority.p3 { background:var(--jira-p3); }
+.issue-card .sp { background:#f4f5f7; padding:1px 6px; border-radius:8px; font-size:10px; font-weight:600; }
+
+/* Backlog / Completed special */
+.col.completed .issue-card { opacity:0.75; }
+.col.completed .issue-card .issue-title { text-decoration:line-through; }
+
+/* Epic Label */
+.epic-badge { display:inline-block; padding:2px 6px; border-radius:3px; font-size:10px; font-weight:600; margin-bottom:4px; }
+.epic-badge.e1 { background:#f3e8ff; color:#6b3fa0; }
+.epic-badge.e2 { background:#e3f0fd; color:#0052cc; }
+.epic-badge.e3 { background:#e8f5e9; color:#1b5e20; }
+.epic-badge.e4 { background:#fff3e0; color:#e65100; }
+
+/* Right Panel - Detail View */
+.detail-overlay { display:none; position:fixed; top:0; right:0; width:560px; height:100vh; background:#fff; box-shadow:-4px 0 20px rgba(0,0,0,0.15); z-index:1000; overflow-y:auto; }
+.detail-overlay.open { display:block; }
+.detail-header { padding:20px 24px; border-bottom:1px solid var(--jira-border); display:flex; align-items:center; gap:12px; }
+.detail-header .close-btn { margin-left:auto; background:none; border:none; font-size:20px; cursor:pointer; color:var(--jira-muted); }
+.detail-body { padding:24px; }
+.detail-field { margin-bottom:20px; }
+.detail-field label { display:block; font-size:11px; font-weight:700; color:var(--jira-muted); margin-bottom:6px; text-transform:uppercase; }
+.detail-field .value { font-size:14px; }
+.backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:999; }
+.backdrop.open { display:block; }
+
+/* Toggle */
+.view-toggle { display:flex; gap:8px; margin-bottom:16px; }
+.view-toggle button { padding:6px 16px; border:1px solid var(--jira-border); background:#fff; border-radius:4px; cursor:pointer; font-size:13px; }
+.view-toggle button.active { background:var(--jira-blue); color:#fff; border-color:var(--jira-blue); }
+
+/* Epic List View */
+.epic-list { display:none; }
+.epic-list.open { display:block; }
+.epic-group { background:#fff; border:1px solid var(--jira-border); border-radius:6px; padding:16px 20px; margin-bottom:16px; }
+.epic-group h3 { font-size:15px; margin-bottom:6px; }
+.epic-group .epic-desc { font-size:13px; color:var(--jira-muted); margin-bottom:12px; }
+.story-row { display:flex; align-items:center; gap:12px; padding:8px 0; border-top:1px solid #f4f5f7; font-size:13px; }
+.story-row .key { font-size:12px; color:var(--jira-muted); min-width:70px; }
+
+/* Footer note */
+.footer-note { margin-top:32px; padding:16px; background:#fff; border:1px solid var(--jira-border); border-radius:6px; font-size:13px; color:var(--jira-muted); text-align:center; }
+</style>
+</head>
+<body>
+
+<!-- Jira Nav -->
+<div class="nav">
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 14.17l4.59-4.58L17 11l-6 6z"/></svg>
+    Jira Software
+  </div>
+  <span class="sep">|</span>
+  <a href="#">你的项目</a>
+  <a href="#">最近浏览</a>
+  <div class="right">
+    <span style="font-size:12px;opacity:0.7;">模拟演示环境</span>
+    <div class="avatar">PM</div>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="proj-name">
+      <span class="icon">T</span>
+      TEST-ENV
+    </div>
+    <div style="padding:4px 24px;font-size:12px;color:var(--jira-muted);">测试环境兼容性优化专项</div>
+    <div class="section">规划</div>
+    <nav>
+      <a href="#" class="active">📋 当前 Sprint 看板</a>
+      <a href="#">📊 待办事项 (Backlog)</a>
+      <a href="#">📈 报告</a>
+      <a href="#">🎯 发布 (Releases)</a>
+    </nav>
+    <div class="section">开发</div>
+    <nav>
+      <a href="#">📝 Epic 列表</a>
+      <a href="#">🔍 所有 Issue</a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <!-- Sprint Header -->
+    <div class="sprint-header">
+      <div>
+        <div class="sprint-name">Sprint 1 — 紧急止血 + 诊断确认</div>
+        <div class="sprint-dates">2026.01.21 — 2026.01.27 · 5 个工作日</div>
+      </div>
+      <div class="quick-stats">
+        <div>📋 <strong>12</strong> Stories</div>
+        <div>✅ <strong>3</strong> 已完成</div>
+        <div>⏳ <strong>5</strong> 进行中</div>
+        <div>📦 <strong>12.5</strong> SP</div>
+      </div>
+      <div class="sprint-status">● 活跃 Sprint</div>
+    </div>
+
+    <!-- View Toggle -->
+    <div class="view-toggle">
+      <button class="active" onclick="switchView('board')">📋 看板视图</button>
+      <button onclick="switchView('epic')">📊 Epic 层级视图</button>
+    </div>
+
+    <!-- Board View -->
+    <div id="view-board" class="board">
+      <div class="col">
+        <div class="col-header">📥 待规划 <span class="count">2</span></div>
+        <div class="issue-card story">
+          <span class="epic-badge e3">E3: 设备选型标准</span>
+          <div class="issue-key">TEST-10</div>
+          <div class="issue-title">被测表型功耗特征数据库建设</div>
+          <div class="issue-meta">
+            <span class="priority p2"></span> P2 · <span class="sp">3 SP</span> · 👤 测试部
+          </div>
+        </div>
+        <div class="issue-card story">
+          <span class="epic-badge e4">E4: 可测试性优化</span>
+          <div class="issue-key">TEST-12</div>
+          <div class="issue-title">新产品设计评审流程中嵌入可测试性节点</div>
+          <div class="issue-meta">
+            <span class="priority p3"></span> P3 · <span class="sp">2 SP</span> · 👤 测试部 + 总工
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="col-header">📝 待办 <span class="count">3</span></div>
+        <div class="issue-card story">
+          <span class="epic-badge e2">E2: 设备替换</span>
+          <div class="issue-key">TEST-06</div>
+          <div class="issue-title">替代电源柜选型评估</div>
+          <div class="issue-meta">
+            <span class="priority p1"></span> P1 · <span class="sp">3 SP</span> · 👤 采购部
+          </div>
+        </div>
+        <div class="issue-card story">
+          <span class="epic-badge e3">E3: 设备选型标准</span>
+          <div class="issue-key">TEST-11</div>
+          <div class="issue-title">设备带载能力匹配矩阵设计</div>
+          <div class="issue-meta">
+            <span class="priority p2"></span> P2 · <span class="sp">2 SP</span> · 👤 测试部
+          </div>
+        </div>
+        <div class="issue-card task">
+          <span class="epic-badge e3">E3: 设备选型标准</span>
+          <div class="issue-key">TEST-13</div>
+          <div class="issue-title">新设备采购验收 checklist 更新</div>
+          <div class="issue-meta">
+            <span class="priority p2"></span> P2 · <span class="sp">1 SP</span> · 👤 测试+采购
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="col-header">🔄 进行中 <span class="count">4</span></div>
+        <div class="issue-card story">
+          <span class="epic-badge e1">E1: 兼容性保障</span>
+          <div class="issue-key">TEST-03</div>
+          <div class="issue-title">全型号功耗特征 × 设备带载能力匹配审查</div>
+          <div class="issue-meta">
+            <span class="priority p1"></span> P1 · <span class="sp">5 SP</span> · 👤 测试部
+          </div>
+        </div>
+        <div class="issue-card story">
+          <span class="epic-badge e1">E1: 兼容性保障</span>
+          <div class="issue-key">TEST-05</div>
+          <div class="issue-title">测试环境异常处理 SOP 更新</div>
+          <div class="issue-meta">
+            <span class="priority p1"></span> P1 · <span class="sp">2 SP</span> · 👤 测试部
+          </div>
+        </div>
+        <div class="issue-card story">
+          <span class="epic-badge e4">E4: 可测试性优化</span>
+          <div class="issue-key">TEST-14</div>
+          <div class="issue-title">硬件 DFT 评审 checklist 增加项梳理</div>
+          <div class="issue-meta">
+            <span class="priority p3"></span> P3 · <span class="sp">2 SP</span> · 👤 测试+研发
+          </div>
+        </div>
+        <div class="issue-card story">
+          <span class="epic-badge e4">E4: 可测试性优化</span>
+          <div class="issue-key">TEST-15</div>
+          <div class="issue-title">与研发对齐 A-OUT 测试接口标准化方案</div>
+          <div class="issue-meta">
+            <span class="priority p3"></span> P3 · <span class="sp">2 SP</span> · 👤 测试+研发
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="col-header">👀 评审中 <span class="count">0</span></div>
+        <div style="padding:16px;text-align:center;color:var(--jira-muted);font-size:13px;">拖拽卡片至此列</div>
+      </div>
+      <div class="col completed">
+        <div class="col-header">✅ 已完成 <span class="count">3</span></div>
+        <div class="issue-card story">
+          <span class="epic-badge e1">E1: 兼容性保障</span>
+          <div class="issue-key">TEST-01</div>
+          <div class="issue-title">TU36 型号测试流程迁移至 1 楼海外台体</div>
+          <div class="issue-meta">
+            <span class="priority p0"></span> P0 · <span class="sp">1 SP</span> · ✅ 2026.01.21
+          </div>
+        </div>
+        <div class="issue-card story">
+          <span class="epic-badge e2">E2: 设备替换</span>
+          <div class="issue-key">TEST-04</div>
+          <div class="issue-title">电源柜 1 号停用 + 供应商维修联系</div>
+          <div class="issue-meta">
+            <span class="priority p0"></span> P0 · <span class="sp">1 SP</span> · ✅ 2026.01.22
+          </div>
+        </div>
+        <div class="issue-card story">
+          <span class="epic-badge e2">E2: 设备替换</span>
+          <div class="issue-key">TEST-08</div>
+          <div class="issue-title">新电源柜验收测试（含带载能力验证）</div>
+          <div class="issue-meta">
+            <span class="priority p1"></span> P1 · <span class="sp">2 SP</span> · ✅ 2026.01.24
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Epic List View -->
+    <div id="view-epic" class="epic-list">
+      <div class="epic-group">
+        <h3>🎯 E1: 测试设备兼容性保障（P0 - 紧急止血）</h3>
+        <div class="epic-desc">Epic Hypothesis: 通过将 TU36 测试迁移至已验证兼容的台体并建立兼容性审查，消除 80% 测试场景的供电异常。</div>
+        <div class="story-row"><span class="key">TEST-01</span> ✅ TU36 型号测试流程迁移至 1 楼海外台体 <span class="sp">1 SP</span> <span class="priority p0"></span></div>
+        <div class="story-row"><span class="key">TEST-03</span> 🔄 全型号功耗特征 × 设备带载能力匹配审查 <span class="sp">5 SP</span> <span class="priority p1"></span></div>
+        <div class="story-row"><span class="key">TEST-05</span> 🔄 测试环境异常处理 SOP 更新 <span class="sp">2 SP</span> <span class="priority p1"></span></div>
+      </div>
+      <div class="epic-group">
+        <h3>🎯 E2: 电源柜设备替换与维修（P0-P1 - 消除瓶颈）</h3>
+        <div class="epic-desc">Epic Hypothesis: 通过替换带载能力不足的电源柜并建立验收标准，从根本上消除此类问题的再次发生。</div>
+        <div class="story-row"><span class="key">TEST-04</span> ✅ 电源柜 1 号停用 + 供应商维修联系 <span class="sp">1 SP</span> <span class="priority p0"></span></div>
+        <div class="story-row"><span class="key">TEST-06</span> 📝 替代电源柜选型评估 <span class="sp">3 SP</span> <span class="priority p1"></span></div>
+        <div class="story-row"><span class="key">TEST-08</span> ✅ 新电源柜验收测试（含带载能力验证） <span class="sp">2 SP</span> <span class="priority p1"></span></div>
+      </div>
+      <div class="epic-group">
+        <h3>🎯 E3: 设备选型标准建立（P2 - 制度化）</h3>
+        <div class="epic-desc">Epic Hypothesis: 通过建立"被测表型功耗 × 设备带载能力"匹配数据库和验收标准，防止未来再次发生设备选型不当。</div>
+        <div class="story-row"><span class="key">TEST-10</span> 📥 被测表型功耗特征数据库建设 <span class="sp">3 SP</span> <span class="priority p2"></span></div>
+        <div class="story-row"><span class="key">TEST-11</span> 📝 设备带载能力匹配矩阵设计 <span class="sp">2 SP</span> <span class="priority p2"></span></div>
+        <div class="story-row"><span class="key">TEST-13</span> 📝 新设备采购验收 checklist 更新 <span class="sp">1 SP</span> <span class="priority p2"></span></div>
+      </div>
+      <div class="epic-group">
+        <h3>🎯 E4: 下一代产品可测试性优化（P3 - 设计前移）</h3>
+        <div class="epic-desc">Epic Hypothesis: 通过在新产品设计评审阶段引入 DFT 检查，从源头上减少"产品设计导致测试困难"的问题。</div>
+        <div class="story-row"><span class="key">TEST-14</span> 🔄 硬件 DFT 评审 checklist 增加项梳理 <span class="sp">2 SP</span> <span class="priority p3"></span></div>
+        <div class="story-row"><span class="key">TEST-15</span> 🔄 与研发对齐 A-OUT 测试接口标准化方案 <span class="sp">2 SP</span> <span class="priority p3"></span></div>
+        <div class="story-row"><span class="key">TEST-12</span> 📥 新产品设计评审流程中嵌入可测试性节点 <span class="sp">2 SP</span> <span class="priority p3"></span></div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      💡 这个 Sprint Board 基于我的真实工作数据（TU36 电源柜兼容性问题闭环），按 Jira Scrum Board 的标准结构搭建。<br>
+      Epic → Story 层级、Issue Key、Story Points、优先级、Sprint 分配、Acceptance Criteria 均遵循 Jira 最佳实践。<br>
+      完整 WBS→Epic→Story 拆解文档见 <a href="https://github.com/Duanyayu/pm-portfolio/blob/master/deliverables/career-transition/A3-wbs-breakdown.md">A3-wbs-breakdown.md</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchView(view) {
+  document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.view-toggle button[onclick*="${view}"]`).classList.add('active');
+  document.getElementById('view-board').style.display = view === 'board' ? 'flex' : 'none';
+  document.getElementById('view-epic').classList.toggle('open', view === 'epic');
+}
+</script>
+</body>
+</html>
