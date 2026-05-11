@@ -1,209 +1,312 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>硬件产品经理作品集 · Mars 5 Ultra</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mars 5 Ultra · 散热优化专项</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* 设计系统 — 暖金白底 Luxury Editorial · Skill: ui-ux-pro-max #50 Bodoni Moda + Jost */
+/* ============================================================
+   设计系统 — 基于 theme-factory（页面 C）升级
+   字体: Outfit + Inter | 暖灰基底 + 铜色 + 青蓝辅色
+   ============================================================ */
 :root {
-  --bg:#e8d5af;--bg-card:#f2e6ce;--bg-card-hover:#faf6ed;
-  --border:rgba(140,110,60,0.13);--border-hover:rgba(140,110,60,0.26);
-  --text:#3d2a10;--text-secondary:rgba(61,42,16,0.66);--text-tertiary:rgba(61,42,16,0.35);
-  --accent:#9b7028;--accent-soft:rgba(155,112,40,0.1);
-  --green:#4a7050;--green-soft:rgba(74,112,80,0.12);
-  --orange:#b07030;--orange-soft:rgba(176,112,48,0.12);
-  --red:#b04838;--red-soft:rgba(176,72,56,0.12);
-  --font-heading:'Bodoni Moda',Georgia,'Times New Roman',serif;
-  --font-body:'Jost','Segoe UI',system-ui,sans-serif;
-  --ease:cubic-bezier(0.22,0.1,0.13,1);--radius-sm:6px;--radius:12px;--radius-lg:16px;
+  --bg: #FBFAF7; --bg-alt: #F5F2ED;
+  --surface: #FFFFFF; --surface-hover: #F9F7F3;
+  --border: rgba(0,0,0,0.06); --border-strong: rgba(0,0,0,0.12);
+  --text: #1C1F2B; --text-secondary: rgba(28,31,43,0.62); --text-tertiary: rgba(28,31,43,0.35);
+  --accent: #C17F59; --accent-soft: rgba(193,127,89,0.1); --accent-glow: rgba(193,127,89,0.18);
+  --teal: #3D8B8B; --teal-soft: rgba(61,139,139,0.1);
+  --green: #4A8C5C; --green-soft: rgba(74,140,92,0.1);
+  --orange: #D4914A; --orange-soft: rgba(212,145,74,0.12);
+  --red: #C4604A; --red-soft: rgba(196,96,74,0.1);
+  --font-heading: 'Outfit', sans-serif; --font-body: 'Inter', sans-serif;
+  --ease: cubic-bezier(0.22,0.1,0.13,1); --radius: 14px; --radius-sm: 8px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04); --shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--bg)}
-body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;font-size:16px}
-/* 噪点纹理 */
-.noise{position:fixed;inset:0;pointer-events:none;z-index:999;opacity:0.022;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-/* 滚动进度条 */
-.scroll-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:101;width:0;transition:width 0.06s linear}
-/* 导航栏 */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 56px;display:flex;justify-content:space-between;align-items:center;transition:all 0.4s}
-.nav.scrolled{background:rgba(232,213,175,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:var(--font-heading);font-size:18px;font-weight:500;color:var(--text);letter-spacing:-0.1px}
-.nav-logo em{font-style:italic;color:var(--accent);font-weight:400}
-.nav-links{display:flex;gap:40px;list-style:none}
-.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s}
-.nav-links a:hover{color:var(--text)}
-.section{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:clamp(100px,14vw,160px) 56px}
-.section-kicker{font-family:var(--font-body);font-size:11px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
-.section-heading{font-family:var(--font-heading);font-size:clamp(36px,5.5vw,52px);font-weight:600;letter-spacing:-0.5px;line-height:1.1;margin-bottom:24px;font-style:italic}
-.section-desc{font-size:17px;color:var(--text-secondary);max-width:540px;line-height:1.7;font-weight:400}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* 粒子画布背景 */
+#particleCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.6}
+/* 冻结导航栏 */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(251,250,247,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:all 0.3s}
+.nav-logo{font-family:var(--font-heading);font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px;display:flex;align-items:center;gap:10px}
+.nav-logo span{font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:12px;letter-spacing:0.5px}
+.nav-links{display:flex;gap:6px;list-style:none;background:var(--bg-alt);border-radius:24px;padding:4px}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:13px;font-weight:500;padding:8px 16px;border-radius:20px;transition:all 0.2s;display:block}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--surface);box-shadow:var(--shadow-sm)}
+/* 区块 */
+.section{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:clamp(80px,12vw,140px) 48px}
+.section-kicker{font-size:12px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section-kicker .sim-badge{font-size:10px;font-weight:500;background:var(--teal-soft);color:var(--teal);padding:2px 8px;border-radius:8px;letter-spacing:0.5px}
+.section-heading{font-family:var(--font-heading);font-size:clamp(32px,5vw,46px);font-weight:700;letter-spacing:-0.8px;line-height:1.12;margin-bottom:20px}
+.section-desc{font-size:17px;color:var(--text-secondary);max-width:540px;line-height:1.7}
 /* Hero */
-.hero{min-height:100vh;display:flex;align-items:center;padding:0 56px;position:relative}
+.hero{min-height:100vh;display:flex;align-items:center;padding:0 48px;position:relative}
 .hero-inner{max-width:1120px;margin:0 auto;position:relative;z-index:2}
-.hero-chip{display:inline-flex;align-items:center;gap:10px;padding:9px 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:24px;font-size:12px;color:var(--text-secondary);margin-bottom:52px;font-weight:500}
-.hero-chip::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green-soft);animation:pulse-dot 2.4s ease-in-out infinite}
-@keyframes pulse-dot{0%,100%{box-shadow:0 0 6px rgba(74,112,80,0.3)}50%{box-shadow:0 0 16px rgba(74,112,80,0.6)}}
-.hero h1{font-family:var(--font-heading);font-size:clamp(48px,8vw,90px);font-weight:600;letter-spacing:-1px;line-height:1.02;margin-bottom:36px;font-style:italic}
-.hero h1 em{font-style:italic;color:var(--accent)}
-.hero .lede{font-size:19px;color:var(--text-secondary);max-width:520px;line-height:1.7;margin-bottom:56px;font-weight:400}
-.hero-stats{display:flex;gap:64px}
-.hero-stat-num{font-family:var(--font-heading);font-size:44px;font-weight:600;color:var(--text);font-style:italic}
-.hero-stat-lbl{font-size:12px;color:var(--text-tertiary);margin-top:6px;font-weight:500;text-transform:uppercase;letter-spacing:1px}
-.scroll-hint{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;animation:float 2.6s ease-in-out infinite;z-index:2}
-.scroll-hint span{font-size:10px;color:var(--text-tertiary);letter-spacing:2.5px;text-transform:uppercase;font-weight:600}
-.scroll-hint-line{width:1px;height:44px;background:linear-gradient(to bottom,var(--text-tertiary),transparent)}
-@keyframes float{0%,100%{transform:translateX(-50%)translateY(0)}50%{transform:translateX(-50%)translateY(10px)}}
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px;transition:all 0.35s var(--ease)}
-.card:hover{background:var(--bg-card-hover);border-color:var(--border-hover);transform:translateY(-2px)}
-.quote-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:36px 40px;transition:all 0.35s var(--ease)}
-.quote-card:hover{background:var(--bg-card-hover);border-color:var(--border-hover)}
-.quote-glyph{font-family:var(--font-heading);font-size:64px;color:var(--accent);line-height:0.4;margin-bottom:24px;font-style:italic}
-.quote-text{font-size:17px;line-height:1.7;margin-bottom:14px;font-weight:400;color:var(--text)}
+.hero-badge{display:inline-block;padding:6px 16px;background:var(--accent-soft);color:var(--accent);border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:32px}
+.hero h1{font-family:var(--font-heading);font-size:clamp(44px,7vw,72px);font-weight:800;letter-spacing:-1.5px;line-height:1.04;margin-bottom:24px}
+.hero h1 em{font-style:normal;color:var(--accent);position:relative}
+.hero .lede{font-size:18px;color:var(--text-secondary);max-width:500px;line-height:1.65;margin-bottom:40px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn{padding:12px 26px;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;border:none}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 16px var(--accent-glow)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--accent-glow)}
+.btn-outline{background:var(--surface);border:1px solid var(--border-strong);color:var(--text)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+/* 卡片 */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;transition:all 0.3s var(--ease);box-shadow:var(--shadow-sm)}
+.card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+/* 引用卡 */
+.quote-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;transition:all 0.3s var(--ease)}
+.quote-card:hover{border-color:var(--border-strong);box-shadow:var(--shadow)}
+.quote-text{font-size:16px;line-height:1.7;color:var(--text);margin-bottom:10px}
 .quote-src{font-size:12px;color:var(--text-tertiary);font-weight:500}
-.pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:36px}
-.pain-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px;transition:all 0.35s var(--ease)}
-.pain-card:hover{background:var(--bg-card-hover);border-color:var(--border-hover);transform:translateY(-2px)}
-.pain-card.p0{border-left:3px solid var(--red)}.pain-card.p1{border-left:3px solid var(--orange)}.pain-card.p2{border-left:3px solid var(--accent)}
-.pain-chip{display:inline-block;padding:5px 14px;border-radius:8px;font-size:11px;font-weight:600;letter-spacing:0.5px;margin-bottom:16px}
+.quote-analysis{font-size:12px;color:var(--teal);line-height:1.5;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-weight:500}
+/* 痛点 */
+.pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px;margin-top:32px}
+.pain-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;transition:all 0.3s var(--ease);position:relative}
+.pain-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.pain-card.p0{border-left:4px solid var(--red)}.pain-card.p1{border-left:4px solid var(--orange)}.pain-card.p2{border-left:4px solid var(--accent)}
+.pain-chip{display:inline-block;padding:4px 12px;border-radius:8px;font-size:11px;font-weight:600;letter-spacing:0.3px;margin-bottom:14px}
 .pain-chip.p0{background:var(--red-soft);color:var(--red)}.pain-chip.p1{background:var(--orange-soft);color:var(--orange)}.pain-chip.p2{background:var(--accent-soft);color:var(--accent)}
-.pain-card h3{font-family:var(--font-heading);font-size:20px;font-weight:600;margin-bottom:12px;font-style:italic}
-.pain-card p{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px}
-.pain-root{font-size:12px;color:var(--text-tertiary);line-height:1.6;border-top:1px solid var(--border);padding-top:16px}
-.metrics-row{display:flex;gap:72px;margin:56px 0;flex-wrap:wrap}
-.metric-num{font-family:var(--font-heading);font-size:56px;font-weight:600;color:var(--accent);font-style:italic}
-.metric-lbl{font-size:12px;color:var(--text-tertiary);margin-top:8px;font-weight:500;text-transform:uppercase;letter-spacing:1px}
-.data-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:20px}
-.data-table th{text-align:left;padding:16px 20px;border-bottom:1px solid var(--border);color:var(--text-tertiary);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:1.5px}
-.data-table td{padding:18px 20px;border-bottom:1px solid var(--border);color:var(--text-secondary)}
-.data-table tr:hover td{background:rgba(0,0,0,0.02)}.data-table .win{color:var(--green);font-weight:600}
-.kanban-col{flex:1;min-width:170px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.pain-card h3{font-family:var(--font-heading);font-size:18px;font-weight:600;margin-bottom:10px}
+.pain-card p{font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px}
+.pain-note{font-size:12px;color:var(--teal);line-height:1.5;background:var(--teal-soft);padding:10px 14px;border-radius:var(--radius-sm);font-weight:500}
+/* 竞品交互卡 */
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:32px}
+.comp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;cursor:pointer;transition:all 0.35s var(--ease);position:relative;overflow:hidden}
+.comp-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.1);border-color:var(--accent)}
+.comp-card h4{font-family:var(--font-heading);font-size:17px;font-weight:600;margin-bottom:6px}
+.comp-card .comp-price{font-size:13px;color:var(--accent);font-weight:600;margin-bottom:12px}
+.comp-card .comp-details{font-size:12px;color:var(--text-secondary);line-height:1.8;max-height:0;overflow:hidden;transition:max-height 0.4s var(--ease)}
+.comp-card:hover .comp-details,.comp-card.expanded .comp-details{max-height:300px;margin-top:10px}
+.comp-card .comp-source{font-size:10px;color:var(--text-tertiary);margin-top:8px}
+/* 看板 */
+.kanban-col{flex:1;min-width:170px;background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);padding:14px;transition:all 0.3s}
 .kanban-col h5{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-tertiary);margin-bottom:10px;display:flex;justify-content:space-between}
-.kanban-col .count{background:var(--bg-card-hover);padding:1px 8px;border-radius:8px;font-size:10px}
-.kanban-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;font-size:13px;color:var(--text);cursor:grab;transition:all 0.2s}
-.kanban-card:hover{border-color:var(--border-hover);transform:translateY(-1px)}.kanban-card.dragging{opacity:0.4}
+.kanban-col .count{background:var(--surface);padding:1px 8px;border-radius:8px;font-size:10px}
+.kanban-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;font-size:13px;cursor:grab;transition:all 0.25s;box-shadow:var(--shadow-sm)}
+.kanban-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+.kanban-card.dragging{opacity:0.4;transform:rotate(1deg)}
 .kanban-card .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;margin-bottom:4px}
-.tag-structure{background:rgba(90,70,130,0.15);color:#4a3078}.tag-hardware{background:rgba(170,90,80,0.15);color:#8a3830}
-.tag-firmware{background:rgba(60,130,150,0.15);color:#2d7a90}.tag-testing{background:rgba(70,120,75,0.15);color:#3b6b40}
-.tag-supply{background:rgba(140,100,40,0.15);color:#7a5828}
-.kanban-col.drag-over{border-color:var(--accent);background:var(--bg-card-hover)}
+.tag-s{background:rgba(120,100,160,0.12);color:#5c4890}.tag-h{background:rgba(190,105,90,0.12);color:#9b4535}
+.tag-f{background:rgba(50,130,155,0.12);color:#2d7a90}.tag-t{background:rgba(65,120,75,0.12);color:#3b6b40}
+.tag-sp{background:rgba(150,110,45,0.12);color:#7a5828}
+.kanban-col.drag-over{border-color:var(--accent);background:var(--accent-soft)}
+/* 风险矩阵 */
+.risk-grid{display:grid;grid-template-columns:80px repeat(5,1fr);grid-template-rows:auto repeat(5,60px);gap:3px;font-size:11px;margin-top:12px}
+.risk-cell{border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative;min-height:60px}
+.risk-bubble{position:absolute;border-radius:50%;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;border:2px solid rgba(255,255,255,0.3);z-index:5}
+.risk-bubble:hover{transform:scale(1.35);z-index:20;box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+/* 同步记录 */
+.sync-entry{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:12px;cursor:pointer;transition:all 0.35s var(--ease);position:relative;overflow:hidden}
+.sync-entry:hover{background:var(--accent-soft);border-color:var(--accent);box-shadow:0 4px 20px var(--accent-glow);transform:translateX(4px)}
+.sync-entry .sync-dot{position:absolute;left:12px;top:50%;transform:translateY(-50%) scale(0);width:10px;height:10px;border-radius:50%;background:var(--accent);transition:transform 0.3s var(--ease)}
+.sync-entry.active .sync-dot{transform:translateY(-50%) scale(1);animation:dotPulse 1.2s ease-out}
+@keyframes dotPulse{0%{box-shadow:0 0 0 0 var(--accent-glow)}100%{box-shadow:0 0 0 16px transparent}}
+/* 测试用例 */
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:24px}
+.test-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all 0.3s var(--ease);cursor:pointer}
+.test-card:hover{border-color:var(--teal);box-shadow:var(--shadow)}
+.test-card .tc-id{font-size:11px;font-weight:600;color:var(--teal);letter-spacing:1px;margin-bottom:6px}
+.test-card h4{font-family:var(--font-heading);font-size:16px;font-weight:600;margin-bottom:8px}
+/* Sprint */
 .sprint-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px}
-.sprint-label{width:70px;font-weight:600;color:var(--text);flex-shrink:0}
-.sprint-track{flex:1;height:22px;background:var(--bg);border-radius:4px;position:relative;overflow:hidden}
-.sprint-bar{height:100%;border-radius:4px;position:absolute;display:flex;align-items:center;padding-left:8px;font-size:10px;color:var(--text-secondary);white-space:nowrap}
-.sprint-bar.done{background:rgba(74,112,80,0.3)}.sprint-bar.current{background:rgba(155,112,40,0.4)}.sprint-bar.upcoming{border:1px dashed var(--border);background:transparent}
-.risk-grid{display:grid;grid-template-columns:80px repeat(5,1fr);grid-template-rows:auto repeat(5,58px);gap:3px;font-size:12px;margin-top:16px}
-.risk-cell{border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative;min-height:58px}
-.risk-bubble{position:absolute;border-radius:50%;cursor:pointer;transition:transform 0.2s;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;border:2px solid rgba(255,255,255,0.3);z-index:5}
-.risk-bubble:hover{transform:scale(1.35);z-index:20}
-.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:32px}
-.test-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;transition:all 0.35s var(--ease)}
-.test-card:hover{background:var(--bg-card-hover);border-color:var(--border-hover);transform:translateY(-2px)}
-.test-card .tc-id{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:1px;margin-bottom:8px}
-.test-card h4{font-family:var(--font-heading);font-size:17px;font-weight:600;margin-bottom:8px;font-style:italic}
-.test-card p{font-size:13px;color:var(--text-secondary);line-height:1.6}
-.reveal{opacity:0;transform:translateY(32px);transition:all 0.7s cubic-bezier(0.22,0.1,0.13,1);will-change:transform,opacity}
-.reveal.visible{opacity:1;transform:translateY(0)}.reveal.d1{transition-delay:60ms}.reveal.d2{transition-delay:120ms}.reveal.d3{transition-delay:180ms}.reveal.d4{transition-delay:240ms}.reveal.d5{transition-delay:300ms}
-@media(max-width:768px){.nav{padding:14px 24px}.nav-links{display:none}.hero{padding:0 24px}.section{padding:72px 24px}.hero h1{font-size:42px}.pain-grid{grid-template-columns:1fr}.hero-stats{gap:32px}.metrics-row{gap:36px}#kanban-board{flex-direction:column}.kanban-col{min-width:auto}.risk-grid{font-size:10px;grid-template-columns:60px repeat(5,1fr)}}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.scroll-hint{animation:none}.hero-chip::before{animation:none}}
-</style></head><body>
-<div class="noise"></div><div class="scroll-bar" id="scrollbar"></div>
+.sprint-label{width:75px;font-weight:600;flex-shrink:0}
+.sprint-track{flex:1;height:24px;background:var(--bg-alt);border-radius:4px;position:relative;overflow:hidden}
+.sprint-bar{height:100%;border-radius:4px;position:absolute;display:flex;align-items:center;padding-left:10px;font-size:10px;color:var(--text-secondary);white-space:nowrap}
+.sprint-bar.done{background:rgba(74,140,92,0.25)}.sprint-bar.current{background:rgba(193,127,89,0.35)}.sprint-bar.upcoming{border:1px dashed var(--border)}
+/* 负载条 */
+.workload-table{width:100%;font-size:13px;border-collapse:collapse}
+.workload-table th{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text-tertiary);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:1px}
+.workload-table td{padding:12px;border-bottom:1px solid var(--border)}
+.wl-bar-bg{width:90px;height:6px;background:var(--bg-alt);border-radius:3px;overflow:hidden;display:inline-block;margin-right:10px;vertical-align:middle}
+.wl-bar-fill{height:100%;border-radius:3px;transition:width 1s var(--ease)}
+/* 渐入 */
+.reveal{opacity:0;transform:translateY(28px);transition:all 0.65s cubic-bezier(0.22,0.1,0.13,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal.d1{transition-delay:50ms}.reveal.d2{transition-delay:100ms}.reveal.d3{transition-delay:150ms}.reveal.d4{transition-delay:200ms}
+/* 响应式 */
+@media(max-width:768px){.nav{padding:12px 20px}.nav-links{gap:2px}.nav-links a{font-size:11px;padding:6px 10px}.hero{padding:0 20px}.section{padding:60px 20px}.hero h1{font-size:36px}.comp-grid{grid-template-columns:1fr}.pain-grid{grid-template-columns:1fr}#kanban-board{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<canvas id="particleCanvas"></canvas>
+
+<!-- 导航栏 -->
 <nav class="nav" id="nav">
-  <div class="nav-logo">作品集<em> · Mars 5 Ultra</em></div>
-  <ul class="nav-links"><li><a href="#insight">洞察</a></li><li><a href="#solution">方案</a></li><li><a href="#execution">执行</a></li><li><a href="#synergy">协同</a></li><li><a href="#validate">验证</a></li></ul>
+  <div class="nav-logo">Mars 5 Ultra<span>散热优化专项</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#insight">洞察</a></li><li><a href="#solution">方案</a></li><li><a href="#execution">执行</a></li><li><a href="#synergy">协同</a></li><li><a href="#validate">验证</a></li>
+  </ul>
 </nav>
+
+<!-- Hero -->
 <section class="hero"><div class="hero-inner">
-  <div class="hero-chip reveal">硬件产品管理 · Hardware Product Management</div>
+  <div class="hero-badge reveal">基于真实用户反馈推演</div>
   <h1 class="reveal d1">从用户反馈到<br><em>产品交付闭环</em></h1>
-  <p class="lede reveal d2">基于 Mars 5 Ultra 真实用户反馈推演，展示从市场洞察→PRD撰写→任务拆解→项目管理→验证闭环的完整PM思维链。每一份产出物背后，都是结构化的思考与方法论。</p>
-  <div class="hero-stats reveal d3"><div><div class="hero-stat-num" data-target="3">0</div><div class="hero-stat-lbl">核心交付物</div></div><div><div class="hero-stat-num" data-target="39">0</div><div class="hero-stat-lbl">开发任务</div></div><div><div class="hero-stat-num" data-target="5">0</div><div class="hero-stat-lbl">标准模板</div></div></div>
-</div><div class="scroll-hint"><span>向下滚动</span><div class="scroll-hint-line"></div></div></section>
-
-<!-- 洞察区 --><section class="section" id="insight">
-<div class="section-kicker reveal">01 · 市场与用户洞察</div><h2 class="section-heading reveal d1">市场与用户洞察</h2><p class="section-desc reveal d2">从三位真实用户的公开测评中提取结构化洞察。核心能力：将用户情绪转译为工程命题，基于跨用户共识度完成痛点优先级排序。</p>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:52px">
-<div class="quote-card reveal d1"><div class="quote-glyph">"</div><div class="quote-text">长时间工作打印，底部发烫明显。不敢无人值守，担心内部元件老化。</div><div class="quote-src">测评一 · 测温枪实测底部 42.5°C</div></div>
-<div class="quote-card reveal d2"><div class="quote-glyph">"</div><div class="quote-text">每次取盖子需要拔下加热器线，否则扯线。气密性不咋地，盖子盖不盖没啥区别。</div><div class="quote-src">反馈一 · 下沉式结构交互摩擦</div></div>
-<div class="quote-card reveal d3"><div class="quote-glyph">"</div><div class="quote-text">环境不好时树脂味不易散。构建板没有防滑，各种零部件都是缩水版。</div><div class="quote-src">反馈三 · 气味管理与感知价值落差</div></div>
-</div>
-<div class="metrics-row"><div class="reveal d1"><div class="metric-num" data-target="42.5">0</div><div class="metric-lbl">底部实测温度 · °C</div></div><div class="reveal d2"><div class="metric-num" data-target="3">0</div><div class="metric-lbl">独立用户报告散热担忧</div></div><div class="reveal d3"><div class="metric-num" data-target="32">0</div><div class="metric-lbl">环境设计上限 · °C</div></div></div>
-<div class="pain-grid">
-<div class="pain-card p0 reveal d1"><span class="pain-chip p0">P0 · 严重</span><h3>散热系统不足引发可靠性信任危机</h3><p>用户恐惧的不是"温度高"，而是"高温→元件老化→故障率升高"——直接瓦解"全自动、安心去睡觉"的核心价值主张。</p><div class="pain-root">根因：机身紧凑散热空间不足 · 风扇风量冗余不够 · 热设计验证缺少"连续长时工况"</div></div>
-<div class="pain-card p1 reveal d2"><span class="pain-chip p1">P1 · 中高</span><h3>下沉式结构引发的交互连锁问题</h3><p>分离盖+外置加热器→取拿必拔线→操作繁琐+线缆风险。气味管理控制权不在产品而在用户环境。</p><div class="pain-root">根因：设计评审中"配件插拔人因工程"未被充分推演</div></div>
-<div class="pain-card p2 reveal d3"><span class="pain-chip p2">P2 · 低</span><h3>跨型号功能下放不一致，感知价值落差</h3><p>低成本高感知功能被过度裁剪，用户在同品牌产品线间比较时产生"降级"认知。</p><div class="pain-root">根因：产品线定义缺少统一的"体验基线规则"</div></div>
-</div>
-<div style="margin-top:60px" class="reveal"><div class="section-kicker">竞争情报</div><h3 style="font-family:var(--font-heading);font-size:24px;font-weight:600;margin-bottom:18px;font-style:italic">竞品态势与市场机会</h3>
-<table class="data-table"><thead><tr><th>竞品</th><th>定位</th><th>散热</th><th>气味管理</th><th>Mars 5 Ultra 机会窗口</th></tr></thead><tbody>
-<tr><td>Phrozen Sonic Mini 系列</td><td>高精度</td><td>保守，未见优化</td><td>—</td><td class="win">率先建立长时可靠性散热优势</td></tr>
-<tr><td>Anycubic Photon Mono 系列</td><td>性价比</td><td>标准设计</td><td>内置净化模块</td><td class="win">散热+气味双线建立可感知差异</td></tr>
-<tr><td>Uniformation GKtwo</td><td>高可靠性</td><td>用料扎实，用户标杆</td><td>—</td><td class="win">2000-3000元价位段形成差异化护城河</td></tr></tbody></table></div></section>
-
-<!-- 方案区 --><section class="section" id="solution">
-<div class="section-kicker reveal">02 · 方案设计</div><h2 class="section-heading reveal d1">方案与PRD设计</h2><p class="section-desc reveal d2">将用户洞察转化为可执行的工程需求。量化目标、明确边界、定义接口——这是"能落地"的PRD。</p>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:48px">
-<div class="card reveal d1" style="text-align:center;padding:40px 28px"><div style="font-family:var(--font-heading);font-size:48px;font-weight:600;color:var(--accent);font-style:italic;margin-bottom:8px">≤38°C</div><div style="font-size:15px;color:var(--text);font-weight:600;margin-bottom:6px">核心目标</div><div style="font-size:13px;color:var(--text-secondary)">环境28°C连续打印4小时<br>外壳最高温度点</div></div>
-<div class="card reveal d2" style="text-align:center;padding:40px 28px"><div style="font-family:var(--font-heading);font-size:48px;font-weight:600;color:var(--accent);font-style:italic;margin-bottom:8px">≤35dB</div><div style="font-size:15px;color:var(--text);font-weight:600;margin-bottom:6px">噪音约束</div><div style="font-size:13px;color:var(--text-secondary)">距离设备1米处<br>A加权测量值</div></div>
-<div class="card reveal d3" style="text-align:center;padding:40px 28px"><div style="font-family:var(--font-heading);font-size:48px;font-weight:600;color:var(--accent);font-style:italic;margin-bottom:8px">≤¥15</div><div style="font-size:15px;color:var(--text);font-weight:600;margin-bottom:6px">BOM增量</div><div style="font-size:13px;color:var(--text-secondary)">单台成本控制目标<br>不影响现有定价体系</div></div>
-<div class="card reveal d4" style="text-align:center;padding:40px 28px"><div style="font-family:var(--font-heading);font-size:48px;font-weight:600;color:var(--green);font-style:italic;margin-bottom:8px">≥80%</div><div style="font-size:15px;color:var(--text);font-weight:600;margin-bottom:6px">用户盲测通过率</div><div style="font-size:13px;color:var(--text-secondary)">5位内部用户连续打印4小时<br>报告"温而不烫"</div></div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
-<div class="card reveal d1" style="border-left:3px solid var(--green)"><div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:16px">范围内 In Scope</div><ul style="list-style:none;font-size:14px;color:var(--text-secondary);line-height:2.2"><li>✓ 底部散热风道重新设计</li><li>✓ 风扇规格升级（同尺寸更高风压）</li><li>✓ 固件PWM智能温控 + 延时散热</li><li>✓ LED矩阵隔热垫增加</li><li>✓ DVT热测试 + 用户主观盲测</li></ul></div>
-<div class="card reveal d2" style="border-left:3px solid var(--red)"><div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:16px">范围外 Out of Scope</div><ul style="list-style:none;font-size:14px;color:var(--text-secondary);line-height:2.2"><li>✗ 外壳整体重新开模</li><li>✗ 液冷或半导体制冷方案</li><li>✗ PCB布局变更</li><li>✗ 电源模块外置方案</li></ul></div>
+  <p class="lede reveal d2">基于 Mars 5 Ultra 公开用户反馈，展示从市场洞察→PRD撰写→任务拆解→项目管理→验证闭环的完整产品思维链。所有数据均标注来源。</p>
+  <div class="hero-btns reveal d3">
+    <a href="deliverables/thermal-optimization-prd-v1.md" target="_blank" class="btn btn-primary">查看 PRD 文档</a>
+    <a href="deliverables/user-insight-report-v1.md" target="_blank" class="btn btn-outline">用户洞察报告</a>
+  </div>
 </div></section>
 
-<!-- 执行区 --><section class="section" id="execution">
-<div class="section-kicker reveal">03 · 项目执行</div><h2 class="section-heading reveal d1">项目执行与进度管理</h2><p class="section-desc reveal d2">将PRD拆解为可执行的任务看板，建立Sprint节奏，通过燃尽图跟踪交付信心。试着拖拽看板卡片切换任务状态。</p>
-<div style="margin-top:48px" class="reveal d1"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic">任务看板</h4><span style="font-size:12px;color:var(--text-tertiary)">拖拽卡片切换状态</span></div><div id="kanban-board" style="display:flex;gap:10px;min-height:260px;overflow-x:auto"></div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px"><div class="card reveal d2"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic;margin-bottom:16px">燃尽图 · Sprint 2</h4><div id="burndown-chart"></div></div><div class="card reveal d3"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic;margin-bottom:16px">Sprint 日历</h4><div id="sprint-timeline"></div></div></div></section>
+<!-- 洞察区 -->
+<section class="section" id="insight">
+<div class="section-kicker reveal">01 · 市场与用户洞察</div>
+<h2 class="section-heading reveal d1">从真实声音中提炼产品方向</h2>
+<p class="section-desc reveal d2">采集 Mars 5 Ultra 公开用户反馈，进行产品化转译——将用户的情绪表达转化为可执行的工程命题。</p>
 
-<!-- 协同区 --><section class="section" id="synergy">
-<div class="section-kicker reveal">04 · 跨团队协同</div><h2 class="section-heading reveal d1">风险管理与团队协同</h2><p class="section-desc reveal d2">5×5概率-影响矩阵量化风险优先级，团队负载视图防止资源过载，结构化同步记录确保跨职能信息对齐。</p>
-<div style="margin-top:48px" class="reveal d1"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic">5×5 风险矩阵</h4><span style="font-size:12px;color:var(--text-tertiary)">X轴：影响程度 · Y轴：发生概率 · 点击气泡查看详情</span></div><div id="risk-matrix"></div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px"><div class="card reveal d2"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic;margin-bottom:16px">团队负载</h4><div id="workload-table"></div></div><div class="card reveal d3"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic;margin-bottom:16px">跨团队同步记录</h4><div id="sync-log" style="font-size:13px;color:var(--text-secondary);line-height:1.8"></div></div></div></section>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:44px">
+<div class="quote-card reveal d1">
+  <div class="quote-text">"长时间工作打印，底部发烫明显……担心寿命"</div>
+  <div class="quote-src">来源：身边的3D打印玩家 · 测温枪实测底部 42.5°C</div>
+  <div class="quote-analysis">PM分析：来自深度使用场景的可靠性焦虑。该用户具备测温工具和对比经验，属于进阶型玩家。反馈动机不是抱怨温度本身，而是对"长期可靠性"的信息缺失——产品未提供可接受的工作温度范围说明。</div>
+</div>
+<div class="quote-card reveal d2">
+  <div class="quote-text">"没有上翻盖…每次取盖子需要拔下加热器的线，否则就会扯线，气密性不咋地"</div>
+  <div class="quote-src">来源：某国内购物评论区 · 日常使用摩擦</div>
+  <div class="quote-analysis">PM分析：来自电商评价场景的体验反馈，面向潜在购买者。用户并非专业测评者，反馈直指日常操作中的设计摩擦——"拔线"动作反复出现意味着结构设计未考虑高频操作路径。</div>
+</div>
+<div class="quote-card reveal d3">
+  <div class="quote-text">"操作环境不太好时，树脂味道没那么容易散，美中不足的就是构建板没有像3 ultra一样的防滑"</div>
+  <div class="quote-src">来源：小红书社交平台用户交流 · 跨型号对比</div>
+  <div class="quote-analysis">PM分析：来自社交平台的口碑传播场景。该用户已有同品牌产品使用经验（3 Ultra），反馈中包含跨型号功能对比和场景适配讨论，影响范围包括潜在升级用户和品牌口碑。反映产品线定义中"体验基线"的一致性问题。</div>
+</div>
+</div>
 
-<!-- 验证区 --><section class="section" id="validate">
-<div class="section-kicker reveal">05 · 产品验证</div><h2 class="section-heading reveal d1">测试验证与迭代闭环</h2><p class="section-desc reveal d2">深度参与产品测试验证工作，系统跟进内外部测试反馈，转化为具体待办事项纳入开发流程追踪管理。</p>
-<div class="test-grid" id="test-cases"></div>
-<div style="margin-top:48px;text-align:center" class="reveal"><div class="card" style="display:inline-block;text-align:left;max-width:600px"><div style="font-family:var(--font-heading);font-size:20px;font-weight:600;font-style:italic;margin-bottom:12px">验证闭环方法论</div><p style="font-size:14px;color:var(--text-secondary);line-height:1.8">用户反馈 → 产品化转译 → PRD需求定义 → WBS任务拆解 → Sprint执行跟踪 → 风险量化管理 → 测试用例验证 → 用户主观盲测 → 反馈再次进入迭代循环。每一步都有文档可追溯，每一项决策都有数据支撑。</p></div></div></section>
+<div class="pain-grid">
+<div class="pain-card p0 reveal d1">
+  <span class="pain-chip p0">P0 · 最高优先</span>
+  <h3>散热系统能力不足，影响打印一致性与用户信任</h3>
+  <p>实测外壳42.5°C——已超出树脂最佳工作温度窗口（24-30°C）。高温加速树脂固化反应，导致层间附着不均、细节丢失。用户层面则产生"不敢无人值守"的信任危机。</p>
+  <div class="pain-note">工程背景：树脂光固化对温度敏感，超过35°C会导致过固化和尺寸偏差。42.5°C外壳意味着内部环境接近35-40°C。与PC机箱不同（工作温度50-60°C属正常），3D打印涉及光化学反应温控。</div>
+</div>
+<div class="pain-card p1 reveal d2">
+  <span class="pain-chip p1">P1 · 重要</span>
+  <h3>下沉式分离盖 + 外置加热器引发的交互摩擦</h3>
+  <p>取盖→拔线→操作→插线→合盖，每次启停需5步操作。线缆反复插拔带来可靠性隐患，气密性不足使气味管理依赖用户环境而非产品本身。</p>
+  <div class="pain-note">结构分析：外置加热器安装在分离盖上，用户拿取盖子时必须断开连接。对比 GKtwo 的上翻盖一体化设计，操作步骤减少到2步（开→关）。</div>
+</div>
+<div class="pain-card p2 reveal d3">
+  <span class="pain-chip p2">P2 · 持续关注</span>
+  <h3>跨型号体验一致性：Mars 5 Ultra vs Saturn 3 Ultra</h3>
+  <p>用户反馈"构建板没有防滑"和"零部件缩水感"。Saturn 3 Ultra（$400-500）拥有2.4倍打印体积、12K屏、ACF离型膜、滚珠丝杆Z轴。Mars 5 Ultra（$270-340）定位入门智能——功能梯度合理，但用户在"Ultra"品牌下期望一致的触感体验基线。</p>
+  <div class="pain-note">真实数据：Saturn 3 Ultra 为激光雕刻构建板（防滑纹理），Mars 5 Ultra 同样为激光雕刻但纹理更浅。两者差价$100-160合理，但"防滑"这类触感细节成本极低，属于品牌感知管理问题。</div>
+</div>
+</div>
 
-<script>
-// 看板 — 嵌入式拖拽任务板
-!function(){var b=document.getElementById("kanban-board");if(!b)return;var c=[{id:"todo",name:"待办",items:[{id:"K1",func:"固件",cls:"tag-firmware",title:"实现打印结束延时散热逻辑"},{id:"K2",func:"测试",cls:"tag-testing",title:"编写极端环境(32°C)热测试用例"}]},{id:"in_progress",name:"进行中",items:[{id:"K3",func:"结构",cls:"tag-structure",title:"底部新风道3D打印手板验证"},{id:"K4",func:"硬件",cls:"tag-hardware",title:"新风扇样品噪音-风量曲线测绘"},{id:"K5",func:"固件",cls:"tag-firmware",title:"PWM温控PID参数初步调试"}]},{id:"review",name:"评审中",items:[]},{id:"done",name:"已完成",items:[{id:"K6",func:"结构",cls:"tag-structure",title:"新风道CFD仿真通过"},{id:"K7",func:"供应链",cls:"tag-supply",title:"新风扇供应商定标"},{id:"K8",func:"硬件",cls:"tag-hardware",title:"隔热垫材料选型确认"}]}];function r(){b.innerHTML="";c.forEach(function(e){var d=document.createElement("div");d.className="kanban-col";d.dataset.colId=e.id;d.innerHTML='<h5>'+e.name+' <span class="count">'+e.items.length+"</span></h5>";e.items.forEach(function(a){var f=document.createElement("div");f.className="kanban-card";f.draggable=!0;f.dataset.itemId=a.id;f.innerHTML='<span class="tag '+a.cls+'">'+a.func+"</span> "+a.title;f.addEventListener("dragstart",function(h){f.classList.add("dragging");h.dataTransfer.setData("text/plain",JSON.stringify({iid:a.id,from:e.id}));h.dataTransfer.effectAllowed="move"});f.addEventListener("dragend",function(){f.classList.remove("dragging")});d.appendChild(f)});d.addEventListener("dragover",function(a){a.preventDefault();a.dataTransfer.dropEffect="move";d.classList.add("drag-over")});d.addEventListener("dragleave",function(){d.classList.remove("drag-over")});d.addEventListener("drop",function(a){a.preventDefault();d.classList.remove("drag-over");var f=JSON.parse(a.dataTransfer.getData("text/plain"));if(f.from===e.id)return;var h=c.find(function(k){return k.id===f.from});var g=h.items.findIndex(function(k){return k.id===f.iid});if(g===-1)return;var l=h.items.splice(g,1)[0];e.items.push(l);r()});b.appendChild(d)})}r()}();
-// 燃尽图 — SVG 理想线 vs 实际线
-!function(){var h=document.getElementById("burndown-chart");if(!h)return;var a=[18,16,14,12,10,9,7,5,3,2,0,0,0,0],b=[18,18,16,15,14,13,11,9,7,0,0,0,0,0],c=18,d=a.length,e=480,f=200,g=40,k=16,l=16,m=28,n=e-g-k,p=f-l-m,q="http://www.w3.org/2000/svg",r=document.createElementNS(q,"svg");r.setAttribute("viewBox","0 0 "+e+" "+f);for(var s=0;s<=4;s++){var t=l+p/4*s,u=document.createElementNS(q,"line");u.setAttribute("x1",g);u.setAttribute("y1",t);u.setAttribute("x2",e-k);u.setAttribute("y2",t);u.setAttribute("stroke","rgba(140,110,60,0.12)");u.setAttribute("stroke-width","1");r.appendChild(u);var v=document.createElementNS(q,"text");v.setAttribute("x",g-8);v.setAttribute("y",t+4);v.setAttribute("text-anchor","end");v.setAttribute("fill","rgba(61,42,16,0.35)");v.setAttribute("font-size","10");v.textContent=Math.round(c*(1-s/4));r.appendChild(v)}for(var s=0;s<d;s++){var w=g+n/(d-1)*s,x=document.createElementNS(q,"line");x.setAttribute("x1",w);x.setAttribute("y1",l+p);x.setAttribute("x2",w);x.setAttribute("y2",l+p+4);x.setAttribute("stroke","rgba(140,110,60,0.18)");r.appendChild(x);var y=document.createElementNS(q,"text");y.setAttribute("x",w);y.setAttribute("y",l+p+16);y.setAttribute("text-anchor","middle");y.setAttribute("fill","rgba(61,42,16,0.35)");y.setAttribute("font-size","9");y.textContent="D"+(s+1);r.appendChild(y)}function z(B){var A="",s;for(s=0;s<d;s++){var t=g+n/(d-1)*s,u=l+p*(1-B[s]/c);A+=(s===0?"M":"L")+t.toFixed(1)+","+u.toFixed(1)+" "}return A}var C=document.createElementNS(q,"path");C.setAttribute("d",z(a));C.setAttribute("fill","none");C.setAttribute("stroke","rgba(140,110,60,0.22)");C.setAttribute("stroke-width","2");C.setAttribute("stroke-dasharray","5,3");r.appendChild(C);var D=document.createElementNS(q,"path");D.setAttribute("d",z(b));D.setAttribute("fill","none");D.setAttribute("stroke","#9b7028");D.setAttribute("stroke-width","2.5");r.appendChild(D);for(var s=0;s<d;s++){if(b[s]===0&&s>0&&b[s-1]===0)continue;var E=g+n/(d-1)*s,F=l+p*(1-b[s]/c),G=document.createElementNS(q,"circle");G.setAttribute("cx",E);G.setAttribute("cy",F);G.setAttribute("r","3.5");G.setAttribute("fill","#9b7028");r.appendChild(G)}h.appendChild(r);var H=document.createElement("div");H.style.cssText="display:flex;gap:16px;margin-top:6px;font-size:11px;color:rgba(61,42,16,0.35)";H.innerHTML='<span><span style="display:inline-block;width:16px;height:2px;background:rgba(140,110,60,0.22);border:1px dashed rgba(140,110,60,0.22);margin-right:4px;vertical-align:middle;"></span>理想</span><span><span style="display:inline-block;width:16px;height:2.5px;background:#9b7028;margin-right:4px;vertical-align:middle;"></span>实际</span>';h.appendChild(H)}();
-// Sprint 时间线
-!function(){var d=document.getElementById("sprint-timeline");if(!d)return;var a=[{name:"Sprint 1",start:"04-15",end:"04-28",status:"done",goal:"EVT启动，CFD仿真完成"},{name:"Sprint 2",start:"04-29",end:"05-12",status:"current",goal:"样机到位，风扇定标"},{name:"Sprint 3",start:"05-13",end:"05-26",status:"upcoming",goal:"固件联调，DVT初步结果"},{name:"Sprint 4",start:"05-27",end:"06-09",status:"upcoming",goal:"全部测试完成，量产评审"},{name:"Sprint 5",start:"06-10",end:"06-17",status:"upcoming",goal:"问题复盘与经验沉淀"}],b="2026-04-15",c="2026-06-17",e=Math.round((new Date(c)-new Date(b))/864e5);a.forEach(function(f){var g=document.createElement("div");g.className="sprint-row";var h=document.createElement("div");h.className="sprint-label";h.textContent=f.name;g.appendChild(h);var i=document.createElement("div");i.className="sprint-track";var j=Math.round((new Date(f.start)-new Date(b))/864e5),k=Math.round((new Date(f.end)-new Date(f.start))/864e5)+1,l=document.createElement("div");l.className="sprint-bar "+f.status;l.style.cssText="left:"+j/e*100+"%;width:"+k/e*100+"%;";l.textContent=f.goal;i.appendChild(l);g.appendChild(i);d.appendChild(g)})}();
-// 风险矩阵 — 5×5 热力图
-!function(){var g=document.getElementById("risk-matrix");if(!g)return;var a=[{id:"R1",desc:"新风扇样品交期可能延迟至5/12",prob:4,impact:4,sev:"高",mit:"已联系备选供应商，最晚5/10到样",owner:"张工(供应链)"},{id:"R2",desc:"满速噪音测试37dB，超过目标35dB",prob:4,impact:3,sev:"中",mit:"固件限最高转速85%，评估温升影响",owner:"李工(硬件)"},{id:"R3",desc:"风道修改可能影响UV遮光性能",prob:3,impact:3,sev:"中",mit:"DVT中增加遮光专项测试",owner:"王工(测试)"},{id:"R4",desc:"新隔热材料高温是否释放异味待确认",prob:2,impact:2,sev:"低",mit:"安排材料气味测试",owner:"陈工(硬件)"},{id:"R5",desc:"温控PID参数调优耗时可能超预期",prob:2,impact:2,sev:"低",mit:"预留固件调试buffer",owner:"赵工(固件)"}],b=[["#f2ecd8","#f4e6cc","#f6e0c0","#f8dab4","#fad4a8"],["#f4e6c8","#f6dcb8","#f8d2a8","#fac898","#fcbe88"],["#f6deba","#f8d2a6","#fac692","#fcba7e","#feae6a"],["#f8d4a6","#fac690","#fcb87a","#feaa64","#ff9c4e"],["#fac890","#fcb878","#fea860","#ff9848","#ff8830"]],c=document.createElement("div");c.className="risk-grid";c.appendChild(e("","transparent"));for(var d=1;d<=5;d++)c.appendChild(e("影响 "+d,"transparent","rgba(61,42,16,0.35)"));for(var d=5;d>=1;d--){c.appendChild(e("概率 "+d,"transparent","rgba(61,42,16,0.35)"));for(var f=1;f<=5;f++){var h=e("",b[d-1][f-1]);h.style.position="relative";var i=a.filter(function(k){return k.probability===d&&k.impact===f});i.forEach(function(k,l){var m=document.createElement("div");m.className="risk-bubble";var n=k.sev==="高"?"#b04838":k.sev==="中"?"#b07030":"#9b7028";m.style.cssText="background:"+n+";";if(k.sev==="高")m.style.width="34px",m.style.height="34px";else m.style.width="28px",m.style.height="28px";m.textContent=k.id.replace("R","");m.title=k.desc;m.addEventListener("mouseenter",function(){m.style.transform="scale(1.35)";m.style.zIndex="20"});m.addEventListener("mouseleave",function(){m.style.transform="scale(1)";m.style.zIndex="5"});m.addEventListener("click",function(o){return function(){alert("风险详情: "+o.id+"\n\n描述: "+o.desc+"\n概率: "+o.prob+"/5  影响: "+o.impact+"/5  等级: "+o.sev+"\n缓解措施: "+o.mit+"\n负责人: "+o.owner)}}(k));h.appendChild(m)});c.appendChild(h)}}g.appendChild(c);function e(j,k,l){var m=document.createElement("div");m.className="risk-cell";m.style.cssText="background:"+k+";color:"+(l||"rgba(61,42,16,0.6)")+";font-size:10px;";m.textContent=j;return m}}();
-// 团队负载
-!function(){var e=document.getElementById("workload-table");if(!e)return;var a=[{name:"周工",role:"结构",tasks:2,points:8,cap:70,risk:"ok"},{name:"陈工",role:"硬件",tasks:3,points:13,cap:85,risk:"warn"},{name:"赵工",role:"固件",tasks:3,points:12,cap:90,risk:"over"},{name:"王工",role:"测试",tasks:2,points:7,cap:55,risk:"ok"},{name:"张工",role:"供应链",tasks:1,points:2,cap:30,risk:"ok"}],b='<table style="width:100%;font-size:13px;border-collapse:collapse"><tr style="color:rgba(61,42,16,0.35);font-size:11px;text-transform:uppercase;letter-spacing:1px"><th style="text-align:left;padding:8px 10px;border-bottom:1px solid rgba(140,110,60,0.1)">成员</th><th style="text-align:left;padding:8px 10px;border-bottom:1px solid rgba(140,110,60,0.1)">职能</th><th style="text-align:left;padding:8px 10px;border-bottom:1px solid rgba(140,110,60,0.1)">任务</th><th style="text-align:left;padding:8px 10px;border-bottom:1px solid rgba(140,110,60,0.1)">负载率</th></tr>';a.forEach(function(c){var d=c.risk==="over"?"#b04838":c.risk==="warn"?"#b07030":"#4a7050",f=c.risk==="over"?"超载 ⚠":c.risk==="warn"?"偏高":"正常";b+='<tr><td style="padding:10px 10px;border-bottom:1px solid rgba(140,110,60,0.06)"><strong>'+c.name+'</strong></td><td style="padding:10px 10px;border-bottom:1px solid rgba(140,110,60,0.06);color:rgba(61,42,16,0.6)">'+c.role+'</td><td style="padding:10px 10px;border-bottom:1px solid rgba(140,110,60,0.06)">'+c.tasks+"项 · "+c.points+'pts</td><td style="padding:10px 10px;border-bottom:1px solid rgba(140,110,60,0.06)"><span style="display:inline-block;width:80px;height:6px;background:rgba(140,110,60,0.1);border-radius:3px;overflow:hidden;margin-right:8px;vertical-align:middle"><span style="display:block;height:100%;width:'+c.cap+"%;background:"+d+';border-radius:3px"></span></span>'+c.cap+"% "+f+"</td></tr>"});b+="</table>";e.innerHTML=b}();
-// 同步记录
-!function(){var b=document.getElementById("sync-log");if(!b)return;b.innerHTML='<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(140,110,60,0.07)"><strong style="color:var(--text)">2026-05-06 16:00</strong> · 散热专项同步会议<br>与会：硬件(陈) · 固件(赵) · 结构(周) · 测试(王) · 产品(本人)<br>结论：新风道手板明日验证 · 固件PWM就绪待联调 · 噪音安排5人盲测 · 供应链风险可控<br><em style="color:var(--accent)">下次同步：5月9日 15:00 · 聚焦DVT初步结果</em></div><div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(140,110,60,0.07)"><strong style="color:var(--text)">2026-05-03 10:00</strong> · 风扇选型评审会<br>与会：硬件(陈) · 结构(周) · 供应链(张) · 测试(王) · 产品(本人)<br>结论：确认备选供应商B风扇（风量+25%）· 5/8到样 · 隔热垫硅基材料确认<br><em style="color:var(--green)">待办：下发采购订单 ✅ 已完成</em></div>'}();
-// 测试用例
-!function(){var d=document.getElementById("test-cases");if(!d)return;var a=[{id:"TC-HEAT-001",title:"连续打印长时温度",cond:"环境28°C · 打印4cm模型×3 · 连续4小时",expect:"底部外壳温度 ≤ 38°C"},{id:"TC-HEAT-002",title:"打印结束自动散热",cond:"完成打印任务后",expect:"3分钟内温度开始下降"},{id:"TC-HEAT-003",title:"噪音测试",cond:"距离设备1米 · 满速运行",expect:"≤ 35dB(A)"},{id:"TC-HEAT-004",title:"极端环境测试",cond:"环境32°C（模拟无空调夏日）· 打印2小时",expect:"设备运行正常，无重启或关机"},{id:"TC-HEAT-005",title:"长期可靠性测试",cond:"新风扇连续运行2000小时",expect:"转速衰减 ≤ 5%，无异响"},{id:"TC-HEAT-006",title:"用户主观盲测",cond:"5位内部用户 · 连续打印4小时后触摸感受",expect:'≥ 80% 报告"温而不烫"'}];a.forEach(function(b){var c=document.createElement("div");c.className="test-card";c.innerHTML='<div class="tc-id">'+b.id+"</div><h4>"+b.title+'</h4><p><strong>条件:</strong> '+b.cond+'</p><p style="margin-top:4px"><strong>预期结果:</strong> '+b.expect+"</p>";d.appendChild(c)})}();
-// 全局：滚动进度 + 导航 + 渐入 + 计数
-window.addEventListener("scroll",function(){var c=document.documentElement.scrollHeight-window.innerHeight;document.getElementById("scrollbar").style.width=c>0?window.scrollY/c*100+"%":"0%";document.getElementById("nav").classList.toggle("scrolled",window.scrollY>60)});
-!function(){var a=new IntersectionObserver(function(b){b.forEach(function(c){if(c.isIntersecting){c.target.classList.add("visible");a.unobserve(c.target)}})},{threshold:0.1,rootMargin:"0px 0px -24px 0px"});document.querySelectorAll(".reveal").forEach(function(b){a.observe(b)})}();
-!function(){var a=new IntersectionObserver(function(b){b.forEach(function(c){if(c.isIntersecting&&!c.target._done){c.target._done=!0;d(c.target)}})},{threshold:0.35});document.querySelectorAll("[data-target]").forEach(function(b){a.observe(b)});function d(b){var c=parseFloat(b.dataset.target),e=performance.now(),f=1600;function g(h){var i=Math.min((h-e)/f,1),j=1-Math.pow(1-i,4),k=c*j;b.textContent=c%1===0?Math.round(k):k.toFixed(1);if(i<1)requestAnimationFrame(g)}requestAnimationFrame(g)}}();
-</script>
+<!-- 竞品互动卡 -->
+<div style="margin-top:48px" class="reveal"><div class="section-kicker"><span class="sim-badge">真实数据</span> 竞品态势</div>
+<h3 style="font-family:var(--font-heading);font-size:22px;font-weight:600;margin-bottom:16px">同类产品对比</h3>
+<div class="comp-grid">
+<div class="comp-card" onclick="this.classList.toggle('expanded')">
+  <h4>Phrozen Sonic Mini 8K S</h4><div class="comp-price">$250-350 · 22μm · 165×72×170mm</div>
+  <div class="comp-details">8K单色LCD · 无WiFi · 无自动调平 · 双线性导轨 · 无加热腔体 · 无空气过滤 · 定位：高精度入门</div>
+  <div class="comp-source">数据来源：Phrozen 官方 + Amazon 2024-2025</div>
+</div>
+<div class="comp-card" onclick="this.classList.toggle('expanded')">
+  <h4>Anycubic Photon Mono M7</h4><div class="comp-price">$525-590 · 14K · 223×126×230mm</div>
+  <div class="comp-details">10.1寸14K屏 · WiFi · 自动调平 · 智能离型2.0 · 无加热(Pro有) · 无空气过滤 · 定位：中高端智能</div>
+  <div class="comp-source">数据来源：Anycubic 官方 + Tom's Hardware 2024</div>
+</div>
+<div class="comp-card" onclick="this.classList.toggle('expanded')">
+  <h4>Uniformation GKtwo</h4><div class="comp-price">$600-850 · 8K · 228×128×245mm</div>
+  <div class="comp-details">10.3寸8K屏 · 加热腔体(25-35°C) · 内置活性炭过滤 · 上翻盖 · 全金属机身20kg · 定位：专业可靠</div>
+  <div class="comp-source">数据来源：TechRadar Pro 评测 + 官方规格 2024</div>
+</div>
+<div class="comp-card" onclick="this.classList.toggle('expanded')" style="border:2px solid var(--accent)">
+  <h4>Elegoo Mars 5 Ultra ← 本项目</h4><div class="comp-price">$270-340 · 9K · 153×77×165mm</div>
+  <div class="comp-details">7寸9K屏 · WiFi · 自动调平 · AI相机 · 倾斜离型 · 智能检测 · 定位：入门智能旗舰</div>
+  <div class="comp-source">数据来源：Elegoo 官方 + Tom's Hardware 2024</div>
+</div>
+</div></div>
+</section>
 
-<!-- 反思区 -->
-<section class="section" id="reflect" style="text-align:center">
-<div class="section-kicker reveal">06 · Reflection</div>
-<h2 class="section-heading reveal d1" style="margin:0 auto 24px">方法论与思考</h2>
-<p class="section-desc reveal d2" style="margin:0 auto 48px">这不仅是一个作品集，更是我对硬件产品经理角色底层方法论的思考。</p>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;text-align:left;max-width:900px;margin:0 auto">
-<div class="card reveal d1"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic;margin-bottom:10px">从情绪到工程命题</h4><p style="font-size:14px;color:var(--text-secondary);line-height:1.7">用户的\"烫手\"是情绪表达，产品经理的职责是将它转译为\"散热设计未覆盖长时工况\"。这个转译能力——在用户语言和工程语言之间建立映射——是PM最核心的素养。</p></div>
-<div class="card reveal d2"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic;margin-bottom:10px">可落地的需求才有价值</h4><p style="font-size:14px;color:var(--text-secondary);line-height:1.7">PRD的意义不在于\"写得多详细\"，而在于\"能否被工程师直接执行\"。量化目标（38°C/35dB/¥15）、明确边界（In/Out Scope）、定义接口——这才是工程级的需求文档。</p></div>
-<div class="card reveal d3"><h4 style="font-family:var(--font-heading);font-size:18px;font-weight:600;font-style:italic;margin-bottom:10px">管理可视化的力量</h4><p style="font-size:14px;color:var(--text-secondary);line-height:1.7">燃尽图不是装饰，是\"交付信心\"的可视化；风险矩阵不是表格，是\"优先级共识\"的量化工具。项目管理的本质是让所有相关方在同一张图上看到同一个真相。</p></div>
+<!-- 方案区 -->
+<section class="section" id="solution">
+<div class="section-kicker reveal">02 · 方案设计 <span class="sim-badge">模拟数据</span></div>
+<h2 class="section-heading reveal d1">PRD 关键目标与范围边界</h2>
+<p class="section-desc reveal d2">将洞察转化为可执行的需求文档。量化目标、明确边界、定义接口。</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:40px">
+<div class="card reveal d1" style="text-align:center"><div style="font-family:var(--font-heading);font-size:44px;font-weight:700;color:var(--accent);margin-bottom:6px">≤38°C</div><div style="font-size:14px;font-weight:600">外壳最高温度</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">环境28°C · 连续4h</div></div>
+<div class="card reveal d2" style="text-align:center"><div style="font-family:var(--font-heading);font-size:44px;font-weight:700;color:var(--accent);margin-bottom:6px">≤35dB</div><div style="font-size:14px;font-weight:600">噪音约束</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">1米处 A加权</div></div>
+<div class="card reveal d3" style="text-align:center"><div style="font-family:var(--font-heading);font-size:44px;font-weight:700;color:var(--accent);margin-bottom:6px">≤¥15</div><div style="font-size:14px;font-weight:600">BOM增量</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">单台成本控制</div></div>
+<div class="card reveal d4" style="text-align:center"><div style="font-family:var(--font-heading);font-size:44px;font-weight:700;color:var(--green);margin-bottom:6px">≥80%</div><div style="font-size:14px;font-weight:600">用户盲测</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">报告"温而不烫"</div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+<div class="card reveal d1" style="border-left:3px solid var(--green)"><div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:14px">In Scope</div><ul style="list-style:none;font-size:14px;color:var(--text-secondary);line-height:2.2"><li>底部散热风道重新设计</li><li>同尺寸高风压风扇升级</li><li>PWM温控 + 延时散热固件</li><li>LED矩阵隔热垫</li><li>DVT热测试 + 用户盲测</li></ul></div>
+<div class="card reveal d2" style="border-left:3px solid var(--red)"><div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:14px">Out of Scope</div><ul style="list-style:none;font-size:14px;color:var(--text-secondary);line-height:2.2"><li>外壳整体重新开模</li><li>液冷/半导体制冷</li><li>PCB布局变更</li><li>电源外置方案</li></ul></div>
 </div>
 </section>
 
-<!-- 页脚 + GitHub -->
-<footer style="text-align:center;padding:80px 24px 40px;position:relative;z-index:1">
-<div class="card reveal" style="display:inline-block;text-align:center;max-width:500px;padding:40px 56px">
-<div style="font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:20px">源码与交付物</div>
-<div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
-<a href="https://github.com/Duanyayu/pm-portfolio" target="_blank" style="padding:12px 28px;background:var(--accent);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:14px;font-weight:600;transition:all 0.25s;display:inline-flex;align-items:center;gap:8px" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(155,112,40,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">GitHub 源码</a>
-<a href="deliverables/user-insight-report-v1.md" target="_blank" style="padding:12px 28px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-sm);text-decoration:none;font-size:14px;font-weight:500;transition:all 0.25s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='';this.style.color=''">洞察报告</a>
-<a href="deliverables/thermal-optimization-prd-v1.md" target="_blank" style="padding:12px 28px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-sm);text-decoration:none;font-size:14px;font-weight:500;transition:all 0.25s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='';this.style.color=''">散热PRD</a>
+<!-- 执行区 -->
+<section class="section" id="execution">
+<div class="section-kicker reveal">03 · 项目执行 <span class="sim-badge">模拟数据</span></div>
+<h2 class="section-heading reveal d1">进度管理与交付跟踪</h2>
+<p class="section-desc reveal d2">看板跟踪任务状态，燃尽图可视化交付信心，Sprint时间线管理里程碑承诺。</p>
+<div style="margin-top:40px" class="reveal d1"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><h4 style="font-family:var(--font-heading);font-size:17px;font-weight:600">任务看板</h4><span style="font-size:11px;color:var(--text-tertiary)">拖拽切换状态</span></div><div id="kanban-board" style="display:flex;gap:10px;min-height:240px;overflow-x:auto"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px">
+<div class="card reveal d2"><h4 style="font-family:var(--font-heading);font-size:17px;font-weight:600;margin-bottom:14px">燃尽图 · Sprint 2</h4><div id="burndown-chart"></div></div>
+<div class="card reveal d3"><h4 style="font-family:var(--font-heading);font-size:17px;font-weight:600;margin-bottom:14px">Sprint 时间线</h4><div id="sprint-timeline"></div></div>
 </div>
-<p style="font-size:12px;color:var(--text-tertiary);margin-top:24px">基于公开用户反馈推演 · 不依赖任何内部信息 · 展示完整PM思维闭环</p>
-</div>
-</footer>
+</section>
 
-</body></html>
+<!-- 协同区 -->
+<section class="section" id="synergy">
+<div class="section-kicker reveal">04 · 风险与协同 <span class="sim-badge">模拟数据</span></div>
+<h2 class="section-heading reveal d1">风险管理与团队协同</h2>
+<p class="section-desc reveal d2">风险矩阵量化优先级，团队负载防止资源过载，同步记录确保跨职能对齐。</p>
+<div style="margin-top:40px" class="reveal d1"><h4 style="font-family:var(--font-heading);font-size:17px;font-weight:600;margin-bottom:12px">5×5 风险矩阵 · 点击气泡查看/编辑</h4><div id="risk-matrix"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px">
+<div class="card reveal d2"><h4 style="font-family:var(--font-heading);font-size:17px;font-weight:600;margin-bottom:14px">团队负载</h4><div id="workload-table"></div></div>
+<div class="card reveal d3"><h4 style="font-family:var(--font-heading);font-size:17px;font-weight:600;margin-bottom:14px">跨团队同步记录 · 点击查看</h4><div id="sync-log"></div></div>
+</div>
+</section>
+
+<!-- 验证区 -->
+<section class="section" id="validate">
+<div class="section-kicker reveal">05 · 产品验证 <span class="sim-badge">模拟数据</span></div>
+<h2 class="section-heading reveal d1">测试验证与迭代闭环</h2>
+<p class="section-desc reveal d2">将PRD验收标准转化为可执行测试用例，建立从用户反馈到验证闭环的完整追溯链。</p>
+<div class="test-grid" id="test-cases"></div>
+</section>
+
+<script>
+// ============================================================
+// 粒子系统 + 流光拖尾 (源自页面A)
+// ============================================================
+!function(){var c=document.getElementById("particleCanvas"),ctx=c.getContext("2d"),w,h,pts=[],trails=[],N=45,mx=-200,my=-200;function R(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}R();window.addEventListener("resize",R);for(var i=0;i<N;i++)pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.6+.3,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2});document.addEventListener("mousemove",function(e){mx=e.clientX;my=e.clientY;trails.push({x:mx,y:my,t:30});if(trails.length>20)trails.shift()});function D(){ctx.clearRect(0,0,w,h);for(var i=0;i<trails.length;i++){var t=trails[i];t.t--;if(t.t<=0){trails.splice(i,1);i--;continue}ctx.beginPath();ctx.arc(t.x,t.y,t.t*.8,0,2*Math.PI);ctx.fillStyle="rgba(193,127,89,"+(t.t/30*.08)+")";ctx.fill()}for(var i=0;i<pts.length;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,2*Math.PI);ctx.fillStyle="rgba(193,127,89,0.1)";ctx.fill()}for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<100){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle="rgba(193,127,89,"+(.04*(1-dist/100))+")";ctx.stroke()}}requestAnimationFrame(D)}D()}();
+
+// 看板 (源自页面C + D的hover)
+!function(){var b=document.getElementById("kanban-board");if(!b)return;var cols=[{id:"todo",name:"待办",items:[{id:"K1",func:"固件",cls:"tag-f",title:"打印结束延时散热逻辑"},{id:"K2",func:"测试",cls:"tag-t",title:"极端环境热测试用例"}]},{id:"ip",name:"进行中",items:[{id:"K3",func:"结构",cls:"tag-s",title:"新风道3D手板验证"},{id:"K4",func:"硬件",cls:"tag-h",title:"风扇噪音-风量测绘"},{id:"K5",func:"固件",cls:"tag-f",title:"PWM温控PID调试"}]},{id:"rv",name:"评审中",items:[]},{id:"dn",name:"已完成",items:[{id:"K6",func:"结构",cls:"tag-s",title:"CFD仿真通过"},{id:"K7",func:"供应链",cls:"tag-sp",title:"风扇供应商定标"},{id:"K8",func:"硬件",cls:"tag-h",title:"隔热垫选型确认"}]}];function R(){b.innerHTML="";cols.forEach(function(c){var e=document.createElement("div");e.className="kanban-col";e.dataset.colId=c.id;e.innerHTML='<h5>'+c.name+' <span class="count">'+c.items.length+"</span></h5>";c.items.forEach(function(i){var d=document.createElement("div");d.className="kanban-card";d.draggable=!0;d.dataset.itemId=i.id;d.innerHTML='<span class="tag '+i.cls+'">'+i.func+"</span> "+i.title;d.addEventListener("dragstart",function(ev){d.classList.add("dragging");ev.dataTransfer.setData("text/plain",JSON.stringify({iid:i.id,from:c.id}));ev.dataTransfer.effectAllowed="move"});d.addEventListener("dragend",function(){d.classList.remove("dragging")});e.appendChild(d)});e.addEventListener("dragover",function(ev){ev.preventDefault();ev.dataTransfer.dropEffect="move";e.classList.add("drag-over")});e.addEventListener("dragleave",function(){e.classList.remove("drag-over")});e.addEventListener("drop",function(ev){ev.preventDefault();e.classList.remove("drag-over");var d=JSON.parse(ev.dataTransfer.getData("text/plain"));if(d.from===c.id)return;var fc=cols.find(function(x){return x.id===d.from});var idx=fc.items.findIndex(function(x){return x.id===d.iid});if(idx===-1)return;c.items.push(fc.items.splice(idx,1)[0]);R()});b.appendChild(e)})}R()}();
+
+// 燃尽图
+!function(){var c=document.getElementById("burndown-chart");if(!c)return;var a=[18,16,14,12,10,9,7,5,3,2,0,0,0,0],b=[18,18,16,15,14,13,11,9,7,0,0,0,0,0],t=18,d=a.length,W=460,H=190,pl=38,pr=14,pt=14,pb=26,pw=W-pl-pr,ph=H-pt-pb,ns="http://www.w3.org/2000/svg",s=document.createElementNS(ns,"svg");s.setAttribute("viewBox","0 0 "+W+" "+H);for(var i=0;i<=4;i++){var y=pt+ph/4*i,ln=document.createElementNS(ns,"line");ln.setAttribute("x1",pl);ln.setAttribute("y1",y);ln.setAttribute("x2",W-pr);ln.setAttribute("y2",y);ln.setAttribute("stroke","rgba(0,0,0,0.05)");s.appendChild(ln);var lb=document.createElementNS(ns,"text");lb.setAttribute("x",pl-6);lb.setAttribute("y",y+4);lb.setAttribute("text-anchor","end");lb.setAttribute("fill","rgba(28,31,43,0.3)");lb.setAttribute("font-size","9");lb.textContent=Math.round(t*(1-i/4));s.appendChild(lb)}for(var i=0;i<d;i++){var x=pl+pw/(d-1)*i;var dl=document.createElementNS(ns,"text");dl.setAttribute("x",x);dl.setAttribute("y",pt+ph+15);dl.setAttribute("text-anchor","middle");dl.setAttribute("fill","rgba(28,31,43,0.3)");dl.setAttribute("font-size","8");dl.textContent="D"+(i+1);s.appendChild(dl)}function P(arr){var p="";for(var i=0;i<d;i++){var x=pl+pw/(d-1)*i,y=pt+ph*(1-arr[i]/t);p+=(i===0?"M":"L")+x.toFixed(1)+","+y.toFixed(1)+" "}return p}var ip=document.createElementNS(ns,"path");ip.setAttribute("d",P(a));ip.setAttribute("fill","none");ip.setAttribute("stroke","rgba(0,0,0,0.15)");ip.setAttribute("stroke-width","1.5");ip.setAttribute("stroke-dasharray","4,3");s.appendChild(ip);var ap=document.createElementNS(ns,"path");ap.setAttribute("d",P(b));ap.setAttribute("fill","none");ap.setAttribute("stroke","#C17F59");ap.setAttribute("stroke-width","2.5");s.appendChild(ap);for(var i=0;i<d;i++){if(b[i]===0&&i>0&&b[i-1]===0)continue;var dt=document.createElementNS(ns,"circle");dt.setAttribute("cx",pl+pw/(d-1)*i);dt.setAttribute("cy",pt+ph*(1-b[i]/t));dt.setAttribute("r","3");dt.setAttribute("fill","#C17F59");s.appendChild(dt)}c.appendChild(s);var lg=document.createElement("div");lg.style.cssText="display:flex;gap:14px;margin-top:4px;font-size:10px;color:rgba(28,31,43,0.35)";lg.innerHTML='<span><span style="display:inline-block;width:14px;height:1.5px;background:rgba(0,0,0,0.15);border:1px dashed rgba(0,0,0,0.15);margin-right:4px;vertical-align:middle"></span>理想</span><span><span style="display:inline-block;width:14px;height:2.5px;background:#C17F59;margin-right:4px;vertical-align:middle"></span>实际</span>';c.appendChild(lg)}();
+
+// Sprint
+!function(){var c=document.getElementById("sprint-timeline");if(!c)return;var ss=[{name:"Sprint 1",start:"04-15",end:"04-28",st:"done",goal:"EVT启动·CFD完成"},{name:"Sprint 2",start:"04-29",end:"05-12",st:"current",goal:"样机到位·风扇定标"},{name:"Sprint 3",start:"05-13",end:"05-26",st:"upcoming",goal:"固件联调·DVT测试"},{name:"Sprint 4",start:"05-27",end:"06-09",st:"upcoming",goal:"全部测试·量产评审"},{name:"Sprint 5",start:"06-10",end:"06-17",st:"upcoming",goal:"复盘·经验沉淀"}],as="2026-04-15",ae="2026-06-17",td=Math.round((new Date(ae)-new Date(as))/864e5);ss.forEach(function(s){var r=document.createElement("div");r.className="sprint-row";var l=document.createElement("div");l.className="sprint-label";l.textContent=s.name;r.appendChild(l);var t=document.createElement("div");t.className="sprint-track";var o=Math.round((new Date(s.start)-new Date(as))/864e5),ln=Math.round((new Date(s.end)-new Date(s.start))/864e5)+1,b=document.createElement("div");b.className="sprint-bar "+s.st;b.style.cssText="left:"+(o/td*100)+"%;width:"+(ln/td*100)+"%;";b.textContent=s.goal;t.appendChild(b);r.appendChild(t);c.appendChild(r)})}();
+
+// 风险矩阵 (可点击编辑)
+!function(){var c=document.getElementById("risk-matrix");if(!c)return;var risks=[{id:"R1",desc:"新风扇样品交期延迟",prob:4,impact:4,sev:"高",mit:"已联系备选供应商",owner:"张工",notes:""},{id:"R2",desc:"满速噪音37dB超标",prob:4,impact:3,sev:"中",mit:"限速85%评估温升",owner:"李工",notes:""},{id:"R3",desc:"风道修改影响UV遮光",prob:3,impact:3,sev:"中",mit:"DVT遮光专项测试",owner:"王工",notes:""},{id:"R4",desc:"隔热材料异味待确认",prob:2,impact:2,sev:"低",mit:"材料气味测试",owner:"陈工",notes:""},{id:"R5",desc:"PID调优超预期耗时",prob:2,impact:2,sev:"低",mit:"预留buffer",owner:"赵工",notes:""}];var hc=[["#f8f4ee","#f6ecde","#f4e4ce","#f2dcbe","#f0d4ae"],["#f6ecde","#f4e0c8","#f2d4b2","#f0c89c","#eebc86"],["#f4e0c8","#f2d0b0","#f0c098","#eeb080","#eca068"],["#f2d0b0","#f0bc96","#eeb07c","#eca062","#ea9048"],["#f0bc96","#eea87a","#ec985e","#ea8842","#e87826"]];var g=document.createElement("div");g.className="risk-grid";g.appendChild(C("","transparent"));for(var i=1;i<=5;i++)g.appendChild(C("影响 "+i,"transparent","rgba(28,31,43,0.3)"));for(var p=5;p>=1;p--){g.appendChild(C("概率 "+p,"transparent","rgba(28,31,43,0.3)"));for(var im=1;im<=5;im++){var cl=C("",hc[p-1][im-1]);cl.style.position="relative";var cr=risks.filter(function(r){return r.probability===p&&r.impact===im});cr.forEach(function(r){var b=document.createElement("div");b.className="risk-bubble";var col=r.sev==="高"?"#C4604A":r.sev==="中"?"#D4914A":"#3D8B8B";b.style.cssText="background:"+col+";width:"+(r.sev==="高"?34:28)+"px;height:"+(r.sev==="高"?34:28)+"px;";b.textContent=r.id.replace("R","");b.addEventListener("click",function(){var nt=prompt("风险: "+r.desc+"\n缓解: "+r.mit+"\n负责人: "+r.owner+"\n\n编辑备注:",r.notes||"");if(nt!==null){r.notes=nt;alert("备注已更新: "+(nt||"(空)"))}});cl.appendChild(b)});g.appendChild(cl)}}c.appendChild(g);function C(tx,bg,co){var d=document.createElement("div");d.className="risk-cell";d.style.cssText="background:"+bg+";color:"+(co||"rgba(28,31,43,0.5)")+";font-size:10px;";d.textContent=tx;return d}}();
+
+// 团队负载 (滚动动画)
+!function(){var c=document.getElementById("workload-table");if(!c)return;var team=[{name:"周工",role:"结构工程师",tasks:2,pts:8,cap:70,risk:"ok"},{name:"陈工",role:"硬件工程师",tasks:3,pts:13,cap:85,risk:"warn"},{name:"赵工",role:"固件工程师",tasks:3,pts:12,cap:90,risk:"over"},{name:"王工",role:"测试工程师",tasks:2,pts:7,cap:55,risk:"ok"},{name:"张工",role:"供应链",tasks:1,pts:2,cap:30,risk:"ok"}];var h='<table class="workload-table"><tr><th>成员</th><th>职能</th><th>任务</th><th>负载率</th></tr>';team.forEach(function(m){var bc=m.risk==="over"?"#C4604A":m.risk==="warn"?"#D4914A":"#4A8C5C",st=m.risk==="over"?"超载":m.risk==="warn"?"偏高":"正常";h+='<tr><td><strong>'+m.name+'</strong></td><td style="color:var(--text-secondary)">'+m.role+'</td><td>'+m.tasks+"项 · "+m.pts+'pts</td><td><span class="wl-bar-bg"><span class="wl-bar-fill" data-width="'+m.cap+'" style="width:0;background:'+bc+'"></span></span>'+m.cap+"% "+st+"</td></tr>"});h+="</table>";c.innerHTML=h;var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var bars=c.querySelectorAll(".wl-bar-fill");bars.forEach(function(b){var tw=parseInt(b.dataset.width);b.style.width=tw+"%"})}obs.disconnect()})},{threshold:0.3});obs.observe(c)}();
+
+// 同步记录 (点击脉冲动画)
+!function(){var c=document.getElementById("sync-log");if(!c)return;var entries=[{date:"2026-05-06 16:00",title:"散热专项同步会议",detail:"与会：硬件(陈)·固件(赵)·结构(周)·测试(王)·产品\n结论：新风道手板验证·PWM待联调·噪音5人盲测·供应链可控\n下次：5月9日15:00 · 聚焦DVT结果"},{date:"2026-05-03 10:00",title:"风扇选型评审会",detail:"与会：硬件·结构·供应链·测试·产品\n结论：供应商B风扇(风量+25%)·5/8到样·硅基隔热垫确认\n待办：采购订单 ✅"}];entries.forEach(function(e,i){var d=document.createElement("div");d.className="sync-entry";d.innerHTML='<span class="sync-dot"></span><strong>'+e.date+"</strong> · "+e.title+'<br><span style="font-size:13px;color:var(--text-secondary)">'+e.detail.replace(/\n/g,"<br>")+"</span>";d.addEventListener("click",function(){d.classList.toggle("active");setTimeout(function(){d.classList.remove("active")},1500)});c.appendChild(d)})}();
+
+// 测试用例
+!function(){var c=document.getElementById("test-cases");if(!c)return;var tcs=[{id:"TC-HEAT-001",title:"连续打印长时温度",cond:"环境28°C · 4cm模型×3 · 4小时",expect:"外壳 ≤ 38°C"},{id:"TC-HEAT-002",title:"打印结束自动散热",cond:"完成打印后",expect:"3分钟内温度下降"},{id:"TC-HEAT-003",title:"噪音测试",cond:"1米 · 满速",expect:"≤ 35dB(A)"},{id:"TC-HEAT-004",title:"极端环境",cond:"32°C模拟无空调 · 2小时",expect:"无重启/关机"},{id:"TC-HEAT-005",title:"长期可靠性",cond:"风扇2000小时",expect:"转速衰减≤5%"},{id:"TC-HEAT-006",title:"用户主观盲测",cond:"5人 · 4小时 · 触摸",expect:'≥80%"温而不烫"'}];tcs.forEach(function(t){var d=document.createElement("div");d.className="test-card";d.innerHTML='<div class="tc-id">'+t.id+"</div><h4>"+t.title+'</h4><p style="font-size:13px;color:var(--text-secondary)"><strong>条件:</strong> '+t.cond+'</p><p style="font-size:13px;color:var(--text-secondary);margin-top:4px"><strong>预期:</strong> '+t.expect+"</p>";c.appendChild(d)})}();
+
+// 全局
+!function(){var secs=document.querySelectorAll(".section[id]");var links=document.querySelectorAll(".nav-links a");window.addEventListener("scroll",function(){var sy=window.scrollY+120;secs.forEach(function(s){var t=s.getAttribute("id");var link=document.querySelector('.nav-links a[href="#'+t+'"]');if(!link)return;var top=s.offsetTop,bot=top+s.offsetHeight;if(sy>=top&&sy<bot)links.forEach(function(l){l.classList.remove("active")}),link.classList.add("active")})});var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target)}})},{threshold:0.08,rootMargin:"0px 0px -20px 0px"});document.querySelectorAll(".reveal").forEach(function(e){obs.observe(e)})}();
+</script>
+</body>
+</html>
