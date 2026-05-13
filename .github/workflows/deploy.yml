@@ -4,10 +4,10 @@ on:
   push:
     branches: [master]
     paths:
-      - 'final/src/**'
-      - 'final/assets/css/**'
-      - 'final/assets/js/**'
-      - 'final/scripts/**'
+      - 'src/**'
+      - 'assets/css/**'
+      - 'assets/js/**'
+      - 'scripts/**'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
@@ -37,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Build HTML pages
-        run: cd final && node scripts/build.js
+        run: node scripts/build.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -45,7 +45,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: final/site
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deployment

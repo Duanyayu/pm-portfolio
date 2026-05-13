@@ -5,18 +5,15 @@
 ## 快速导航
 
 - **在线浏览**：[duanyayu.github.io/pm-portfolio](https://duanyayu.github.io/pm-portfolio)
-- **构建命令**：`cd final && node scripts/build.js`
-- **源码目录**：`final/src/`（12篇思考文档）
-- **构建输出**：`final/site/`（HTML页面）
+- **构建命令**：`node scripts/build.js`
+- **源码目录**：`src/`（12篇思考文档）
+- **构建输出**：`site/`（HTML页面）
 
 ## 项目结构
 
 ```
-final/
 ├── src/           # 源Markdown文件（12篇能力证据+简历）
 ├── site/          # 构建生成的HTML页面
-│   ├── index.html # 首页
-│   └── docs/      # 文档详情页
 ├── assets/        # CSS、JS、图片、简历文件
 ├── tools/         # md格式转换PDF工具
 ├── scripts/       # 构建脚本
@@ -42,7 +39,6 @@ final/
 ## 本地使用
 
 ```bash
-cd final
 npm install
 node scripts/build.js
 # 用浏览器打开 site/index.html
