@@ -1,6 +1,5 @@
-# Claude Code session artifacts
-.claude/sessions/
-.claude/cache/
+# Dependencies
+node_modules/
 
 # OS files
 .DS_Store
@@ -13,13 +12,6 @@ desktop.ini
 *~
 .vscode/
 
-# Node (if any later)
-node_modules/
-
-# PM Skills tool package (not portfolio content)
-Product-Manager-Skills-main/
-
 # Temporary files
 *.tmp
 *.log
-scripts/create-confluence-page.js
