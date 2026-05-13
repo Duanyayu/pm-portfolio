@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>电网设备与3D打印：同一套系统思维 | Duanyanyu · PM Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="doc-page">
+
+<nav class="nav" id="nav">
+  <a href="../index.html" class="nav-logo">Duanyanyu<span>PM Portfolio</span></a>
+  <ul class="nav-links"><li><a href="../index.html">首页</a></li><li><a href="../index.html#resources">简历</a></li><li><a href="../index.html#elegoo">ELEGOO</a></li><li><a href="../index.html#evidence">能力证据</a></li></ul>
+</nav>
+<div class="doc-layout">
+  <aside class="doc-sidebar">
+    <h4>目录</h4>
+    
+  </aside>
+  <main class="doc-content">
+    <div class="doc-header">
+    <div class="doc-action-bar"><a href="#" class="btn-pdf" onclick="window.print();return false" title="点击后选择「另存为PDF」即可保存">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 12H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    打印导出 PDF
+  </a></div>
+    <p class="doc-pdf-hint">点击「打印导出 PDF」→ 在打印对话框中选择「另存为 PDF」→ 即可获得带专业排版的 PDF 文件</p>
+  </div>
+    <p>电网设备和3D打印：它们其实是一回事</p>
+<p>这个文档是我在研究ELEGOO时的思考记录。我会思考，当我被问到&quot;你没做过3D打印，凭什么觉得你能做&quot;的时候，我的答案应该在这里先呈现。</p>
+<p>多层物理系统的误差溯源——这两个行业共用同一个底层逻辑</p>
+<p>我在电网设备里面对的是一个五层系统。电压和电流信号是输入端，互感器和传感器做物理到电信号的转换，电路板上的每一个走线和焊点处理信号，嵌入式固件跑计量算法，检定软件和台体做控制。</p>
+<p>3D打印面对的是同样的五层结构。打印材料是输入端，挤出机和热端做物理到熔融态的转换，主板上的每一个元件驱动电机，固件解析G-code控制运动，切片软件决定参数。</p>
+<p>核心挑战是一样的：当一个系统输出不达标的时候——电表读数不准或者打印件表面粗糙——问题可能出在任何一层。而层与层之间的边界，是最容易被误判的地方。我在电网设备里花了整整一年练习怎么在这些层之间追溯误差，这个技能本身不挑行业。</p>
+<p>如果你让我用一句话解释两个行业的同构关系：你能不能在多层系统中定位误差的真正来源，而不是只看表面现象。</p>
+<p>TU36事件如果发生在3D打印行业</p>
+<p>在电网设备中，TU36的A相电流在某些设备上无法施加。在3D打印的语境下，这个问题可以直接翻译为&quot;某型号耗材在特定热端温度下挤出不稳定&quot;。</p>
+<p>我做的第一组操作是A相输出线直插输入线尾部，这是在排除线路连接变量。在3D打印里就是换一个喷嘴，排除喷嘴堵塞假说。</p>
+<p>第二组操作是断开A-OUT焊接点重新焊接，这是在排除电路板走线设计变量。在3D打印里就是调整挤出机步进电机的电流，排除驱动能力假说。</p>
+<p>换了一台国网标准型号的电表之后问题消失，这是在交叉验证测试方法本身没毛病。在3D打印里就是用标准耗材打印同一个模型，排除切片参数假说。</p>
+<p>最后三款设备交叉对比，锁定了特定电源柜的带载能力边界。这是在从&quot;调一下参数&quot;升级到&quot;这个供应商的电源在这个负载下有问题&quot;。根因不在产品层，不在固件层，在测试环境和特定产品的兼容边界上。</p>
+<p>如果有人问我：你了解3D打印吗？</p>
+<p>我会说我没有在这个行业工作过，但我理解它的核心产品挑战。打印质量的可重复性取决于材料特性、机械结构精度、固件参数、切片软件设置这四层之间的依赖关系。我在电网设备做的是同样的多层误差溯源。能力是一样的，只是物理载体从电表变成了打印机。</p>
+<p>如果有人问我：你怎么理解硬件PM的工作？</p>
+<p>我会说硬件PM就是硬件和软件之间的翻译层。问题被用户报告的时候往往是一个表层现象——打印失败了或者电表读数不准。但根因可能在物理层、硬件层、固件层、甚至测试层的任何一个环节。我的价值就是能系统性地在这些层之间追溯，而不是谁嗓门大就听谁的。</p>
+<p>如果有人问我：你最大的弱点是什么？</p>
+<p>PM术语的熟练度。电网设备行业没有PM这个岗位，我做的PM工作在行业里叫测试协调。一样的思维，不一样的词汇。但我正在补——我已经把我的测试方案用标准PRD格式重写了一遍，也做了从PRD到WBS到Epic再到Story的完整拆解。给我一个月，术语不会是我的障碍。</p>
+<p>如果有人问我：为什么选了3D打印？</p>
+<p>因为它是我能找到的、和我的既有经验同构度最高、但又不想重复做电网的行业。电网的问题是标准驱动——国网标准定义了一切，产品经理的空间在于符合标准，不是定义产品。3D打印正好反过来。从消费级到工业级，用户需求高度分化，材料、工艺、软件都在快速迭代，PM有真正的空间去驱动产品方向。我想把我在硬件系统诊断方面的能力，用在一个更产品化、更市场驱动的环境里。</p>
+<p>如果有人问我：如果研发说不是bug怎么办？</p>
+<p>我在TU36事件里恰好面对过这个局面。研发一开始说&quot;是你们测试部设备不行&quot;，我也可以说&quot;是你们设计问题&quot;。但我们没有陷入争论。我设计了对照实验让数据替我们说话。最后不是我&quot;说服&quot;了研发——是研发看了我设计的实验数据之后自己得出&quot;电源柜带载能力有问题&quot;的结论。我不会要求别人相信我，我会创造条件让事实被看见。</p>
+
+    <nav class="doc-nav"><div><div class="doc-nav-label">← 上一篇</div><a href="A3-wbs-breakdown.html">PRD拆解：4个Epic×12个Story</a></div><div style="text-align:right"><div class="doc-nav-label">下一篇 →</div><a href="A7-elegoo-deep-research.html">ELEGOO深度研究：三个核心问题与我的方案</a></div></nav>
+  </main>
+</div>
+<footer class="footer">
+<div class="ft-links">
+  <a href="https://github.com/Duanyayu/pm-portfolio" target="_blank">GitHub</a>
+  <a href="https://duanyayu.github.io/pm-portfolio" target="_blank">在线浏览</a>
+</div>
+</footer>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Home | Duanyanyu · PM Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="">
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Duanyanyu<span>PM Portfolio</span></a>
+  <ul class="nav-links"><li><a href="index.html">首页</a></li><li><a href="#resources">简历</a></li><li><a href="#elegoo">ELEGOO</a></li><li><a href="#evidence">能力证据</a></li></ul>
+</nav>
+<section class="hero"><div class="hero-grid"></div><div class="hero-inner">
+  <div class="hero-badge reveal">段彦羽的硬件产品经理作品集展示</div>
+  <h1 class="reveal d1">从电网设备测试<br><em>到3D打印PM</em></h1>
+  <p class="lede reveal d2">在无PM岗位的行业环境中自驱完成了需求分析、跨部门协同、问题闭环推动——本质上承担了硬件PM的核心职能。这里记录了关于我的能力展示。</p>
+  <div class="hero-btns reveal d3">
+    <a href="#evidence" class="btn btn-primary">浏览文档</a>
+    <a href="../reference/mars5-dashboard.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.25);color:#fff">基于Mars 5 Ultra用户反馈的产品从0-1仪表盘模拟</a>
+    <a href="../tools/converter.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.25);color:#fff">md格式转换PDF工具</a>
+  </div>
+</div></section>
+<div class="stats-bar reveal" style="grid-template-columns:repeat(2,1fr);max-width:560px;margin-left:auto;margin-right:auto">
+  <div class="stat-card"><div class="stat-num" data-target="12">0</div><div class="stat-lbl">思考文档</div></div>
+  <div class="stat-card"><div class="stat-num" data-target="10">0</div><div class="stat-lbl">能力证据</div></div>
+</div>
+
+<section class="section" id="resources">
+  <div class="divider"></div>
+  <div class="section-kicker reveal">简历</div>
+  <h2 class="section-heading reveal d1">我的简历</h2>
+  <p class="section-sub reveal d2">中文简历、英文简历，以及可直接打印的 Word 格式文件。</p>
+  <div class="doc-resource-grid" style="margin-top:28px"><a href="docs/resume-cn.html" class="doc-resource-card reveal d1">
+      <div class="doc-resource-icon">&#128196;</div>
+      <div class="doc-card-body">
+        <h3>简历（中文版）</h3>
+        <p>段彦羽 — 硬件产品经理</p>
+      </div>
+    </a><a href="docs/resume-en.html" class="doc-resource-card reveal d1">
+      <div class="doc-resource-icon">&#128196;</div>
+      <div class="doc-card-body">
+        <h3>Resume (English)</h3>
+        <p>Duanyanyu — Hardware Product Manager</p>
+      </div>
+    </a><a href="../assets/resume-duanyayu.docx" class="doc-resource-card reveal d1" style="border-color:var(--green);border-style:solid" download>
+      <div class="doc-resource-icon" style="background:rgba(79,154,116,0.1)">&#128196;</div>
+      <div class="doc-card-body">
+        <h3>简历下载 (.docx)</h3>
+        <p>可直接打印的 Word 格式简历</p>
+      </div>
+    </a></div>
+</section>
+
+<section class="section" id="elegoo">
+  <div class="divider"></div>
+  <div class="section-kicker reveal">ELEGOO 研究</div>
+  <h2 class="section-heading reveal d1">我对 ELEGOO 的深度理解</h2>
+  <p class="section-sub reveal d2">从公司速览到痛点诊断，从价值匹配到决策框架——展示如果我做ELEGOO的PM，我会从哪里开始思考。</p>
+  
+    <div class="elegoo-inline">
+      <h3>一、ELEGOO 2026 最新快照</h3>
+      <p>ELEGOO（智能派）由三位90后——陈波、洪英杰、欧阳翔——于2015年在深圳华强北创立。从 Arduino 开源电子套件起家，2018年转型3D打印机。创始人陈波的核心产品哲学是"中国制造，降维打击"——用深圳供应链把光固化做到299美元，扩大用户基数而不是提高单价。</p>
+      <p>2026年，ELEGOO年营收23-25亿元，年增长约30%，员工超1000人。产品线覆盖 Mars（入门LCD）、Saturn（中大型LCD）、Jupiter（超大尺寸）、Neptune（FDM）四大系列共10余款在售机型。耗材年出货近5000吨，是公司实际上的现金牛业务。B轮和B+轮累计融资数亿元，投资方包括大疆、美团、高瓴资本。</p>
+
+      <h3>二、ELEGOO 痛点地图（按紧急度×影响度排列）</h3>
+      <div class="pain-grid">
+        <div class="pain-card p0"><span class="pain-chip p0">P0 · 最高优先</span><h4>用户信任裂缝</h4><p>取消 Mars 5 Ultra 的 AMS（自动材料系统）承诺后，Kickstarter 支持者和早期用户的信任受损。这是品牌信用的核心问题——在消费电子行业，一次交付承诺的失信需要三次超额交付来修复。ELEGOO目前的回应相对沉默，缺少正式的补救方案公告。</p></div>
+        <div class="pain-card p1"><span class="pain-chip p1">P1 · 重要</span><h4>硬件质量一致性</h4><p>多型号、多批次之间的品控波动是快速迭代策略的代价。用户社区中反复出现的问题包括了轴精度下降、LCD屏寿命不稳定、WiFi模块批次差异。这本质上是"新品节奏 vs 供应链质量体系"的张力——需要在PM层面建立标准化的质量门禁。</p></div>
+        <div class="pain-card p2"><span class="pain-chip p2">P2 · 长期</span><h4>生态差距</h4><p>拓竹通过 MakerWorld 建立了"内容→耗材→机器"的闭环：用户在MakerWorld下载模型→一键打印→推荐官方耗材。ELEGOO的Nexprint平台在体量和活跃度上仍有显著差距。硬件可以快速迭代，但生态需要时间沉淀——这是最需要前瞻性战略投入的地方。</p></div>
+      </div>
+
+      <h3>三、我的价值匹配表</h3>
+      <table class="elegoo-table">
+        <tr><th>ELEGOO 痛点</th><th>我的能力</th><th>面试中可提出的具体方案</th></tr>
+        <tr><td>用户信任修复</td><td>在电网设备行业经历过"型式试验合格但现场出问题"的信任危机处理</td><td>提出"承诺兜底框架"——一旦承诺了功能/时间，就必须有兜底方案；如果兜底也做不到，就在承诺前说清楚边界</td></tr>
+        <tr><td>质量一致性</td><td>TU36事件就是多批次设备兼容性的诊断——从"不同电源柜、不同表型、不同接线方式"中定位规律</td><td>建立"新产品量产前的兼容性矩阵测试"制度——不只是测同型号，而是测它在真实使用环境中与各种外围设备的配合</td></tr>
+        <tr><td>生态建设</td><td>理解"标准定义了产品的最低门槛"——在电网行业，国网/南网标准就是生态的游戏规则</td><td>提出耗材开放兼容策略——不是把耗材做成锁死的配件，而是做成"谁都能用，但用我的效果最好"的行业标准</td></tr>
+      </table>
+
+      <h3>四、我在面试中准备好的 PM 决策框架</h3>
+      <div class="framework-grid">
+        <div class="framework-card">
+          <h4>框架 1：承诺兜底框架</h4>
+          <p>任何对外承诺的功能，在PRD阶段必须定义"如果这个功能在截止日期前达不到验收标准怎么办"。电网设备的型式试验教会我：对外的承诺必须有三层——理想目标、可接受目标、底线目标。</p>
+        </div>
+        <div class="framework-card">
+          <h4>框架 2：可靠性工程视角</h4>
+          <p>复杂度每增加一层，至少需要两倍的测试用例来覆盖新的故障模式。这是我在电网设备测试中学到的第一条原则——也适用于3D打印机的多色系统、RFID耗材识别等新增复杂度的评估。</p>
+        </div>
+        <div class="framework-card">
+          <h4>框架 3：生产力工具逻辑</h4>
+          <p>3D打印机不是家电，是生产力工具。生产力工具的PM核心KPI不是"用户喜欢什么功能"，而是"什么让用户更快从A到B"——从"我想打印一个零件"到"零件在我手里"的时间越短越好。</p>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="section" id="evidence">
+  <div class="divider"></div>
+  <div class="section-kicker reveal">能力证据</div>
+  <h2 class="section-heading reveal d1">从基础认知到战略洞察</h2>
+  <p class="section-sub reveal d2" style="max-width:720px">10篇思考文档，从公司速览到生态扩张，展示完整的认知深度演进。</p>
+  <div class="doc-grid" style="margin-top:28px"><a href="docs/ELEGOO-customized-brief.html" class="doc-card reveal d1">
+      <div class="doc-card-num">01</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>ELEGOO 公司速览</h3>
+        <p>三个90后从华强北起家，2026年营收23-25亿，10余款产品覆盖FDM和光固化全线。</p>
+      </div>
+    </a><a href="docs/A4-capability-matrix.html" class="doc-card reveal d1">
+      <div class="doc-card-num">02</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>JD能力对齐：8项要求×我的证据</h3>
+        <p>将ELEGOO硬件PM的8项JD要求逐一映射到我的实际工作经历，用TU36案例自证核心能力。</p>
+      </div>
+    </a><a href="docs/B5-behavioral-qa.html" class="doc-card reveal d1">
+      <div class="doc-card-num">03</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>面试高频题：我的回答策略</h3>
+        <p>6个最高频PM行为面试题的标准回答，全部锚定TU36电源柜案例，不提术语，提行为。</p>
+      </div>
+    </a><a href="docs/A2-prd-from-test-report.html" class="doc-card reveal d1">
+      <div class="doc-card-num">04</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>从测试报告到PRD的视角转换</h3>
+        <p>以TU36故障为案例，展示测试思维和产品思维的关键区别——写PRD需要的不是新内容，是新视角。</p>
+      </div>
+    </a><a href="docs/A3-wbs-breakdown.html" class="doc-card reveal d1">
+      <div class="doc-card-num">05</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>PRD拆解：4个Epic×12个Story</h3>
+        <p>将TU36电源柜兼容性PRD拆为4个Epic和12个Story，每个Story含验收标准、优先级、估时和依赖。</p>
+      </div>
+    </a><a href="docs/B3-isomorphic-analogy.html" class="doc-card reveal d1">
+      <div class="doc-card-num">06</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>电网设备与3D打印：同一套系统思维</h3>
+        <p>建立电网设备测试与3D打印之间的同构类比——两个行业共享五层物理系统的误差溯源逻辑。</p>
+      </div>
+    </a><a href="docs/A7-elegoo-deep-research.html" class="doc-card reveal d1">
+      <div class="doc-card-num">07</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>ELEGOO深度研究：三个核心问题与我的方案</h3>
+        <p>诊断ELEGOO的三大核心问题（用户信任、质量一致性、生态差距），并提出具体的产品改进方案。</p>
+      </div>
+    </a><a href="docs/competitor-analysis.html" class="doc-card reveal d1">
+      <div class="doc-card-num">08</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>竞品地图：四小龙谁在赚什么钱</h3>
+        <p>分析拓竹、创想三维、纵维立方、ELEGOO的利润模式差异和致命弱点，判断真正的护城河在哪。</p>
+      </div>
+    </a><a href="docs/independent-views.html" class="doc-card reveal d1">
+      <div class="doc-card-num">09</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>四个战略判断：多色、耗材、生态、可靠性</h3>
+        <p>四问竞品格局——ELEGOO不应在多色参数上卷，应在可靠性和耗材开放策略上建立差异化。</p>
+      </div>
+    </a><a href="docs/ecosystem-expansion.html" class="doc-card reveal d1">
+      <div class="doc-card-num">10</div>
+      <div class="doc-card-body">
+        <span class="doc-card-badge badge-evidence">证据</span>
+        <h3>把蛋糕做大：从卖打印机到硬件基础设施</h3>
+        <p>提出ELEGOO与嘉立创深度整合的愿景——让硬件工程师画完PCB就自动生成外壳，重新定义行业边界。</p>
+      </div>
+    </a></div>
+</section>
+
+<footer class="footer">
+<div class="ft-links">
+  <a href="https://github.com/Duanyayu/pm-portfolio" target="_blank">GitHub</a>
+  <a href="https://duanyayu.github.io/pm-portfolio" target="_blank">在线浏览</a>
+</div>
+</footer>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

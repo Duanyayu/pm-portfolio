@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Markdown → 作品集页面转换器</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FBFAF7;--bg-dark:#1C1F2B;--bg-card:#FFFFFF;--bg-wash:#F5F2ED;
+  --border:#E5E1DA;--border-light:#F0EDE7;
+  --text:#1C1F2B;--text-secondary:#6B6E76;--text-tertiary:#94969C;
+  --accent:#C17F59;--accent-dim:rgba(193,127,89,0.06);
+  --green:#4F9A74;--red:#D14444;
+  --font-heading:'Outfit',sans-serif;--font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(0.22,0.1,0.13,1);--radius:14px;--radius-sm:8px;
+  --shadow:0 4px 16px rgba(0,0,0,0.06);--shadow-lg:0 12px 40px rgba(0,0,0,0.1)
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.hero{background:var(--bg-dark);padding:60px 48px 80px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(193,127,89,0.12),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(79,154,116,0.06),transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{position:relative;z-index:2;max-width:720px;margin:0 auto}
+.hero-badge{display:inline-block;padding:6px 16px;background:rgba(193,127,89,0.15);color:var(--accent);border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:24px}
+.hero h1{font-family:var(--font-heading);font-size:clamp(32px,5vw,48px);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:16px;color:#fff}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{font-size:16px;color:rgba(255,255,255,0.55);max-width:500px;margin:0 auto}
+.main{max-width:1120px;margin:0 auto;padding:0 48px 80px}
+.drop-zone-wrapper{margin-top:-40px;position:relative;z-index:3}
+.drop-zone{background:var(--bg-card);border:2px dashed var(--border);border-radius:var(--radius);padding:48px;text-align:center;transition:all 0.3s var(--ease);cursor:pointer;box-shadow:var(--shadow)}
+.drop-zone.drag-over{border-color:var(--accent);background:var(--accent-dim);transform:scale(1.01)}
+.drop-zone-icon{font-size:40px;margin-bottom:12px;display:block}
+.drop-zone h3{font-family:var(--font-heading);font-size:18px;font-weight:600;margin-bottom:6px}
+.drop-zone p{font-size:14px;color:var(--text-secondary)}
+.drop-zone input[type=file]{display:none}
+.control-bar{display:flex;gap:12px;margin:24px 0;flex-wrap:wrap;align-items:center}
+.btn{padding:10px 22px;border-radius:24px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;border:none;font-family:var(--font-body)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(193,127,89,0.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(193,127,89,0.4)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-secondary)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.file-info{font-size:13px;color:var(--text-secondary);margin-left:auto}
+.preview-area{display:none;margin-top:24px}
+.preview-area.active{display:block}
+.preview-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.preview-label::after{content:'';flex:1;height:1px;background:var(--border-light)}
+.preview-content{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:48px 56px;box-shadow:var(--shadow)}
+.preview-content h1{font-family:var(--font-heading);font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.15;margin-bottom:8px}
+.preview-content h2{font-family:var(--font-heading);font-size:22px;font-weight:600;margin-top:36px;margin-bottom:10px;padding-top:20px;border-top:1px solid var(--border-light)}
+.preview-content h3{font-family:var(--font-heading);font-size:17px;font-weight:600;margin-top:24px;margin-bottom:8px}
+.preview-content p{font-size:15px;line-height:1.8;margin-bottom:14px}
+.preview-content strong{font-weight:600}
+.preview-content a{color:var(--accent);text-decoration:none;font-weight:500}
+.preview-content a:hover{text-decoration:underline}
+.preview-content blockquote{background:var(--accent-dim);border-radius:var(--radius-sm);padding:16px 20px;margin:20px 0;font-size:15px;line-height:1.8;color:var(--text-secondary)}
+.preview-content blockquote p{margin-bottom:0;color:inherit}
+.preview-content code{font-family:var(--font-mono);font-size:13px;background:var(--bg-wash);padding:2px 6px;border-radius:4px}
+.preview-content pre{background:var(--bg-dark);color:rgba(255,255,255,0.85);padding:20px 24px;border-radius:var(--radius);overflow-x:auto;margin:16px 0;font-size:13px;line-height:1.7}
+.preview-content pre code{background:transparent;padding:0;color:inherit}
+.preview-content ul,.preview-content ol{padding-left:24px;margin-bottom:14px}
+.preview-content li{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+.preview-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
+.preview-content th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--border);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-tertiary);background:var(--bg-wash)}
+.preview-content td{padding:10px 14px;border-bottom:1px solid var(--border-light);vertical-align:top;line-height:1.6}
+.preview-content hr{border:none;border-top:1px solid var(--border-light);margin:24px 0}
+.preview-content img{max-width:100%;border-radius:var(--radius)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-tertiary)}
+.empty-state .icon{font-size:48px;display:block;margin-bottom:16px}
+.footer{background:var(--bg-dark);color:rgba(255,255,255,0.5);text-align:center;padding:40px 48px;font-size:13px}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg-dark);color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:500;z-index:200;transition:transform 0.35s var(--ease);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:768px){.hero{padding:40px 20px 60px}.main{padding:0 20px 60px}.drop-zone{padding:32px 20px}.preview-content{padding:28px 20px}.control-bar{flex-direction:column}.file-info{margin-left:0}}
+</style>
+<script src="marked-v4.3.0.js"></script>
+
+</head>
+<body>
+<section class="hero"><div class="hero-grid"></div><div class="hero-inner">
+  <div class="hero-badge">双击即用 · 无需安装 · 离线可用</div>
+  <h1>Markdown → <em>作品集页面</em></h1>
+  <p>拖拽 .md 文件进来，即时预览专业排版效果，一键导出 HTML 或打印 PDF</p>
+</div></section>
+<div class="main">
+  <div class="drop-zone-wrapper">
+    <div class="drop-zone" id="dropZone">
+      <span class="drop-zone-icon">&#128229;</span>
+      <h3>拖拽 .md 文件到这里</h3>
+      <p>或点击此处选择文件 &middot; 支持 .md / .txt &middot; 所有处理在浏览器本地完成</p>
+      <input type="file" id="fileInput" accept=".md,.txt,.markdown">
+    </div>
+  </div>
+  <div class="control-bar" id="controlBar" style="display:none">
+    <button class="btn btn-primary" onclick="downloadHTML()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      下载 HTML 文件
+    </button>
+    <button class="btn btn-outline" onclick="printPDF()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 12H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      打印导出 PDF
+    </button>
+    <button class="btn btn-outline" onclick="clearAll()" style="color:var(--red);border-color:transparent">清除</button>
+    <span class="file-info" id="fileInfo"></span>
+  </div>
+  <div class="preview-area" id="previewArea">
+    <div class="preview-label">预览</div>
+    <div class="preview-content" id="previewContent">
+      <div class="empty-state"><span class="icon">&#128196;</span><p>拖入文件后这里会显示排版效果</p></div>
+    </div>
+  </div>
+</div>
+<div class="footer">Markdown → 作品集页面转换器 &middot; 所有处理都在你的浏览器本地完成，不会上传任何数据</div>
+<div class="toast" id="toast"></div>
+<script>
+// ── Application logic ──
+var dropZone = document.getElementById('dropZone');
+var fileInput = document.getElementById('fileInput');
+var controlBar = document.getElementById('controlBar');
+var previewArea = document.getElementById('previewArea');
+var previewContent = document.getElementById('previewContent');
+var fileInfo = document.getElementById('fileInfo');
+var toast = document.getElementById('toast');
+var currentHTML = '';
+var currentFileName = 'document';
+
+dropZone.addEventListener('click', function() { fileInput.click(); });
+fileInput.addEventListener('change', function(e) { handleFile(e.target.files[0]); });
+
+dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', function() { dropZone.classList.remove('drag-over'); });
+dropZone.addEventListener('drop', function(e) {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(file) {
+  if (!file) return;
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (ext !== 'md' && ext !== 'txt' && ext !== 'markdown') {
+    showToast('请选择 .md 或 .txt 文件');
+    return;
+  }
+  currentFileName = file.name.replace(/\.(md|txt|markdown)$/i, '');
+  fileInfo.textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+  var reader = new FileReader();
+  reader.onerror = function() {
+    showToast('文件读取失败，请重试');
+  };
+  reader.onload = function(e) {
+    try {
+      var md = e.target.result;
+      var renderer = new marked.Renderer();
+      renderer.heading = function(text, level) {
+        var plain = text.replace(/<[^>]+>/g, '').trim();
+        var id = plain.toLowerCase()
+          .replace(/[^一-鿿\w\s-]/g, '').replace(/\s+/g, '-')
+          .replace(/-+/g, '-').replace(/^-|-$/g, '').substring(0, 60);
+        return '<h' + level + ' id="' + id + '">' + text + '</h' + level + '>';
+      };
+      marked.setOptions({ gfm: true, breaks: false });
+      currentHTML = marked.parse(md, { renderer: renderer });
+      previewContent.innerHTML = currentHTML;
+      previewArea.classList.add('active');
+      controlBar.style.display = 'flex';
+      showToast('转换完成！可以下载 HTML 或打印 PDF');
+    } catch (err) {
+      showToast('转换失败: ' + (err.message || err));
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function downloadHTML() {
+      if (!currentHTML) return showToast("请先拖入一个 .md 文件");
+      var L = "<", R = ">";
+      var css = [
+        "body{font-family:Inter,sans-serif;max-width:65ch;margin:0 auto;padding:48px 24px;",
+        "line-height:1.8;color:#1C1F2B;background:#FBFAF7}",
+        "h1{font-family:Outfit,sans-serif;font-size:32px;font-weight:700}",
+        "h2{font-family:Outfit,sans-serif;font-size:22px;font-weight:600;margin-top:36px;",
+        "padding-top:20px;border-top:1px solid #E5E1DA}",
+        "h3{font-family:Outfit,sans-serif;font-size:17px;font-weight:600;margin-top:24px}",
+        "code{font-family:\"JetBrains Mono\",monospace;font-size:13px;background:#F5F2ED;",
+        "padding:2px 6px;border-radius:4px}",
+        "pre{background:#1C1F2B;color:#ddd;padding:20px 24px;border-radius:14px;overflow-x:auto}",
+        "pre code{background:transparent;padding:0;color:inherit}",
+        "blockquote{background:rgba(193,127,89,0.06);border-radius:8px;padding:16px 20px;margin:20px 0}",
+        "table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}",
+        "th{text-align:left;padding:10px 14px;border-bottom:2px solid #E5E1DA;background:#F5F2ED}",
+        "td{padding:10px 14px;border-bottom:1px solid #F0EDE7}",
+        "@media print{body{background:#fff;font-size:11pt}pre{background:#f5f5f5;color:#000}}",
+      ].join("");
+      var lines = [
+        L + "!DOCTYPE html" + R,
+        L + "html lang=\"zh-CN\"" + R,
+        L + "head" + R,
+        L + "meta charset=\"UTF-8\"" + R,
+        L + "meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"" + R,
+        L + "title" + R + currentFileName + L + "/title" + R,
+        L + "link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"" + R,
+        L + "link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin" + R,
+        L + "link href=\"https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800"
+          + "&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap\" rel=\"stylesheet\"" + R,
+        L + "style" + R + css + L + "/style" + R,
+        L + "/head" + R,
+        L + "body" + R + currentHTML + L + "/body" + R,
+        L + "/html" + R,
+      ];
+      var fullHTML = lines.join("\n");
+      var blob = new Blob([fullHTML], { type: "text/html;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = currentFileName + ".html"; document.body.appendChild(a);
+      a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+      showToast("HTML 文件已下载！双击即可在浏览器中打开");
+    }
+function printPDF() {
+  if (!currentHTML) return showToast('请先拖入一个 .md 文件');
+  window.print();
+}
+
+function clearAll() {
+  currentHTML = ''; currentFileName = 'document';
+  previewContent.innerHTML = '<div class="empty-state"><span class="icon">&#128196;</span><p>拖入文件后这里会显示排版效果</p></div>';
+  previewArea.classList.remove('active'); controlBar.style.display = 'none';
+  fileInput.value = ''; fileInfo.textContent = '';
+}
+
+function showToast(msg) {
+  toast.textContent = msg; toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 2500);
+}
+</script>
+</body>
+</html>
