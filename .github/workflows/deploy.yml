@@ -4,10 +4,10 @@ on:
   push:
     branches: [master]
     paths:
-      - 'deliverables/career-transition/**'
-      - 'model_for_md/css/**'
-      - 'model_for_md/js/**'
-      - 'scripts/build-portfolio.js'
+      - 'final/src/**'
+      - 'final/assets/css/**'
+      - 'final/assets/js/**'
+      - 'final/scripts/**'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
@@ -37,13 +37,7 @@ jobs:
         run: npm ci
 
       - name: Build HTML pages
-        run: node scripts/build-portfolio.js
-
-      - name: Generate PDFs
-        run: |
-          npm install puppeteer
-          node scripts/build-portfolio.js --pdf
-        continue-on-error: true
+        run: cd final && node scripts/build.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -51,7 +45,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: model_for_md
+          path: final/site
 
       - name: Deploy to GitHub Pages
         id: deployment
