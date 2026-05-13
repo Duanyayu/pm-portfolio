@@ -13,3 +13,4 @@ services:
         value: "3000"
       - key: ADMIN_PASSWORD
         value: mars5admin2026
+

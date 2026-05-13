@@ -62,3 +62,4 @@ B.S. in Electronic Information Science & Technology from South China Normal Univ
 **Tools:** Jira, Confluence, Git, Markdown
 
 **Languages:** English (fluent in reading and writing), Chinese (native)
+
